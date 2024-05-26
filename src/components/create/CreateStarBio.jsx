@@ -419,6 +419,7 @@ const CreateStarBio = () => {
             { value: 'double', label: 'double' },
             { value: 'double anal', label: 'double anal' },
             { value: 'double vaginal', label: 'double vaginal' },
+            { value: 'triple penetration', label: 'triple penetration' },
             { value: 'trans', label: 'trans' },
           ])}
         />
