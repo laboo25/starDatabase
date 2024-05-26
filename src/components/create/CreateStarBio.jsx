@@ -20,10 +20,10 @@ const CreateStarBio = () => {
   const [activeYearStart, setActiveYearStart] = useState(2010);
   const [activeYearEnd, setActiveYearEnd] = useState(2022);
   const [ethnicity, setEthnicity] = useState('caucasian');
-  const [height, setHeight] = useState('5.5');
+  const [height, setHeight] = useState(`5'5"`);
   const [hairColor, setHairColor] = useState('brown');
   const [eyeColor, setEyeColor] = useState('black');
-  const [shoeSize, setShoeSize] = useState(9);
+  const [shoeSize, setShoeSize] = useState(35);
   const [cupSize, setCupSize] = useState('C');
   const [bustSize, setBustSize] = useState(34);
   const [waistSize, setWaistSize] = useState(24);
@@ -317,6 +317,7 @@ const CreateStarBio = () => {
             { value: 'blue', label: 'blue' },
             { value: 'green', label: 'green' },
             { value: 'red', label: 'red' },
+            { value: 'hazel', label: 'hazel' },
           ])}
           allowClear
         />
