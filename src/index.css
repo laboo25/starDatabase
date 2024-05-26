@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* * {
+    background-color: #fffafa;
+} */
+/* Custom scrollbar width for WebKit (Chrome, Safari, etc.) */
+/* Custom scrollbar width for WebKit (Chrome, Safari, etc.) */
+html::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+    margin: 5px; /* Margin around the scrollbar */
+}
+
+html::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the scrollbar track */
+}
+
+html::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Adjust the radius to change the rounded corners */
+    padding: 5px; /* Padding inside the scrollbar thumb */
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color of the scrollbar thumb on hover */
+}
+
+
+/* For Firefox */
+/* Note: Mozilla Firefox does not support styling of scrollbar width and track directly with CSS as of the latest standard. However, you can use scrollbar-color and scrollbar-width properties which are supported in Firefox 64 and later. */
+/* Color of the scrollbar thumb */
+* {
+    scrollbar-color: #b3b3b3 #f1f1f1;
+}
+
+/* Width of the scrollbar thumb */
+* {
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+    
+}
+
+/* For IE and Edge */
+/* Microsoft Edge (EdgeHTML) and Internet Explorer do not support styling of scrollbar directly with CSS. */
+/* You may need to use custom JavaScript-based solutions for these browsers */

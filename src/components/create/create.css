@@ -1,0 +1,22 @@
+#create {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+#create #sidebar {
+    width: 20%;
+    background-color: #f1f1f1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#create #sidebar a {
+    padding: 10px 0;
+    margin: 10px 0;
+    border-bottom: 1px solid black;
+}
+#create #forms {
+    width: 80%;
+    background-color: #bdbdbd;
+    height: 100%;
+}

@@ -1,0 +1,39 @@
+#navbar {
+    width: 100%;
+    height: 100%;
+    background-color: #F5F5F5;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+}
+
+/* #DFE1DE */
+#navbar #logo {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: sans-serif;
+    padding: 0 10px;
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
+#navbar #search_fields {
+    padding: 0 20px;
+}
+#navbar #search_fields input {
+    outline: none;
+    background: none;
+    border-bottom: 1px solid black;
+}
+#navbar #search_fields button {
+    border-bottom: 1px solid black;
+}
+
+@media only screen and (width: 375px){
+    body {
+        background: rebeccapurple;
+    }
+}
