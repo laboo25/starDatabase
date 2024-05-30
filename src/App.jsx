@@ -1,16 +1,14 @@
 // App.js
 import React from 'react';
 import Home from './components/home/Home';
-import CreateStarBio from './components/create/CreateStarBio';
-import CreateAlbums from './components/create/CreateAlbums';
-import CreateStar from './components/create/CreateStar';
+import { Link } from 'react-router-dom';
 
 const App = () => {
   return (
     <div>
-      <CreateStar/>
-      <CreateAlbums/>
-      <CreateStarBio/>
+      <div>
+        <Link to='create'>create data</Link>
+      </div>
       <Home/>
     </div>
   );

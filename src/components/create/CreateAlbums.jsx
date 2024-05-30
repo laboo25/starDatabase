@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, message, Button, Input, Select } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import './createAlbum.css';
+import { Upload, message, Button, Input, Select, Progress } from 'antd';
+import { InboxOutlined, DeleteOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const { Dragger } = Upload;
@@ -66,9 +67,13 @@ const CreateAlbums = () => {
       });
       console.log(response.data);
       setUploadMessage('Album created successfully');
+      message.success('Album created successfully');
+      // Mark files as uploaded
+      setFileList(fileList.map(file => ({ ...file, uploaded: true })));
     } catch (error) {
       console.error('Error creating album:', error.response?.data);
       setUploadMessage('Error creating album');
+      message.error('Error creating album');
     } finally {
       setLoading(false);
     }
@@ -89,12 +94,12 @@ const CreateAlbums = () => {
 
   return (
     <div>
-      <h2>Create Album</h2>
+      <h2 className='title'>Create Album</h2>
       {uploadMessage && <p>{uploadMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="albumname">Album Name:</label>
-          <Input type="text" id="albumname" value={albumname} onChange={(e) => setAlbumname(e.target.value)} />
+          <Input type="text" id="albumname" value={albumname} onChange={(e) => setAlbumname(e.target.value)} className='title-input' />
         </div>
         <div>
           <label htmlFor="starname">Star Name: {starname.length}</label>
@@ -126,7 +131,7 @@ const CreateAlbums = () => {
         </div>
         <div>
           <label htmlFor="files">Select Images:</label>
-          <Dragger {...uploadProps}>
+          <Dragger {...uploadProps} className='cover-input'>
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
@@ -138,13 +143,27 @@ const CreateAlbums = () => {
           Create Album
         </Button>
       </form>
-      {uploadPercentage > 0 && <p>Upload Progress: {uploadPercentage}%</p>}
-      <div>
+      {uploadPercentage > 0 && <Progress percent={uploadPercentage} />}
+      <div className='uploaded-images'>
         {fileList.map((file, index) => (
-          <div key={index}>
-            <p>{file.name}</p>
+          <div key={index} className='uploaded-image-wrapper'>
             {file.originFileObj && (
-              <img src={URL.createObjectURL(file.originFileObj)} alt={file.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
+              <>
+                <img
+                  src={URL.createObjectURL(file.originFileObj)}
+                  alt={file.name}
+                  className={`uploaded-image ${file.uploaded ? 'uploaded-image-overlay' : ''}`}
+                />
+                {file.uploaded && (
+                  <CheckCircleOutlined className='uploaded-image-ok' />
+                )}
+                <Button
+                  type="text"
+                  icon={<DeleteOutlined />}
+                  className='delete-image-button'
+                  onClick={() => setFileList(prevFiles => prevFiles.filter(f => f.uid !== file.uid))}
+                />
+              </>
             )}
           </div>
         ))}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './createStar.css'
 import { Upload, message, Button, Input, Form, Progress } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
@@ -86,14 +87,14 @@ const CreateStar = () => {
 
   return (
     <div>
-      <h2>Create Star</h2>
+      <h2 className='title'>Create Star</h2>
       <Form onFinish={handleSubmit}>
         <Form.Item
           label="Star Name"
           name="starname"
           rules={[{ required: true, message: 'Please input the star name!' }]}
         >
-          <Input value={starname} onChange={(e) => setStarname(e.target.value)} />
+          <Input value={starname} onChange={(e) => setStarname(e.target.value)} allowClear className='title-input'/>
         </Form.Item>
         <Form.Item
           label="Star Cover"
@@ -102,6 +103,7 @@ const CreateStar = () => {
           <Dragger
             beforeUpload={handleCoverChange}
             onRemove={() => setStarcover(null)}
+            className='cover-input'
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />

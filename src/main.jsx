@@ -8,6 +8,10 @@ import "./index.css";
 import App from "./App";
 import StarBio from "./components/starBio/StarBio";
 import Create from "./components/create/Create";
+import CreateStar from "./components/create/CreateStar";
+import CreateStarBio from "./components/create/CreateStarBio";
+import CreateAlbums from "./components/create/CreateAlbums";
+import CreateImages from "./components/create/CreateImages";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +25,23 @@ const router = createBrowserRouter([
   {
     path: "/create",
     element: <Create/>,
+    children: [{
+      path: "/create",
+      element: <CreateStar/>,
+    },
+    {
+      path: '/create/create-bio',
+      element: <CreateStarBio/>,
+    },
+    {
+      path: '/create/create-images',
+      element: <CreateImages/>,
+    },
+    {
+      path: '/create/create-album',
+      element: <CreateAlbums/>,
+    },
+  ]
   }
 ]);
 

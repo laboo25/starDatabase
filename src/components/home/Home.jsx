@@ -36,7 +36,7 @@ const Home = () => {
                             ) : (
                                 starTitles.map((star, index) => (
                                     <div className='card' key={index}>
-                                        <div style={{width: "100%", height: "auto"}}>
+                                        <div style={{width: "100%"}}>
                                             <Link to={`/star/${star._id}`}>
                                                 <img src={star.starcover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                             </Link>

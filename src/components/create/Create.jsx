@@ -1,47 +1,50 @@
-// Create.js
-import React from 'react';
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './create.css';
-import CreateStar from './CreateStar';
-import CreateStarBio from './CreateStarBio';
-import CreateImages from './CreateImages';
-import CreateAlbums from './CreateAlbums';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const Create = () => {
-  return (
-    <div id="create">
-        <BrowserRouter>
-      <div id="sidebar">
-        <div id="sidebar-title">
-          <h2>Create Items</h2>
-        </div>
-        <NavLink to="create-star" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-          Create Star
-        </NavLink>
-        <NavLink to="create-star-bio" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-          Create Star Bio
-        </NavLink>
-        <NavLink to="create-images" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-          Create Images
-        </NavLink>
-        <NavLink to="create-albums" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-          Create Albums
-        </NavLink>
-      </div>
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const location = useLocation();
 
-      <div id="forms">
-        
-        <Routes>
-          <Route path="create-star" element={<CreateStar />} />
-          <Route path="create-star-bio" element={<CreateStarBio />} />
-          <Route path="create-images" element={<CreateImages />} />
-          <Route path="create-albums" element={<CreateAlbums />} />
-        </Routes>
-        
-        
+  const toggleSidebar = () => {
+    setSidebarVisible(!isSidebarVisible);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isSidebarVisible && !event.target.closest('#sidebar') && !event.target.closest('.toggle-btn')) {
+        setSidebarVisible(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isSidebarVisible]);
+
+  const getLinkClass = (path) => {
+    return location.pathname === path ? 'active' : '';
+  };
+
+  return (
+    <>
+      <div id='create'>
+        <button className='toggle-btn' onClick={toggleSidebar}>
+          {isSidebarVisible ? 'Close' : 'Menu'}
+        </button>
+        <div id='sidebar' className={isSidebarVisible ? 'visible' : ''}>
+          <h1>Create</h1>
+          <Link to='/create' className={getLinkClass('/create')}>create star</Link>
+          <Link to='/create/create-bio' className={getLinkClass('/create/create-bio')}>create bio</Link>
+          <Link to='/create/create-images' className={getLinkClass('/create/create-images')}>create images</Link>
+          <Link to='/create/create-album' className={getLinkClass('/create/create-album')}>create album</Link>
+        </div>
+        <div id='forms'>
+          <Outlet />
+        </div>
       </div>
-      </BrowserRouter>
-    </div>
+    </>
   );
 };
 

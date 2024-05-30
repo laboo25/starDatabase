@@ -1,0 +1,39 @@
+.ant-select  {
+    width: 300px;
+}
+.lbl-inpt-wrap {
+    display: flex;
+    /* flex-wrap: wrap; */
+    flex-direction: column;
+    padding: 5px 0 10px 0;
+}
+.lbl-inpt-wrap label {
+    padding: 5px 0 10px 0px;
+}
+.multiple-wrapper {
+    display: flex !important;
+}
+.measurement {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.bust {
+    width: 60px;
+}
+.cup {
+    width: 70px !important;
+}
+.hip {
+    width: 60px !important;
+}
+.chest {
+    width: 60px;
+}
+

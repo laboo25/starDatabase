@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './createStarBio.css'
 import axios from 'axios';
 import { Select, Input, InputNumber, DatePicker, Button, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -153,9 +154,10 @@ const CreateStarBio = () => {
 
   return (
     <div onKeyDown={handleKeyDown}>
-      <div>
-        <label>Select a star</label>
+      <div className='lbl-inpt-wrap'>
+        <label>star name: </label>
         <Select
+          className='star-select'
           showSearch
           placeholder="Select a star"
           optionFilterProp="children"
@@ -170,7 +172,7 @@ const CreateStarBio = () => {
           }))}
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Add aliases</label>
         <Select
           mode="tags"
@@ -182,7 +184,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Star real name</label>
         <Input
           placeholder="Star real name"
@@ -191,7 +193,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Birth place</label>
         <Input
           placeholder="Birth place"
@@ -200,7 +202,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Birth date</label>
         <DatePicker
           format="YYYY-MM-DD"
@@ -209,7 +211,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Death date</label>
         <DatePicker
           format="YYYY-MM-DD"
@@ -218,7 +220,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Occupation</label>
         <Select
           mode="multiple"
@@ -233,7 +235,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Status</label>
         <Select
           defaultValue="active"
@@ -247,7 +249,8 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='multipe-wrapper'>
+      <div className='lbl-inpt-wrap'>
         <label>Active Year Start</label>
         <InputNumber
           defaultValue={2010}
@@ -255,7 +258,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Active Year End</label>
         <InputNumber
           defaultValue={null}
@@ -263,7 +266,8 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      </div>
+      <div className='lbl-inpt-wrap'>
         <label>Ethnicity</label>
         <Select
           defaultValue="caucasian"
@@ -281,7 +285,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Height</label>
         <Input
           placeholder="Height"
@@ -290,7 +294,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Hair Color</label>
         <Select
           defaultValue="brown"
@@ -302,15 +306,17 @@ const CreateStarBio = () => {
             { value: 'blonde', label: 'blonde' },
             { value: 'red', label: 'red' },
             { value: 'green', label: 'green' },
+            { value: 'auburn', label: 'auburn' },
+            { value: 'gray', label: 'gray' },
+            { value: 'white', label: 'white' },
           ])}
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Eye Color</label>
         <Select
           defaultValue="black"
-          style={{ width: 120 }}
           onChange={setEyeColor}
           options={sortOptions([
             { value: 'black', label: 'black' },
@@ -319,12 +325,13 @@ const CreateStarBio = () => {
             { value: 'green', label: 'green' },
             { value: 'red', label: 'red' },
             { value: 'hazel', label: 'hazel' },
-            { value: 'grey', label: 'grey' },
+            { value: 'gray', label: 'gray' },
+            { value: 'amber', label: 'amber' },
           ])}
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Shoe Size</label>
         <InputNumber
           min={4}
@@ -334,46 +341,44 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
-        <label>Cup Size</label>
-        <Input
-          placeholder="Cup Size"
-          value={cupSize}
-          onChange={e => setCupSize(e.target.value)}
-          allowClear
-        />
-      </div>
-      <div style={{ marginTop: '20px' }}>
-        <label>Bust Size</label>
+      <div className='lbl-inpt-wrap measurement'>
+      <label>measurement</label>
+        <div className='wrap'>
         <InputNumber
+        className='bust'
           min={4}
           max={50}
           defaultValue={34}
           onChange={value => setBustSize(value !== null ? value : null)}
           allowClear
         />
-      </div>
-      <div style={{ marginTop: '20px' }}>
-        <label>Waist Size</label>
+        <Input
+        className='cup'
+          placeholder="Cup Size"
+          value={cupSize}
+          onChange={e => setCupSize(e.target.value)}
+          allowClear
+        />
         <InputNumber
+        className='chest'
           min={4}
           max={50}
           defaultValue={24}
           onChange={value => setWaistSize(value !== null ? value : null)}
           allowClear
         />
-      </div>
-      <div style={{ marginTop: '20px' }}>
-        <label>Hips Size</label>
         <InputNumber
+        className='hip'
           min={4}
           max={50}
           defaultValue={34}
           onChange={value => setHipsSize(value !== null ? value : null)}
           allowClear
         />
+        </div>
       </div>
-      <div style={{ marginTop: '20px' }}>
+      
+      <div className='lbl-inpt-wrap'>
         <label>Tattoos</label>
         <Input
           placeholder="Tattoos"
@@ -382,7 +387,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Piercings</label>
         <Input
           placeholder="Piercings"
@@ -391,7 +396,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Pubic Hair</label>
         <Input
           placeholder="Pubic hair"
@@ -400,9 +405,10 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Boobs</label>
         <Input
+        style={{width: "100%"}}
           placeholder="Boobs"
           defaultValue={'natural'}
           value={boobs}
@@ -410,7 +416,7 @@ const CreateStarBio = () => {
           allowClear
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <label>Skills</label>
         <Select
           mode="multiple"
@@ -431,7 +437,7 @@ const CreateStarBio = () => {
           ])}
         />
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='lbl-inpt-wrap'>
         <Button
           type="primary"
           onClick={handleSubmit}

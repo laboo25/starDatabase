@@ -36,6 +36,8 @@ const StarBio = () => {
                         if (bioData) {
                             setStarBio(bioData);
                             localStorage.setItem(`starBio_${_id}`, JSON.stringify(bioData));
+                        } else {
+                            setError('Bio not found for the given star');
                         }
 
                         // Fetch star album data
@@ -74,11 +76,11 @@ const StarBio = () => {
         return <div>Error: {error}</div>;
     }
 
-    if (!starName) {
+    if (!starName || !starBio) {
         return <div>No data found</div>;
     }
 
-    const age = starBio?.birthdate ? calculateAge(starBio.birthdate) : 'Unknown';
+    const age = starBio.birthdate ? calculateAge(starBio.birthdate) : 'Unknown';
 
     const renderArrayItems = (items) => {
         if (!items || items.length === 0) return null;
@@ -90,7 +92,7 @@ const StarBio = () => {
     };
 
     const getStatusClass = (status) => {
-        switch (status?.toLowerCase()) {
+        switch (status.toLowerCase()) {
             case 'active':
                 return 'active-status';
             case 'retired':
@@ -110,46 +112,42 @@ const StarBio = () => {
                 </div>
                 <div className='bio'>
                     <h2 className='title'>{starName.starname}</h2>
-                    {starBio ? (
-                        <div className='bio-texts'>
+                    <div className='bio-texts'>
+                        <div>
+                            {starBio.aliases && <div>Aliases: {renderArrayItems(starBio.aliases)}</div>}
+                            {starBio.birthname && <div>Birth Name: {starBio.birthname}</div>}
+                            {starBio.birthplace && <div>Birthplace: {starBio.birthplace}</div>}
+                            <div>Age: {age}</div>
+                            {starBio.birthdate && <div>Birthdate: {moment(starBio.birthdate).format('DD-MMM-YYYY')}</div>}
+                            {starBio.deathdate ? <div>Death Date: {moment(starBio.deathdate).format('DD-MMM-YYYY')}</div> : null}
+                            {starBio.occupation && <div>Occupation: {renderArrayItems(starBio.occupation)}</div>}
+                            {starBio.status && <div className={getStatusClass(starBio.status)}>Status: {starBio.status}</div>}
+                            {starBio.start && <div>Start: {starBio.start}</div>}
+                            {starBio.end && <div>End: {starBio.end}</div>}
+                            {starBio.ethnicity && <div>Ethnicity: {starBio.ethnicity}</div>}
+                            {starBio.height && <div>Height: {starBio.height}</div>}
+                            {starBio.hair && <div>Hair: {starBio.hair}</div>}
+                            {starBio.eyes && <div>Eyes: {starBio.eyes}</div>}
+                            {starBio.shoesize && <div>Shoe Size: {formatShoeSize(starBio.shoesize)}</div>}
                             <div>
-                                {starBio.aliases && <div>Aliases: {renderArrayItems(starBio.aliases)}</div>}
-                                {starBio.birthname && <div>Birth Name: {starBio.birthname}</div>}
-                                {starBio.birthplace && <div>Birthplace: {starBio.birthplace}</div>}
-                                <div>Age: {age}</div>
-                                {starBio.birthdate && <div>Birthdate: {moment(starBio.birthdate).format('DD-MMM-YYYY')}</div>}
-                                {starBio.deathdate ? <div>Death Date: {moment(starBio.deathdate).format('DD-MMM-YYYY')}</div> : null}
-                                {starBio.occupation && <div>Occupation: {renderArrayItems(starBio.occupation)}</div>}
-                                {starBio.status && <div className={getStatusClass(starBio.status)}>Status: {starBio.status}</div>}
-                                {starBio.start && <div>Start: {starBio.start}</div>}
-                                {starBio.end && <div>End: {starBio.end}</div>}
-                                {starBio.ethnicity && <div>Ethnicity: {starBio.ethnicity}</div>}
-                                {starBio.height && <div>Height: {starBio.height}</div>}
-                                {starBio.hair && <div>Hair: {starBio.hair}</div>}
-                                {starBio.eyes && <div>Eyes: {starBio.eyes}</div>}
-                                {starBio.shoesize && <div>Shoe Size: {formatShoeSize(starBio.shoesize)}</div>}
-                                <div>
-                                    {starBio.measurement && starBio.measurement.map((item, index) => (
-                                        <p key={index}>
-                                            <span>{item.bust}</span>
-                                            <span>{item.cup}</span>
-                                            <span>–</span>
-                                            <span>{item.waist}</span>
-                                            <span>–</span>
-                                            <span>{item.hips}</span>
-                                        </p>
-                                    ))}
-                                </div>
-                                {starBio.tattoos && <div>Tattoos: {starBio.tattoos}</div>}
-                                {starBio.piercings && <div>Piercings: {starBio.piercings}</div>}
-                                {starBio.skills && <div>Skills: {renderArrayItems(starBio.skills)}</div>}
-                                {starBio.pubic && <div>Pubic Hair: {starBio.pubic}</div>}
-                                {starBio.boobs && <div>Boobs: {starBio.boobs}</div>}
+                                {starBio.measurement && starBio.measurement.map((item, index) => (
+                                    <p key={index}>
+                                        <span>{item.bust}</span>
+                                        <span>{item.cup}</span>
+                                        <span>–</span>
+                                        <span>{item.waist}</span>
+                                        <span>–</span>
+                                        <span>{item.hips}</span>
+                                    </p>
+                                ))}
                             </div>
+                            {starBio.tattoos && <div>Tattoos: {starBio.tattoos}</div>}
+                            {starBio.piercings && <div>Piercings: {starBio.piercings}</div>}
+                            {starBio.skills && <div>Skills: {renderArrayItems(starBio.skills)}</div>}
+                            {starBio.pubic && <div>Pubic Hair: {starBio.pubic}</div>}
+                            {starBio.boobs && <div>Boobs: {starBio.boobs}</div>}
                         </div>
-                    ) : (
-                        <div>No bio available</div>
-                    )}
+                    </div>
                 </div>
             </div>
             <div>
