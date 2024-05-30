@@ -32,7 +32,7 @@ const StarBio = () => {
 
                         // Fetch star bio data using the star name or id
                         const bioRes = await axios.get('https://stardb-api.onrender.com/api/stars/star-bio/get-all-bio');
-                        const bioData = bioRes.data.find((bio) => bio.starname === _id); 
+                        const bioData = bioRes.data.find((bio) => bio.starname === _id);
                         if (bioData) {
                             setStarBio(bioData);
                             localStorage.setItem(`starBio_${_id}`, JSON.stringify(bioData));
@@ -41,10 +41,12 @@ const StarBio = () => {
                         }
 
                         // Fetch star album data
+                        // Fetch star album data
                         const albumRes = await axios.get('https://stardb-api.onrender.com/api/stars/albums/get-all-albums');
-                        const albumData = albumRes.data.filter((albm) => albm.starname.includes(_id));
+                        const albumData = albumRes.data.filter((albm) => albm.starname && albm.starname.includes(_id));
                         setAlbums(albumData);
                         localStorage.setItem(`albums_${_id}`, JSON.stringify(albumData));
+
                     } else {
                         setError('Star not found');
                     }
