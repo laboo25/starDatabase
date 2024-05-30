@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './createStar.css'
+import './createStar.css';
 import { Upload, message, Button, Input, Form, Progress } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import axiosInstance from '../../app/axiosInstance';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 
@@ -10,8 +10,8 @@ const { Dragger } = Upload;
 
 const CreateStar = () => {
   const [starname, setStarname] = useState('');
-  const [starcover, setStarcover] = useState(null);
-  const [starprofile, setStarprofile] = useState(null);
+  const [starcover, setStarcover] = useState([]);
+  const [starprofile, setStarprofile] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
 
@@ -39,8 +39,8 @@ const CreateStar = () => {
       if (result.successful) {
         message.success('Star created successfully');
         setStarname('');
-        setStarcover(null);
-        setStarprofile(null);
+        setStarcover([]);
+        setStarprofile([]);
         setUploadPercentage(0);
       } else {
         message.error('Error creating star');
@@ -50,13 +50,13 @@ const CreateStar = () => {
     return () => uppy.close();
   }, [uppy]);
 
-  const handleCoverChange = (file) => {
-    setStarcover(file);
+  const handleCoverChange = ({ file, fileList }) => {
+    setStarcover(fileList);
     return false; // Prevent automatic upload
   };
 
-  const handleProfileChange = (file) => {
-    setStarprofile(file);
+  const handleProfileChange = ({ file, fileList }) => {
+    setStarprofile(fileList);
     return false; // Prevent automatic upload
   };
 
@@ -64,11 +64,11 @@ const CreateStar = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append('starname', values.starname);
-    if (starcover) formData.append('starcover', starcover);
-    if (starprofile) formData.append('starprofile', starprofile);
+    if (starcover.length > 0) formData.append('starcover', starcover[0].originFileObj);
+    if (starprofile.length > 0) formData.append('starprofile', starprofile[0].originFileObj);
 
     try {
-      await axios.post('https://stardb-api.onrender.com/api/stars/create-star/create-new-star', formData, {
+      await axiosInstance.post('/stars/create-star/create-new-star', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -77,6 +77,11 @@ const CreateStar = () => {
           setUploadPercentage(percentCompleted);
         },
       });
+      message.success('Star created successfully');
+      setStarname('');
+      setStarcover([]);
+      setStarprofile([]);
+      setUploadPercentage(0);
     } catch (error) {
       console.error('Error creating star:', error.response ? error.response.data : error.message);
       message.error('Error creating star');
@@ -101,8 +106,9 @@ const CreateStar = () => {
           name="starcover"
         >
           <Dragger
+            fileList={starcover}
             beforeUpload={handleCoverChange}
-            onRemove={() => setStarcover(null)}
+            onRemove={() => setStarcover([])}
             className='cover-input'
           >
             <p className="ant-upload-drag-icon">
@@ -117,8 +123,9 @@ const CreateStar = () => {
           name="starprofile"
         >
           <Dragger
+            fileList={starprofile}
             beforeUpload={handleProfileChange}
-            onRemove={() => setStarprofile(null)}
+            onRemove={() => setStarprofile([])}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './createAlbum.css';
 import { Upload, message, Button, Input, Select, Progress } from 'antd';
 import { InboxOutlined, DeleteOutlined, CheckCircleOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import axiosInstance from '../../app/axiosInstance'; // Import axios instance
 
 const { Dragger } = Upload;
 const { Option } = Select;
@@ -19,7 +19,7 @@ const CreateAlbums = () => {
 
   useEffect(() => {
     // Fetch star names from the API
-    axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star')
+    axiosInstance.get('/stars/create-star/get-all-star')
       .then(response => {
         const sortedStars = response.data.sort((a, b) => a.starname.localeCompare(b.starname));
         setStarOptions(sortedStars);
@@ -59,7 +59,7 @@ const CreateAlbums = () => {
     });
 
     try {
-      const response = await axios.post('https://stardb-api.onrender.com/api/stars/albums/create-album', formData, {
+      const response = await axiosInstance.post('/stars/albums/create-album', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -71,9 +71,14 @@ const CreateAlbums = () => {
       // Mark files as uploaded
       setFileList(fileList.map(file => ({ ...file, uploaded: true })));
     } catch (error) {
-      console.error('Error creating album:', error.response?.data);
-      setUploadMessage('Error creating album');
-      message.error('Error creating album');
+      if (error.response && error.response.status === 401) {
+        setUploadMessage('Unauthorized. Please log in.');
+        message.error('Unauthorized. Please log in.');
+      } else {
+        console.error('Error creating album:', error.response?.data);
+        setUploadMessage('Error creating album');
+        message.error('Error creating album');
+      }
     } finally {
       setLoading(false);
     }

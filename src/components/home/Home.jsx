@@ -1,7 +1,6 @@
-// Home.js
 import React, { useEffect, useState } from 'react';
-import './home.css'
-import axios from 'axios';
+import './home.css';
+import axiosInstance from '../../app/axiosInstance';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
@@ -11,7 +10,7 @@ const Home = () => {
     useEffect(() => {
         const fetchStarTitles = async () => {
             try {
-                const res = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+                const res = await axiosInstance.get('/stars/create-star/get-all-star');
                 const sortedData = res.data.sort((a, b) => a.starname.localeCompare(b.starname));
                 setStarTitles(sortedData);
             } catch (error) {
@@ -31,20 +30,20 @@ const Home = () => {
             <div>
                 <div id='home'>
                     <div className='wrapper'>
-                            {error ? (
-                                <div className="error">An error occurred: {error.message}</div>
-                            ) : (
-                                starTitles.map((star, index) => (
-                                    <div className='card' key={index}>
-                                        <div style={{width: "100%"}}>
-                                            <Link to={`/star/${star._id}`}>
-                                                <img src={star.starcover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                            </Link>
-                                        </div>
-                                        <p className='title'>{star.starname}</p>
+                        {error ? (
+                            <div className="error">An error occurred: {error.message}</div>
+                        ) : (
+                            starTitles.map((star, index) => (
+                                <div className='card' key={index}>
+                                    <div style={{ width: "100%" }}>
+                                        <Link to={`/star/${star._id}`}>
+                                            <img src={star.starcover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                        </Link>
                                     </div>
-                                ))
-                            )}
+                                    <p className='title'>{star.starname}</p>
+                                </div>
+                            ))
+                        )}
                     </div>
                 </div>
             </div>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import './createStarBio.css'
-import axios from 'axios';
+import './createStarBio.css';
+import axios from '../../app/axiosInstance';
 import { Select, Input, InputNumber, DatePicker, Button, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const CreateStarBio = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const [starNames, setStarNames] = useState([]);
@@ -43,6 +43,7 @@ const CreateStarBio = () => {
       })
       .catch(error => {
         console.error('Error fetching the star names:', error);
+        message.error('Error fetching the star names');
       });
   }, []);
 
@@ -103,14 +104,14 @@ const CreateStarBio = () => {
 
     axios.post('https://stardb-api.onrender.com/api/stars/star-bio/create-star-bio', starData)
       .then(response => {
-        message.success('Star bio created successfully');
+        message.success('Star bio created successfully', 5, { top: 0, left: '50%', transform: 'translateX(-50%)' });
         resetForm();
         sessionStorage.setItem('scrollPosition', window.scrollY);
-        navigate('/path-to-redirect');
+        // navigate('/path-to-redirect');
       })
       .catch(error => {
         console.error('Error creating star bio:', error);
-        message.error('Error creating star bio');
+        message.error('Error creating star bio', 5, { top: 0, left: '50%', transform: 'translateX(-50%)' });
       })
       .finally(() => {
         setLoading(false);
@@ -153,299 +154,280 @@ const CreateStarBio = () => {
   const sortOptions = (options) => options.sort((a, b) => a.label.localeCompare(b.label));
 
   return (
-    <div onKeyDown={handleKeyDown}>
-      <div className='lbl-inpt-wrap'>
-        <label>star name: </label>
-        <Select
-          className='star-select'
-          showSearch
-          placeholder="Select a star"
-          optionFilterProp="children"
-          onChange={setSelectedStar}
-          allowClear
-          filterOption={(input, option) =>
-            option.label.toLowerCase().includes(input.toLowerCase())
-          }
-          options={starNames.map(star => ({
-            value: star._id,
-            label: star.starname,
-          }))}
-        />
+    <div>
+      <div>
+        <h2 className='capitalize text-[25px] font-bold'>create star bio</h2>
       </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Add aliases</label>
-        <Select
-          mode="tags"
-          style={{ width: '100%' }}
-          placeholder="Add aliases"
-          value={aliases}
-          onChange={setAliases}
-          tokenSeparators={[',']}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Star real name</label>
-        <Input
-          placeholder="Star real name"
-          value={birthName}
-          onChange={e => setBirthName(e.target.value)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Birth place</label>
-        <Input
-          placeholder="Birth place"
-          value={birthPlace}
-          onChange={e => setBirthPlace(e.target.value)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Birth date</label>
-        <DatePicker
-          format="YYYY-MM-DD"
-          placeholder="Birth date"
-          onChange={date => setBirthDate(date ? date.format('YYYY-MM-DD') : null)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Death date</label>
-        <DatePicker
-          format="YYYY-MM-DD"
-          placeholder="Death date"
-          onChange={date => setDeathDate(date ? date.format('YYYY-MM-DD') : null)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Occupation</label>
-        <Select
-          mode="multiple"
-          style={{ width: '100%' }}
-          placeholder="Occupation"
-          value={occupation}
-          onChange={setOccupation}
-          options={sortOptions([
-            { value: 'adult model', label: 'adult model' },
-            { value: 'pornstar', label: 'pornstar' },
-          ])}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Status</label>
-        <Select
-          defaultValue="active"
-          style={{ width: 120 }}
-          onChange={setStatus}
-          options={sortOptions([
-            { value: 'active', label: 'active' },
-            { value: 'retired', label: 'retired' },
-            { value: 'died', label: 'died' },
-          ])}
-          allowClear
-        />
-      </div>
-      <div className='multipe-wrapper'>
-      <div className='lbl-inpt-wrap'>
-        <label>Active Year Start</label>
-        <InputNumber
-          defaultValue={2010}
-          onChange={value => setActiveYearStart(value !== null ? value : null)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Active Year End</label>
-        <InputNumber
-          defaultValue={null}
-          onChange={value => setActiveYearEnd(value !== null ? value : null)}
-          allowClear
-        />
-      </div>
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Ethnicity</label>
-        <Select
-          defaultValue="caucasian"
-          style={{ width: 120 }}
-          onChange={setEthnicity}
-          options={sortOptions([
-            { value: 'caucasian', label: 'caucasian' },
-            { value: 'mixed', label: 'mixed' },
-            { value: 'latin', label: 'latin' },
-            { value: 'mixed-caucasian', label: 'mixed-caucasian' },
-            { value: 'mixed-latin', label: 'mixed-latin' },
-            { value: 'black', label: 'black' },
-            { value: 'mixed-black', label: 'mixed-black' },
-          ])}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Height</label>
-        <Input
-          placeholder="Height"
-          value={height}
-          onChange={e => setHeight(e.target.value)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Hair Color</label>
-        <Select
-          defaultValue="brown"
-          style={{ width: 120 }}
-          onChange={setHairColor}
-          options={sortOptions([
-            { value: 'black', label: 'black' },
-            { value: 'brown', label: 'brown' },
-            { value: 'blonde', label: 'blonde' },
-            { value: 'red', label: 'red' },
-            { value: 'green', label: 'green' },
-            { value: 'auburn', label: 'auburn' },
-            { value: 'gray', label: 'gray' },
-            { value: 'white', label: 'white' },
-          ])}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Eye Color</label>
-        <Select
-          defaultValue="black"
-          onChange={setEyeColor}
-          options={sortOptions([
-            { value: 'black', label: 'black' },
-            { value: 'brown', label: 'brown' },
-            { value: 'blue', label: 'blue' },
-            { value: 'green', label: 'green' },
-            { value: 'red', label: 'red' },
-            { value: 'hazel', label: 'hazel' },
-            { value: 'gray', label: 'gray' },
-            { value: 'amber', label: 'amber' },
-          ])}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Shoe Size</label>
-        <InputNumber
-          min={4}
-          max={50}
-          defaultValue={35}
-          onChange={value => setShoeSize(value !== null ? value : null)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap measurement'>
-      <label>measurement</label>
-        <div className='wrap'>
-        <InputNumber
-        className='bust'
-          min={4}
-          max={50}
-          defaultValue={34}
-          onChange={value => setBustSize(value !== null ? value : null)}
-          allowClear
-        />
-        <Input
-        className='cup'
-          placeholder="Cup Size"
-          value={cupSize}
-          onChange={e => setCupSize(e.target.value)}
-          allowClear
-        />
-        <InputNumber
-        className='chest'
-          min={4}
-          max={50}
-          defaultValue={24}
-          onChange={value => setWaistSize(value !== null ? value : null)}
-          allowClear
-        />
-        <InputNumber
-        className='hip'
-          min={4}
-          max={50}
-          defaultValue={34}
-          onChange={value => setHipsSize(value !== null ? value : null)}
-          allowClear
-        />
+      <div onKeyDown={handleKeyDown}>
+        <div className='lbl-inpt-wrap'>
+          <label>Star name: </label>
+          <Select
+            className='star-select'
+            showSearch
+            placeholder="Select a star"
+            optionFilterProp="children"
+            onChange={setSelectedStar}
+            allowClear
+            filterOption={(input, option) =>
+              option.label.toLowerCase().includes(input.toLowerCase())
+            }
+            options={starNames.map(star => ({
+              value: star._id,
+              label: star.starname,
+            }))}
+          />
         </div>
-      </div>
-      
-      <div className='lbl-inpt-wrap'>
-        <label>Tattoos</label>
-        <Input
-          placeholder="Tattoos"
-          value={tattoos}
-          onChange={e => setTattoos(e.target.value)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Piercings</label>
-        <Input
-          placeholder="Piercings"
-          value={piercings}
-          onChange={e => setPiercings(e.target.value)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Pubic Hair</label>
-        <Input
-          placeholder="Pubic hair"
-          value={pubicHair}
-          onChange={e => setPubicHair(e.target.value)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Boobs</label>
-        <Input
-        style={{width: "100%"}}
-          placeholder="Boobs"
-          defaultValue={'natural'}
-          value={boobs}
-          onChange={e => setBoobs(e.target.value)}
-          allowClear
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
-        <label>Skills</label>
-        <Select
-          mode="multiple"
-          allowClear
-          style={{ width: '100%' }}
-          placeholder="Skills"
-          value={skills}
-          onChange={setSkills}
-          options={sortOptions([
-            { value: 'anal', label: 'anal' },
-            { value: 'bdsm', label: 'bdsm' },
-            { value: 'foot fetish', label: 'foot fetish' },
-            { value: 'double', label: 'double' },
-            { value: 'double anal', label: 'double anal' },
-            { value: 'double vaginal', label: 'double vaginal' },
-            { value: 'triple', label: 'triple' },
-            { value: 'trans', label: 'trans' },
-          ])}
-        />
-      </div>
-      <div className='lbl-inpt-wrap'>
+        <div className='lbl-inpt-wrap'>
+          <label>Add aliases</label>
+          <Select
+            mode="tags"
+            style={{ width: '100%' }}
+            placeholder="Add aliases"
+            value={aliases}
+            onChange={setAliases}
+            tokenSeparators={[',']}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Star real name</label>
+          <Input
+            placeholder="Star real name"
+            value={birthName}
+            onChange={e => setBirthName(e.target.value)}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Birth place</label>
+          <Input
+            placeholder="Birth place"
+            value={birthPlace}
+            onChange={e => setBirthPlace(e.target.value)}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Birth date</label>
+          <DatePicker
+            format="YYYY-MM-DD"
+            placeholder="Birth date"
+            onChange={date => setBirthDate(date ? date.format('YYYY-MM-DD') : null)}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Death date</label>
+          <DatePicker
+            format="YYYY-MM-DD"
+            placeholder="Death date"
+            onChange={date => setDeathDate(date ? date.format('YYYY-MM-DD') : null)}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Occupation</label>
+          <Select
+            mode="multiple"
+            style={{ width: '100%' }}
+            placeholder="Occupation"
+            value={occupation}
+            onChange={setOccupation}
+            options={sortOptions([
+              { value: 'adult model', label: 'adult model' },
+              { value: 'pornstar', label: 'pornstar' },
+            ])}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Status</label>
+          <Select
+            defaultValue="active"
+            style={{ width: 120 }}
+            onChange={setStatus}
+            options={sortOptions([
+              { value: 'active', label: 'active' },
+              { value: 'retired', label: 'retired' },
+              { value: 'deceased', label: 'deceased' },
+            ])}
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Active year start</label>
+          <InputNumber
+            placeholder="Active year start"
+            value={activeYearStart}
+            onChange={setActiveYearStart}
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Active year end</label>
+          <InputNumber
+            placeholder="Active year end"
+            value={activeYearEnd}
+            onChange={setActiveYearEnd}
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Ethnicity</label>
+          <Select
+            defaultValue="caucasian"
+            style={{ width: 120 }}
+            onChange={setEthnicity}
+            options={sortOptions([
+              { value: 'caucasian', label: 'caucasian' },
+              { value: 'black', label: 'black' },
+              { value: 'asian', label: 'asian' },
+              { value: 'latin', label: 'latin' },
+              { value: 'indian', label: 'indian' },
+              { value: 'middle eastern', label: 'middle eastern' },
+              { value: 'native american', label: 'native american' },
+              { value: 'pacific islander', label: 'pacific islander' },
+            ])}
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Height</label>
+          <Input
+            placeholder="Height"
+            value={height}
+            onChange={e => setHeight(e.target.value)}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Hair color</label>
+          <Select
+            defaultValue="brown"
+            style={{ width: 120 }}
+            onChange={setHairColor}
+            options={sortOptions([
+              { value: 'blonde', label: 'blonde' },
+              { value: 'brunette', label: 'brunette' },
+              { value: 'black', label: 'black' },
+              { value: 'brown', label: 'brown' },
+              { value: 'red', label: 'red' },
+              { value: 'grey', label: 'grey' },
+              { value: 'bald', label: 'bald' },
+              { value: 'dyed', label: 'dyed' },
+            ])}
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Eye color</label>
+          <Select
+            defaultValue="black"
+            style={{ width: 120 }}
+            onChange={setEyeColor}
+            options={sortOptions([
+              { value: 'black', label: 'black' },
+              { value: 'brown', label: 'brown' },
+              { value: 'blue', label: 'blue' },
+              { value: 'green', label: 'green' },
+              { value: 'grey', label: 'grey' },
+              { value: 'hazel', label: 'hazel' },
+            ])}
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Shoe size</label>
+          <InputNumber
+            placeholder="Shoe size"
+            value={shoeSize}
+            onChange={setShoeSize}
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Measurements</label>
+          <Input
+            placeholder="Cup size"
+            value={cupSize}
+            onChange={e => setCupSize(e.target.value)}
+            allowClear
+          />
+          <Input
+            placeholder="Bust size"
+            value={bustSize}
+            onChange={e => setBustSize(e.target.value)}
+            allowClear
+          />
+          <Input
+            placeholder="Waist size"
+            value={waistSize}
+            onChange={e => setWaistSize(e.target.value)}
+            allowClear
+          />
+          <Input
+            placeholder="Hips size"
+            value={hipsSize}
+            onChange={e => setHipsSize(e.target.value)}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Tattoos</label>
+          <Input
+            placeholder="Tattoos"
+            value={tattoos}
+            onChange={e => setTattoos(e.target.value)}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Piercings</label>
+          <Input
+            placeholder="Piercings"
+            value={piercings}
+            onChange={e => setPiercings(e.target.value)}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Pubic hair</label>
+          <Input
+            placeholder="Pubic hair"
+            value={pubicHair}
+            onChange={e => setPubicHair(e.target.value)}
+            allowClear
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Boobs</label>
+          <Select
+            defaultValue="natural"
+            style={{ width: 120 }}
+            onChange={setBoobs}
+            options={sortOptions([
+              { value: 'natural', label: 'natural' },
+              { value: 'fake', label: 'fake' },
+            ])}
+          />
+        </div>
+        <div className='lbl-inpt-wrap'>
+          <label>Skills</label>
+          <Select
+            mode="multiple"
+            style={{ width: '100%' }}
+            placeholder="Skills"
+            value={skills}
+            onChange={setSkills}
+            options={sortOptions([
+              { value: 'acting', label: 'acting' },
+              { value: 'dancing', label: 'dancing' },
+              { value: 'singing', label: 'singing' },
+              { value: 'stunts', label: 'stunts' },
+            ])}
+            allowClear
+          />
+        </div>
         <Button
           type="primary"
           onClick={handleSubmit}
           loading={loading}
-          style={{ display: 'block', margin: '0 auto' }}
-          className='bg-blue-500'
+          disabled={!selectedStar || loading}
         >
-          Submit star bio
+          Create Star Bio
         </Button>
       </div>
     </div>
@@ -453,3 +435,4 @@ const CreateStarBio = () => {
 };
 
 export default CreateStarBio;
+

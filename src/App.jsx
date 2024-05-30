@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 
 const App = () => {
   return (
-    <div>
-      <div>
-        <Link to='create'>create data</Link>
+    <div className='pt-[30px]'>
+      <div className='bg-[#ff5733] p-[10px] uppercase rounded-[20px] w-fit ml-[20px] text-white px-[20px]'>
+        <Link to='create' className=''>create data</Link>
       </div>
       <Home/>
     </div>
