@@ -7,6 +7,7 @@ import {
 import "./index.css";
 import App from "./App";
 import StarBio from "./components/starBio/StarBio";
+import Create from "./components/create/Create";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/star/:_id",
     element: <StarBio/>,
+  },
+  {
+    path: "/create",
+    element: <Create/>,
   }
 ]);
 

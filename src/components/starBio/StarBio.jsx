@@ -96,9 +96,8 @@ const StarBio = () => {
             case 'active':
                 return 'active-status';
             case 'retired':
-                return 'retired-status';
+                return 'retire-status';
             case 'died':
-            case 'dead':
                 return 'died-status';
             default:
                 return '';
