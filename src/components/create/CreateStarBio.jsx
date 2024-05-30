@@ -319,6 +319,7 @@ const CreateStarBio = () => {
             { value: 'green', label: 'green' },
             { value: 'red', label: 'red' },
             { value: 'hazel', label: 'hazel' },
+            { value: 'grey', label: 'grey' },
           ])}
           allowClear
         />
