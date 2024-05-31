@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './createStar.css';
 import { Upload, message, Button, Input, Form, Progress } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import axiosInstance from '../../app/axiosInstance';
-import Uppy from '@uppy/core';
-import XHRUpload from '@uppy/xhr-upload';
+import axios from 'axios';
 
 const { Dragger } = Upload;
 
@@ -15,60 +13,33 @@ const CreateStar = () => {
   const [loading, setLoading] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
 
-  const uppy = new Uppy({
-    autoProceed: false,
-    restrictions: {
-      maxNumberOfFiles: 1,
-    },
-  });
-
-  uppy.use(XHRUpload, {
-    endpoint: 'https://stardb-api.onrender.com/api/stars/create-star/create-new-star',
-    fieldName: 'files',
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-    onProgress: (progress) => {
-      setUploadPercentage(progress);
-    },
-  });
-
-  useEffect(() => {
-    uppy.on('complete', (result) => {
-      setLoading(false);
-      if (result.successful) {
-        message.success('Star created successfully');
-        setStarname('');
-        setStarcover([]);
-        setStarprofile([]);
-        setUploadPercentage(0);
-      } else {
-        message.error('Error creating star');
-      }
-    });
-
-    return () => uppy.close();
-  }, [uppy]);
-
-  const handleCoverChange = ({ file, fileList }) => {
+  const handleCoverChange = ({ fileList }) => {
     setStarcover(fileList);
-    return false; // Prevent automatic upload
   };
 
-  const handleProfileChange = ({ file, fileList }) => {
+  const handleProfileChange = ({ fileList }) => {
     setStarprofile(fileList);
-    return false; // Prevent automatic upload
   };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async () => {
+    if (!starname) {
+      message.error('Please input the star name');
+      return;
+    }
+
     setLoading(true);
+
     const formData = new FormData();
-    formData.append('starname', values.starname);
-    if (starcover.length > 0) formData.append('starcover', starcover[0].originFileObj);
-    if (starprofile.length > 0) formData.append('starprofile', starprofile[0].originFileObj);
+    formData.append('starname', starname);
+    if (starcover.length > 0) {
+      formData.append('starcover', starcover[0].originFileObj);
+    }
+    if (starprofile.length > 0) {
+      formData.append('starprofile', starprofile[0].originFileObj);
+    }
 
     try {
-      await axiosInstance.post('/stars/create-star/create-new-star', formData, {
+      await axios.post('https://stardb-api.onrender.com/api/stars/create-star/create-new-star', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -77,6 +48,7 @@ const CreateStar = () => {
           setUploadPercentage(percentCompleted);
         },
       });
+
       message.success('Star created successfully');
       setStarname('');
       setStarcover([]);
@@ -99,7 +71,7 @@ const CreateStar = () => {
           name="starname"
           rules={[{ required: true, message: 'Please input the star name!' }]}
         >
-          <Input value={starname} onChange={(e) => setStarname(e.target.value)} allowClear className='title-input'/>
+          <Input value={starname} onChange={(e) => setStarname(e.target.value)} allowClear className='title-input' />
         </Form.Item>
         <Form.Item
           label="Star Cover"
@@ -107,7 +79,8 @@ const CreateStar = () => {
         >
           <Dragger
             fileList={starcover}
-            beforeUpload={handleCoverChange}
+            beforeUpload={() => false} // Prevent automatic upload
+            onChange={handleCoverChange}
             onRemove={() => setStarcover([])}
             className='cover-input'
           >
@@ -124,7 +97,8 @@ const CreateStar = () => {
         >
           <Dragger
             fileList={starprofile}
-            beforeUpload={handleProfileChange}
+            beforeUpload={() => false} // Prevent automatic upload
+            onChange={handleProfileChange}
             onRemove={() => setStarprofile([])}
           >
             <p className="ant-upload-drag-icon">

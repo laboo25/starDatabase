@@ -340,6 +340,7 @@ const CreateStarBio = () => {
         </div>
         <div className='lbl-inpt-wrap'>
           <label>Measurements</label>
+          <div className='w-auto flex gap-2'>
           <Input
             placeholder="Cup size"
             value={cupSize}
@@ -364,6 +365,7 @@ const CreateStarBio = () => {
             onChange={e => setHipsSize(e.target.value)}
             allowClear
           />
+          </div>
         </div>
         <div className='lbl-inpt-wrap'>
           <label>Tattoos</label>

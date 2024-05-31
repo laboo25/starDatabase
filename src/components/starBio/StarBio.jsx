@@ -108,7 +108,7 @@ const StarBio = () => {
 
     return (
         <div>
-            <div id='bio-page'>
+            <div id='bio-page' className='w-full flex'>
                 <div className='profile'>
                     <img src={starName.starprofile} alt={starName.starname} />
                 </div>
@@ -116,9 +116,18 @@ const StarBio = () => {
                     <h2 className='title'>{starName.starname}</h2>
                     <div className='bio-texts'>
                         <div>
-                            {starBio.aliases && <div>Aliases: {renderArrayItems(starBio.aliases)}</div>}
-                            {starBio.birthname && <div>Birth Name: {starBio.birthname}</div>}
-                            {starBio.birthplace && <div>Birthplace: {starBio.birthplace}</div>}
+                            {starBio.aliases &&
+                                <div className='w-auto flex'>
+                                    <div className='font-bold pr-2'>Aliases:</div>
+                                    <span className='font-light'>{renderArrayItems(starBio.aliases)}</span></div>}
+                            {starBio.birthname && 
+                            <div className='font-bold'>Birth Name:
+                                <span className='font-light pl-2'>{starBio.birthname}</span>
+                                </div>}
+                            {starBio.birthplace && 
+                            <div className='font-medium'>Birthplace: 
+                                <span className='font-light pl-2'>{starBio.birthplace}</span>
+                                </div>}
                             <div>Age: {age}</div>
                             {starBio.birthdate && <div>Birthdate: {moment(starBio.birthdate).format('DD-MMM-YYYY')}</div>}
                             {starBio.deathdate ? <div>Death Date: {moment(starBio.deathdate).format('DD-MMM-YYYY')}</div> : null}
