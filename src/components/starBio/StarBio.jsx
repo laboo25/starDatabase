@@ -16,12 +16,10 @@ const StarBio = () => {
             try {
                 const storedStarName = localStorage.getItem(`starName_${_id}`);
                 const storedStarBio = localStorage.getItem(`starBio_${_id}`);
-                const storedAlbums = localStorage.getItem(`albums_${_id}`);
 
-                if (storedStarName && storedStarBio && storedAlbums) {
+                if (storedStarName && storedStarBio) {
                     setStarName(JSON.parse(storedStarName));
                     setStarBio(JSON.parse(storedStarBio));
-                    setAlbums(JSON.parse(storedAlbums));
                 } else {
                     // Fetch star title data
                     const titleRes = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
@@ -37,17 +35,16 @@ const StarBio = () => {
                             setStarBio(bioData);
                             localStorage.setItem(`starBio_${_id}`, JSON.stringify(bioData));
                         }
-
-                        // Fetch star album data
-                        const albumRes = await axios.get('https://stardb-api.onrender.com/api/stars/albums/get-all-albums');
-                        const albumData = albumRes.data.filter((albm) => albm.starname && albm.starname.includes(_id));
-                        setAlbums(albumData);
-                        localStorage.setItem(`albums_${_id}`, JSON.stringify(albumData));
-
                     } else {
                         setError('Star not found');
                     }
                 }
+
+                // Fetch star album data
+                const albumRes = await axios.get('https://stardb-api.onrender.com/api/stars/albums/get-all-albums');
+                const albumData = albumRes.data.filter((albm) => albm.starname && albm.starname.includes(_id));
+                setAlbums(albumData);
+
             } catch (error) {
                 setError(error.message);
             }
@@ -55,6 +52,25 @@ const StarBio = () => {
 
         fetchData();
     }, [_id]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    useEffect(() => {
+        const scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition, 10));
+        }
+    }, []);
 
     const calculateAge = (birthdate) => {
         return moment().diff(birthdate, 'years');

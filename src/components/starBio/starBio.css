@@ -31,21 +31,21 @@
     line-height: 25px;
 }
 .active-status {
-    background-color: green;
+    background-color: #32CD32 ;
     color: white;
     padding: 5px;
     border-radius: 5px;
 }
 
 .retire-status {
-    background-color: yellow;
+    background-color: #fdbe0f;
     color: black;
     padding: 5px;
     border-radius: 5px;
 }
 
 .died-status {
-    background-color: red;
+    background-color: #FF0000;
     color: white;
     padding: 5px;
     border-radius: 5px;
