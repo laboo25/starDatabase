@@ -1,14 +1,19 @@
-.ant-select  {
-    width: 300px;
+
+.measurement-inpt {
+    padding: 5px 0 10px 0;
+    display: flex !important;
+    width: auto;
+    gap: 20px;
+    width: 100%;
 }
 .lbl-inpt-wrap {
-    display: flex;
-    /* flex-wrap: wrap; */
+    width: 100%;
+    display: flex !important;
+    flex-wrap: wrap;
     flex-direction: column;
-    padding: 5px 0 10px 0;
 }
 .lbl-inpt-wrap label {
-    padding: 5px 0 10px 0px;
+    padding: 25px 0 10px 0px;
 }
 .multiple-wrapper {
     display: flex !important;
@@ -36,4 +41,12 @@
 .chest {
     width: 60px;
 }
+
+
+
+@media only screen and (max-width: 375px) {
+    .measurement-inpt {
+      max-width: 375px;
+    }
+  }
 

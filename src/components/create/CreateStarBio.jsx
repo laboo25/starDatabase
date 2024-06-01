@@ -342,7 +342,7 @@ const CreateStarBio = () => {
         <div className='lbl-inpt-wrap'>
           <label>Shoe size</label>
           <InputNumber
-            min={30}
+            min={1}
             max={50}
             value={shoeSize}
             onChange={setShoeSize}
