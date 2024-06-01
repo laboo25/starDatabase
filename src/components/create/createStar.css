@@ -1,32 +1,43 @@
-.title {
-    font-size: 30px;
-    font-weight: bold;
-    padding: 5px;
-    margin-bottom: 50px;
+
+.measurement-inpt {
+    padding: 5px 0 10px 0;
+    display: flex !important;
+    width: auto;
+    gap: 20px;
 }
-.title-input {
+.lbl-inpt-wrap {
     width: 100%;
-    max-width: 500px;
-}
-.ant-row {
-    
-    display: flex;
+    display: flex !important;
     flex-wrap: wrap;
     flex-direction: column;
 }
-.ant-form-item {
-    min-height: 200px;
+.lbl-inpt-wrap label {
+    padding: 25px 0 10px 0px;
 }
-.ant-form-item:first-child {
-    min-height: 10px;
+.multiple-wrapper {
+    display: flex !important;
 }
-form label {
+.measurement {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.wrap {
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
-form>div {
-    width: 100%;
+.bust {
+    width: 60px;
 }
-div.ant-upload {
-    width: 100%;
-    /* max-width: 500px; */
+.cup {
+    width: 70px !important;
 }
+.hip {
+    width: 60px !important;
+}
+.chest {
+    width: 60px;
+}
+
