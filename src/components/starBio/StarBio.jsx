@@ -80,9 +80,9 @@ const StarBio = () => {
         if (!size) return null;
         const number = parseInt(size, 10);
         if (number >= 1 && number <= 20) {
-            return `${size} us`;
+            return `${size} US`;
         } else if (number >= 21 && number <= 50) {
-            return `${size} eu`;
+            return `${size} EU`;
         }
         return size;
     };
@@ -91,7 +91,7 @@ const StarBio = () => {
         if (!items || items.length === 0) return null;
         return items.map((item, index) => (
             <span key={index}>
-                {item}{index === items.length - 1 ? ';' : ', '}
+                {item}{index === items.length - 1 ? '' : ', '}
             </span>
         ));
     };
@@ -110,8 +110,7 @@ const StarBio = () => {
     };
 
     return (
-        <div>
-            {error && <div>Error: {error}</div>}
+        <div id='main'>
             <div id='bio-page' className='w-full flex'>
                 <div className='profile'>
                     {starName && <img src={starName.starprofile} alt={starName.starname} />}
@@ -119,75 +118,151 @@ const StarBio = () => {
                 <div className='bio'>
                     {starName && <h2 className='title'>{starName.starname}</h2>}
                     <div className='bio-texts'>
-                        <div>
-                            {starBio ? (
-                                <>
-                                    {starBio.aliases && (
-                                        <div className='w-auto flex'>
-                                            <div className='font-bold pr-2'>Aliases:</div>
-                                            <span className='font-light'>{renderArrayItems(starBio.aliases)}</span>
-                                        </div>
-                                    )}
-                                    {starBio.birthname && (
-                                        <div className='font-bold'>
-                                            Birth Name:
-                                            <span className='font-light pl-2'>{starBio.birthname}</span>
-                                        </div>
-                                    )}
-                                    {starBio.birthplace && (
-                                        <div className='font-medium'>
-                                            Birthplace:
-                                            <span className='font-light pl-2'>{starBio.birthplace}</span>
-                                        </div>
-                                    )}
-                                    <div>Age: {starBio.birthdate ? calculateAge(starBio.birthdate) : 'Unknown'}</div>
-                                    {starBio.birthdate && <div>Birthdate: {moment(starBio.birthdate).format('DD-MMM-YYYY')}</div>}
-                                    {starBio.deathdate && <div>Death Date: {moment(starBio.deathdate).format('DD-MMM-YYYY')}</div>}
-                                    {starBio.occupation && <div>Occupation: {renderArrayItems(starBio.occupation)}</div>}
-                                    {starBio.status && <div className={getStatusClass(starBio.status)}>Status: {starBio.status}</div>}
-                                    {starBio.start && <div>Start: {starBio.start}</div>}
-                                    {starBio.end && <div>End: {starBio.end}</div>}
-                                    {starBio.ethnicity && <div>Ethnicity: {starBio.ethnicity}</div>}
-                                    {starBio.height && <div>Height: {starBio.height}</div>}
-                                    {starBio.hair && <div>Hair: {starBio.hair}</div>}
-                                    {starBio.eyes && <div>Eyes: {starBio.eyes}</div>}
-                                    {starBio.shoesize && <div>Shoe Size: {formatShoeSize(starBio.shoesize)}</div>}
+                        {starBio && (
+                            <>
+                                {starBio.aliases && (
                                     <div>
-                                        {starBio.measurement && starBio.measurement.map((item, index) => (
-                                            <p key={index}>
-                                                <span>{item.bust}</span>
-                                                <span>{item.cup}</span>
-                                                <span>–</span>
-                                                <span>{item.waist}</span>
-                                                <span>–</span>
-                                                <span>{item.hips}</span>
-                                            </p>
-                                        ))}
+                                        <span className='fontMedium'>Aliases:</span>
+                                        <span className='fontReg'>{renderArrayItems(starBio.aliases)}</span>
                                     </div>
-                                    {starBio.tattoos && <div>Tattoos: {starBio.tattoos}</div>}
-                                    {starBio.piercings && <div>Piercings: {starBio.piercings}</div>}
-                                    {starBio.skills && <div>Skills: {renderArrayItems(starBio.skills)}</div>}
-                                    {starBio.pubic && <div>Pubic Hair: {starBio.pubic}</div>}
-                                    {starBio.boobs && <div>Boobs: {starBio.boobs}</div>}
-                                </>
-                            ) : (
-                                <div>No bio data available</div>
-                            )}
-                        </div>
+                                )}
+                                {starBio.birthname && (
+                                    <div>
+                                        <span className='fontMedium'>Birth Name:</span>
+                                        <span className='fontReg'>{starBio.birthname}</span>
+                                    </div>
+                                )}
+                                {starBio.birthplace && (
+                                    <div>
+                                        <span className='fontMedium'>Birthplace:</span>
+                                        <span className='fontReg'>{starBio.birthplace}</span>
+                                    </div>
+                                )}
+                                <div>
+                                    <span className='fontMedium'>Age:</span>
+                                    <span className='fontReg'>{starBio.birthdate ? calculateAge(starBio.birthdate) : 'Unknown'}</span>
+                                </div>
+                                {starBio.birthdate && (
+                                    <div>
+                                        <span className='fontMedium'>Birthdate:</span>
+                                        <span className='fontReg'>{moment(starBio.birthdate).format('DD-MMM-YYYY')}</span>
+                                    </div>
+                                )}
+                                {starBio.deathdate && (
+                                    <div>
+                                        <span className='fontMedium'>Death Date:</span>
+                                        <span className='fontReg'>{moment(starBio.deathdate).format('DD-MMM-YYYY')}</span>
+                                    </div>
+                                )}
+                                {starBio.occupation && (
+                                    <div>
+                                        <span className='fontMedium'>Occupation:</span>
+                                        <span className='fontReg'>{renderArrayItems(starBio.occupation)}</span>
+                                    </div>
+                                )}
+                                {starBio.status && (
+                                    <div>
+                                        <span className='fontMedium'>Status:</span>
+                                        <span className={`fontReg text-[#fff] px-[10px] ${getStatusClass(starBio.status)}`}>{starBio.status}</span>
+                                    </div>
+                                )}
+                                {starBio.start && (
+                                    <div>
+                                        <span className='fontMedium'>Start:</span>
+                                        <span className='fontReg'>{starBio.start}</span>
+                                    </div>
+                                )}
+                                {starBio.end && (
+                                    <div>
+                                        <span className='fontMedium'>End:</span>
+                                        <span className='fontReg'>{starBio.end}</span>
+                                    </div>
+                                )}
+                                {starBio.ethnicity && (
+                                    <div>
+                                        <span className='fontMedium'>Ethnicity:</span>
+                                        <span className='fontReg'>{starBio.ethnicity}</span>
+                                    </div>
+                                )}
+                                {starBio.height && (
+                                    <div>
+                                        <span className='fontMedium'>Height:</span>
+                                        <span className='fontReg'>{starBio.height}</span>
+                                    </div>
+                                )}
+                                {starBio.hair && (
+                                    <div>
+                                        <span className='fontMedium'>Hair:</span>
+                                        <span className='fontReg'>{starBio.hair}</span>
+                                    </div>
+                                )}
+                                {starBio.eyes && (
+                                    <div>
+                                        <span className='fontMedium'>Eyes:</span>
+                                        <span className='fontReg'>{starBio.eyes}</span>
+                                    </div>
+                                )}
+                                {starBio.shoesize && (
+                                    <div>
+                                        <span className='fontMedium'>Shoe Size:</span>
+                                        <span className='fontReg'>{formatShoeSize(starBio.shoesize)}</span>
+                                    </div>
+                                )}
+                                <div>
+                                    <span className='fontMedium'>Measurement:</span>
+                                    {starBio.measurement && starBio.measurement.map((item, index) => (
+                                        <span key={index} className='fontReg'>
+                                            <span>{item.bust}</span>
+                                            <span>{item.cup}</span>
+                                            <span>–</span>
+                                            <span>{item.waist}</span>
+                                            <span>–</span>
+                                            <span>{item.hips}</span>
+                                        </span>
+                                    ))}
+                                </div>
+                                {starBio.tattoos && (
+                                    <div>
+                                        <span className='fontMedium'>Tattoos:</span>
+                                        <span className='fontReg'>{starBio.tattoos}</span>
+                                    </div>
+                                )}
+                                {starBio.piercings && (
+                                    <div>
+                                        <span className='fontMedium'>Piercings:</span>
+                                        <span className='fontReg'>{starBio.piercings}</span>
+                                    </div>
+                                )}
+                                {starBio.skills && (
+                                    <div>
+                                        <span className='fontMedium'>Skills:</span>
+                                        <span className='fontReg'>{renderArrayItems(starBio.skills)}</span>
+                                    </div>
+                                )}
+                                {starBio.pubic && (
+                                    <div>
+                                        <span className='fontMedium'>Pubic Hair:</span>
+                                        <span className='fontReg'>{starBio.pubic}</span>
+                                    </div>
+                                )}
+                                {starBio.boobs && (
+                                    <div>
+                                        <span className='fontMedium'>Boobs:</span>
+                                        <span className='fontReg'>{starBio.boobs}</span>
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
-            <div>
-                {albums.length > 0 ? (
-                    albums.map((album, index) => (
-                        <div key={index}>
-                            <div>{album.albumname}</div>
-                            {/* <img src={album.thumburl} alt={`Album ${index + 1}`} /> */}
-                        </div>
-                    ))
-                ) : (
-                    <div>No albums found</div>
-                )}
+            <div id='albums_page' className='albums-container'>
+                {albums.map((album, index) => (
+                    <div key={index} className='album'>
+                        <div>{album.albumname}</div>
+                        <img src={album.thumburl} alt={`Album ${index + 1}`} />
+                    </div>
+                ))}
             </div>
         </div>
     );
