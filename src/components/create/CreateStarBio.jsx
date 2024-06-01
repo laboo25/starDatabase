@@ -233,10 +233,10 @@ const CreateStarBio = () => {
             placeholder="Occupation"
             value={occupation}
             onChange={setOccupation}
-            options={sortOptions([
+            options={[
               { value: 'adult model', label: 'adult model' },
               { value: 'pornstar', label: 'pornstar' },
-            ])}
+            ]}
             allowClear
           />
         </div>
@@ -246,27 +246,32 @@ const CreateStarBio = () => {
             defaultValue="active"
             style={{ width: 120 }}
             onChange={setStatus}
-            options={sortOptions([
+            options={[
               { value: 'active', label: 'active' },
               { value: 'retired', label: 'retired' },
-              { value: 'deceased', label: 'deceased' },
-            ])}
+              { value: 'died', label: 'deceased' },
+            ]}
+            allowClear
           />
         </div>
         <div className='lbl-inpt-wrap'>
           <label>Active year start</label>
           <InputNumber
-            placeholder="Active year start"
+            min={1970}
+            max={2550}
             value={activeYearStart}
             onChange={setActiveYearStart}
+            placeholder="Active year start"
           />
         </div>
         <div className='lbl-inpt-wrap'>
           <label>Active year end</label>
           <InputNumber
-            placeholder="Active year end"
+            min={1970}
+            max={2530}
             value={activeYearEnd}
             onChange={setActiveYearEnd}
+            placeholder="Active year end"
           />
         </div>
         <div className='lbl-inpt-wrap'>
@@ -275,16 +280,17 @@ const CreateStarBio = () => {
             defaultValue="caucasian"
             style={{ width: 120 }}
             onChange={setEthnicity}
-            options={sortOptions([
+            options={[
               { value: 'caucasian', label: 'caucasian' },
               { value: 'black', label: 'black' },
               { value: 'asian', label: 'asian' },
               { value: 'latin', label: 'latin' },
               { value: 'indian', label: 'indian' },
-              { value: 'middle eastern', label: 'middle eastern' },
-              { value: 'native american', label: 'native american' },
-              { value: 'pacific islander', label: 'pacific islander' },
-            ])}
+              { value: 'mixed caucasian', label: 'middle caucasian' },
+              { value: 'mixed black', label: 'mixed black' },
+              { value: 'mixed latin', label: 'mixed latin' },
+            ]}
+            allowClear
           />
         </div>
         <div className='lbl-inpt-wrap'>
@@ -302,16 +308,17 @@ const CreateStarBio = () => {
             defaultValue="brown"
             style={{ width: 120 }}
             onChange={setHairColor}
-            options={sortOptions([
+            options={[
               { value: 'blonde', label: 'blonde' },
               { value: 'brunette', label: 'brunette' },
               { value: 'black', label: 'black' },
               { value: 'brown', label: 'brown' },
               { value: 'red', label: 'red' },
               { value: 'grey', label: 'grey' },
-              { value: 'bald', label: 'bald' },
-              { value: 'dyed', label: 'dyed' },
-            ])}
+              { value: 'auburn', label: 'auburn' },
+              { value: 'blonde', label: 'blonde' },
+            ]}
+            allowClear
           />
         </div>
         <div className='lbl-inpt-wrap'>
@@ -320,51 +327,79 @@ const CreateStarBio = () => {
             defaultValue="black"
             style={{ width: 120 }}
             onChange={setEyeColor}
-            options={sortOptions([
+            options={[
               { value: 'black', label: 'black' },
               { value: 'brown', label: 'brown' },
               { value: 'blue', label: 'blue' },
               { value: 'green', label: 'green' },
               { value: 'grey', label: 'grey' },
               { value: 'hazel', label: 'hazel' },
-            ])}
+              { value: 'amber', label: 'amber' },
+            ]}
+            allowClear
           />
         </div>
         <div className='lbl-inpt-wrap'>
           <label>Shoe size</label>
           <InputNumber
-            placeholder="Shoe size"
+            min={30}
+            max={50}
             value={shoeSize}
             onChange={setShoeSize}
+            placeholder="Shoe size"
           />
         </div>
         <div className='lbl-inpt-wrap'>
-          <label>Measurements</label>
-          <div className='w-auto flex gap-2'>
-          <Input
-            placeholder="Cup size"
-            value={cupSize}
-            onChange={e => setCupSize(e.target.value)}
-            allowClear
-          />
-          <Input
-            placeholder="Bust size"
-            value={bustSize}
-            onChange={e => setBustSize(e.target.value)}
-            allowClear
-          />
-          <Input
-            placeholder="Waist size"
-            value={waistSize}
-            onChange={e => setWaistSize(e.target.value)}
-            allowClear
-          />
-          <Input
-            placeholder="Hips size"
-            value={hipsSize}
-            onChange={e => setHipsSize(e.target.value)}
-            allowClear
-          />
+          <label>measurement</label>
+          <div className='measurement-inpt w-full flex'>
+            <div className=''>
+              <InputNumber
+                min={20}
+                max={50}
+                value={bustSize}
+                onChange={setBustSize}
+                placeholder="Bust size"
+                className='w-[70px]'
+              />
+            </div>
+            <Select
+              value={cupSize}
+              onChange={setCupSize}
+              options={[
+                { value: 'AA', label: 'AA' },
+                { value: 'A', label: 'A' },
+                { value: 'B', label: 'B' },
+                { value: 'C', label: 'C' },
+                { value: 'D', label: 'D' },
+                { value: 'DD', label: 'DD' },
+                { value: 'E', label: 'E' },
+                { value: 'EE', label: 'EE' },
+                { value: 'F', label: 'F' },
+                { value: 'G', label: 'G' },
+              ]}
+              allowClear
+              className='w-[70px]'
+            />
+            <div className=''>
+            <InputNumber
+              min={20}
+              max={50}
+              value={waistSize}
+              onChange={setWaistSize}
+              placeholder="Waist size"
+              className='w-[70px]'
+            />
+          </div>
+          <div className=''>
+            <InputNumber
+              min={20}
+              max={50}
+              value={hipsSize}
+              onChange={setHipsSize}
+              placeholder="Hips size"
+              className='w-[70px]'
+            />
+          </div>
           </div>
         </div>
         <div className='lbl-inpt-wrap'>
@@ -400,10 +435,11 @@ const CreateStarBio = () => {
             defaultValue="natural"
             style={{ width: 120 }}
             onChange={setBoobs}
-            options={sortOptions([
+            options={[
               { value: 'natural', label: 'natural' },
               { value: 'fake', label: 'fake' },
-            ])}
+            ]}
+            allowClear
           />
         </div>
         <div className='lbl-inpt-wrap'>
@@ -414,22 +450,22 @@ const CreateStarBio = () => {
             placeholder="Skills"
             value={skills}
             onChange={setSkills}
-            options={sortOptions([
-              { value: 'acting', label: 'acting' },
-              { value: 'dancing', label: 'dancing' },
-              { value: 'singing', label: 'singing' },
-              { value: 'stunts', label: 'stunts' },
-            ])}
+            options={[
+              { value: 'anal', label: 'anal' },
+              { value: 'bdsm', label: 'bdsm' },
+              { value: 'double', label: 'double' },
+              { value: 'double anal', label: 'double anal' },
+              { value: 'double pussy', label: 'double pussy' },
+              { value: 'gangbang', label: 'gangbang' },
+              { value: 'triple', label: 'triple' },
+              { value: 'foot fetish', label: 'foot fetish' },
+              { value: 'trans', label: 'trans' },
+            ]}
             allowClear
           />
         </div>
-        <Button
-          type="primary"
-          onClick={handleSubmit}
-          loading={loading}
-          disabled={!selectedStar || loading}
-        >
-          Create Star Bio
+        <Button className='bg-blue-600 w-full my-5' type="primary" onClick={handleSubmit} loading={loading}>
+          Submit
         </Button>
       </div>
     </div>
@@ -437,4 +473,3 @@ const CreateStarBio = () => {
 };
 
 export default CreateStarBio;
-
