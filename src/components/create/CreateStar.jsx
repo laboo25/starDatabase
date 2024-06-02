@@ -66,49 +66,55 @@ const CreateStar = () => {
     <div>
       <h2 className='title'>Create Star</h2>
       <Form onFinish={handleSubmit}>
-        <Form.Item
-          label="Star Name"
-          name="starname"
-          rules={[{ required: true, message: 'Please input the star name!' }]}
-        >
-          <Input value={starname} onChange={(e) => setStarname(e.target.value)} allowClear className='title-input' />
-        </Form.Item>
-        <Form.Item
-          label="Star Cover"
-          name="starcover"
-        >
-          <Dragger
-            fileList={starcover}
-            beforeUpload={() => false} // Prevent automatic upload
-            onChange={handleCoverChange}
-            onRemove={() => setStarcover([])}
-            className='cover-input'
+        <div className='py-3'>
+          <Form.Item
+            label="Star Name"
+            name="starname"
+            rules={[{ required: true, message: 'Please input the star name!' }]}
           >
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">Support for a single upload.</p>
-          </Dragger>
-        </Form.Item>
-        <Form.Item
-          label="Star Profile"
-          name="starprofile"
-        >
-          <Dragger
-            fileList={starprofile}
-            beforeUpload={() => false} // Prevent automatic upload
-            onChange={handleProfileChange}
-            onRemove={() => setStarprofile([])}
+            <Input value={starname} onChange={(e) => setStarname(e.target.value)} allowClear className='title-input' />
+          </Form.Item>
+        </div>
+        <div className='py-3'>
+          <Form.Item
+            label="Star Cover"
+            name="starcover"
           >
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">Support for a single upload.</p>
-          </Dragger>
-        </Form.Item>
-        <Button className='bg-blue-600 w-full'  type="primary" htmlType="submit" loading={loading}>
+            <Dragger
+              fileList={starcover}
+              beforeUpload={() => false} // Prevent automatic upload
+              onChange={handleCoverChange}
+              onRemove={() => setStarcover([])}
+              className='cover-input'
+            >
+              <p className="ant-upload-drag-icon">
+                <InboxOutlined />
+              </p>
+              <p className="ant-upload-text">Click or drag file to this area to upload</p>
+              <p className="ant-upload-hint">Support for a single upload.</p>
+            </Dragger>
+          </Form.Item>
+        </div>
+        <div className='py-3'>
+          <Form.Item
+            label="Star Profile"
+            name="starprofile"
+          >
+            <Dragger
+              fileList={starprofile}
+              beforeUpload={() => false} // Prevent automatic upload
+              onChange={handleProfileChange}
+              onRemove={() => setStarprofile([])}
+            >
+              <p className="ant-upload-drag-icon">
+                <InboxOutlined />
+              </p>
+              <p className="ant-upload-text">Click or drag file to this area to upload</p>
+              <p className="ant-upload-hint">Support for a single upload.</p>
+            </Dragger>
+          </Form.Item>
+        </div>
+        <Button className='bg-blue-600 w-full' type="primary" htmlType="submit" loading={loading}>
           Create Star
         </Button>
       </Form>

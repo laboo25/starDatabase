@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <div className='sidebar-content'>
         <div className='w-full text-center h-[60px]'>
           <h2>
-            <p to='/'>Home</p>
+            <Link to='/'>Home</Link>
           </h2>
         </div>
         <div className='pb-[10px]'>
@@ -47,6 +47,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </div>
         
       </div>
+      <div className='list-wrapper'>
       <div className='list'>
           {filteredStars.map(star => (
             <div key={star._id}>
@@ -54,6 +55,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </div>
           ))}
         </div>
+      </div>
     </div>
   );
 };

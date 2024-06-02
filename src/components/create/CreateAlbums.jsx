@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './createAlbum.css';
+// import './createAlbum.css';
 import { Upload, message, Button, Input, Select, Progress } from 'antd';
 import { InboxOutlined, DeleteOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import axiosInstance from '../../app/axiosInstance'; // Import axios instance
