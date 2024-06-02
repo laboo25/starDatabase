@@ -1,52 +1,32 @@
-
-.measurement-inpt {
-    padding: 5px 0 10px 0;
-    display: flex !important;
-    width: auto;
-    gap: 20px;
-    width: 100%;
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 5px;
+    margin-bottom: 50px;
 }
-.lbl-inpt-wrap {
+.title-input {
     width: 100%;
-    display: flex !important;
+    max-width: 500px;
+}
+.ant-row {
+    
+    display: flex;
     flex-wrap: wrap;
     flex-direction: column;
 }
-.lbl-inpt-wrap label {
-    padding: 25px 0 10px 0px;
+.ant-form-item {
+    min-height: 200px;
 }
-.multiple-wrapper {
-    display: flex !important;
+.ant-form-item:first-child {
+    min-height: 10px;
 }
-.measurement {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-}
-.wrap {
+form label {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
 }
-.bust {
-    width: 60px;
+form>div {
+    width: 100%;
 }
-.cup {
-    width: 70px !important;
+div.ant-upload {
+    width: 100%;
+    /* max-width: 500px; */
 }
-.hip {
-    width: 60px !important;
-}
-.chest {
-    width: 60px;
-}
-
-
-
-@media only screen and (max-width: 375px) {
-    .measurement-inpt {
-      max-width: 375px;
-    }
-  }
-

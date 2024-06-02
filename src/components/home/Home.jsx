@@ -20,9 +20,12 @@ const Home = () => {
                 const res = await axiosInstance.get('/stars/create-star/get-all-star');
                 const sortedData = res.data.sort((a, b) => a.starname.localeCompare(b.starname));
                 
-                if (JSON.stringify(sortedData) !== storedStarTitles) {
-                    setStarTitles(sortedData);
-                    localStorage.setItem('starTitles', JSON.stringify(sortedData));
+                // Filter out stars without a starcover
+                const filteredData = sortedData.filter(star => star.starcover);
+                
+                if (JSON.stringify(filteredData) !== storedStarTitles) {
+                    setStarTitles(filteredData);
+                    localStorage.setItem('starTitles', JSON.stringify(filteredData));
                 }
             } catch (error) {
                 setError(error);
@@ -62,7 +65,7 @@ const Home = () => {
     useEffect(() => {
         const savedScrollPosition = sessionStorage.getItem('scrollPosition');
         if (savedScrollPosition) {
-            window.scrollTo(0, savedScrollPosition);
+            window.scrollTo(0, Number(savedScrollPosition));
         }
     }, []);
 
@@ -78,7 +81,7 @@ const Home = () => {
                                 <div className='card' key={index}>
                                     <div style={{ width: "100%" }}>
                                         <Link to={`/star/${star._id}`}>
-                                            <img src={star.starcover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                            <img src={star.starcover} alt={star.starname} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                         </Link>
                                     </div>
                                     <p className='title'>{star.starname}</p>

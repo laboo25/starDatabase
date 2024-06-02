@@ -10,6 +10,7 @@ const StarBio = () => {
     const [starBio, setStarBio] = useState(null);
     const [albums, setAlbums] = useState([]);
     const [error, setError] = useState(null);
+    const [showCover, setShowCover] = useState(false); // New state to toggle between showing cover or profile
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,6 +46,9 @@ const StarBio = () => {
                 const albumData = albumRes.data.filter((albm) => albm.starname && albm.starname.includes(_id));
                 setAlbums(albumData);
 
+                // Check if both starName and starBio are not null, then show the profile
+                setShowCover(!(starName && starBio));
+
             } catch (error) {
                 setError(error.message);
             }
@@ -52,25 +56,6 @@ const StarBio = () => {
 
         fetchData();
     }, [_id]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            sessionStorage.setItem('scrollPosition', window.scrollY);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-    useEffect(() => {
-        const scrollPosition = sessionStorage.getItem('scrollPosition');
-        if (scrollPosition) {
-            window.scrollTo(0, parseInt(scrollPosition, 10));
-        }
-    }, []);
 
     const calculateAge = (birthdate) => {
         return moment().diff(birthdate, 'years');
@@ -111,13 +96,14 @@ const StarBio = () => {
 
     return (
         <div id='main'>
-            <div id='bio-page' className='w-full flex'>
-                <div className='profile'>
-                    {starName && <img src={starName.starprofile} alt={starName.starname} />}
-                </div>
-                <div className='bio'>
-                    {starName && <h2 className='title'>{starName.starname}</h2>}
-                    <div className='bio-texts'>
+            {starName && starName.starprofile ? (
+                <div id='bio-page' className='w-full flex'>
+                    <div className='profile'>
+                        {starName && <img src={starName.starprofile} alt={starName.starname} />}
+                    </div>
+                    <div className='bio'>
+                        {starName && <h2 className='title'>{starName.starname}</h2>}
+                        <div className='bio-texts'>
                         {starBio && (
                             <>
                                 {starBio.aliases && (
@@ -253,9 +239,20 @@ const StarBio = () => {
                                 )}
                             </>
                         )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            ) : (
+                <div id='cover' className='w-full flex items-center'>
+                    <div className='w-[250px] h-[250px] rounded-full'>
+                        {starName && <img src={starName.starcover} alt={`Cover for ${starName.starname}`} className='w-full h-full object-cover rounded-full' />}
+                    </div>
+
+                    <div>
+                        {starName && <h2 className='title'>{starName.starname}</h2>}
+                    </div>
+                </div>
+            )}
             <div id='albums_page' className='albums-container'>
                 {albums.map((album, index) => (
                     <div key={index} className='album'>

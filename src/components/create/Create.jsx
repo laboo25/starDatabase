@@ -42,6 +42,9 @@ const Create = () => {
           <Link to='/create/create-bio' className={getLinkClass('/create/create-bio')}>create bio</Link>
           <Link to='/create/create-images' className={getLinkClass('/create/create-images')}>create images</Link>
           <Link to='/create/create-album' className={getLinkClass('/create/create-album')}>create album</Link>
+          <Link to='/create/update-all' className={getLinkClass('/create/create-album')}>update all</Link>
+          <Link to='/create/update-star' className={getLinkClass('/create/create-album')}>update star⭐</Link>
+          
         </div>
         <div id='forms'>
           <Outlet />

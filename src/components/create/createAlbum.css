@@ -8,6 +8,10 @@
     width: 100%;
     max-width: 500px;
 }
+.submit-btn {
+  width: 100%;
+  background-color: blue !important;
+}
 .ant-row {
     display: flex;
     flex-wrap: wrap;
@@ -72,14 +76,7 @@ div.ant-upload {
     font-size: 24px;
   }
   
-  .delete-image-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: white;
-    border: none;
-    font-size: 18px;
-  }
+  
 .ant-upload-list-item, .ant-upload-list-item-undefined {
     display: none;
 }  

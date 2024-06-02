@@ -164,8 +164,8 @@ const CreateAlbums = () => {
                 )}
                 <Button
                   type="text"
-                  icon={<DeleteOutlined />}
-                  className='delete-image-button'
+                  
+                  className='submit-btn'
                   onClick={() => setFileList(prevFiles => prevFiles.filter(f => f.uid !== file.uid))}
                 />
               </>

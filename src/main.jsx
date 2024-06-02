@@ -1,5 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -12,6 +14,27 @@ import CreateStar from "./components/create/CreateStar";
 import CreateStarBio from "./components/create/CreateStarBio";
 import CreateAlbums from "./components/create/CreateAlbums";
 import CreateImages from "./components/create/CreateImages";
+import UpdateAll from "./components/create/UpdateAll";
+import StarUpdate from "./components/update/StarUpdate";
+
+Fancybox.bind('[data-fancybox="gallery"]', {
+  Carousel: {
+        transition: "slide",
+      },
+  Toolbar: {
+    display: {
+      left: ["infobar"],
+      middle: [
+        "zoomIn",
+        "zoomOut",
+        "rotateCW",
+        "flipX",
+        "flipY",
+      ],
+      right: ["slideshow", "fullscreen", "thumbs", "download", "close"],
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -40,6 +63,14 @@ const router = createBrowserRouter([
     {
       path: '/create/create-album',
       element: <CreateAlbums/>,
+    },
+    {
+      path: '/create/update-all',
+      element: <UpdateAll/>,
+    },
+    {
+      path: '/create/update-star',
+      element: <StarUpdate/>,
     },
   ]
   }

@@ -108,7 +108,7 @@ const CreateStar = () => {
             <p className="ant-upload-hint">Support for a single upload.</p>
           </Dragger>
         </Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
+        <Button className='bg-blue-600 w-full'  type="primary" htmlType="submit" loading={loading}>
           Create Star
         </Button>
       </Form>

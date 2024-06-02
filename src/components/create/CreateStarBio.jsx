@@ -459,6 +459,7 @@ const CreateStarBio = () => {
               { value: 'gangbang', label: 'gangbang' },
               { value: 'triple', label: 'triple' },
               { value: 'foot fetish', label: 'foot fetish' },
+              { value: 'fisting', label: 'fisting' },
               { value: 'trans', label: 'trans' },
             ]}
             allowClear
