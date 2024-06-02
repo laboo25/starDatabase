@@ -5,6 +5,7 @@
     border-radius: 50px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 /* #DFE1DE */
@@ -20,20 +21,40 @@
     user-select: none;
     /* Standard syntax */
 }
+
 #navbar #search_fields {
     padding: 0 20px;
+    position: relative;
+    border-bottom: 1px solid black;
+}
+#navbar #search_fields .search-toggle-icon {
+    display: none;
 }
 #navbar #search_fields input {
     outline: none;
     background: none;
-    border-bottom: 1px solid black;
+    
 }
-#navbar #search_fields button {
-    border-bottom: 1px solid black;
+/* #navbar #search_fields button {
+} */
+#navbar #search_fields .suggestion {
+    position: absolute;
+    width: 254px;
+    height: 100px;
+    background-color: rgb(240, 240, 240);
+    padding: 20px;
 }
-
-@media only screen and (width: 375px){
-    body {
-        background: rebeccapurple;
+@media only screen and (max-width: 600px){
+    #navbar #search_fields .search-toggle-icon {
+        display: block;
+        
+    }
+    #search_fields .search-inpt {
+        width: 100%;
+        background: white;
+        position: absolute;
+        top: 20px;
+        left: 0;
+        z-index: 1;
     }
 }

@@ -1,106 +1,146 @@
-
-
 @font-face {
-    font-family: SFPRODISPLAYMEDIUM;
-    src: url(../../../fonts/SFPRODISPLAYMEDIUM.OTF);
+  font-family: SFPRODISPLAYMEDIUM;
+  src: url(../../../fonts/SFPRODISPLAYMEDIUM.OTF);
 }
 @font-face {
-    font-family: SFPRODISPLAYBOLD;
-    src: url(../../../fonts/SFPRODISPLAYBOLD.OTF);
+  font-family: SFPRODISPLAYBOLD;
+  src: url(../../../fonts/SFPRODISPLAYBOLD.OTF);
 }
 @font-face {
-    font-family: SFPRODISPLAYREGULAR;
-    src: url(../../../fonts/SFPRODISPLAYREGULAR.OTF);
+  font-family: SFPRODISPLAYREGULAR;
+  src: url(../../../fonts/SFPRODISPLAYREGULAR.OTF);
 }
 .fontMedium {
-    font-family: SFPRODISPLAYMEDIUM;
-    color: rgb(146, 146, 146);
-    padding-right: 10px;
+  font-family: SFPRODISPLAYMEDIUM;
+  color: rgb(146, 146, 146);
+  padding-right: 10px;
 }
 .fontReg {
-    font-family: SFPRODISPLAYREGULAR;
-    color: rgb(32, 32, 32);
+  font-family: SFPRODISPLAYREGULAR;
+  color: rgb(32, 32, 32);
+}
+::selection {
+  color: white; /* Text color */
+  background-color: rgb(255, 0, 0); /* Background color */
+}
+
+#starbio-main {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  position: relative;
+}
+#starbio-main .sidebar {
+  width: 250px;
+  height: 100vh;
 }
 #bio-page {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 }
 #bio-page .profile {
-    min-width: 300px;
-    height: 100vh;
-    object-fit: cover;
+  min-width: 300px;
+  height: 100vh;
+  object-fit: cover;
 }
 #bio-page .profile img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 #bio-page .bio {
-    text-transform: capitalize;
-    min-width: 200px;
-    max-width: 500px;
-    padding: 20px;
-    padding-bottom: 50px;
-    
+  text-transform: capitalize;
+  min-width: 200px;
+  max-width: 500px;
+  padding: 20px;
+  padding-bottom: 50px;
 }
 #bio-page .bio .title {
-    text-transform: uppercase;
-    font-size: 30px;
-    margin: 0;
-    padding: 30px 0 50px 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #6c47ff;
+  text-transform: uppercase;
+  font-size: 30px;
+  margin: 0;
+  padding: 30px 0 50px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #6c47ff;
 }
 #bio-page .bio .bio-texts {
-    font-size: 15px;
-    line-height: 25px;
+  font-size: 15px;
+  line-height: 25px;
 }
 .active-status {
-    background-color: #32CD32 ;
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
+  background-color: #32CD32 ;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .retire-status {
-    background-color: #fdbe0f;
-    color: black;
-    padding: 5px;
-    border-radius: 5px;
+  background-color: #fdbe0f;
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .died-status {
-    background-color: #FF0000;
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
+  background-color: #FF0000;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
 }
-
-
-
 
 .bio-texts div {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 #albums_page {
-    width: 100%;
-    background: #32CD32;
-    position: static;
+  width: 100%;
+  background: #32CD32;
+  position: static;
+}
+
+/* Menu toggle button */
+.menu-toggle {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: #6c47ff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 600px) {
-    #bio-page .bio {
-        padding-top: 0;
-    }
-    #bio-page .bio .title {
-        text-transform: uppercase;
-        font-size: 30px;
-        margin: 0;
-        padding: 30px 0 50px 0;
-        font-family: SFPRODISPLAYMEDIUM;
-        color: #000;
-    }
+  .menu-toggle {
+      display: block;
   }
+
+  .sidebar {
+      position: absolute;
+      width: 250px;
+      height: 100%;
+      background: white;
+      z-index: 1000;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar.show-sidebar {
+      transform: translateX(0);
+  }
+
+  #bio-page .bio {
+      padding-top: 0;
+  }
+  #bio-page .bio .title {
+      text-transform: uppercase;
+      font-size: 30px;
+      margin: 0;
+      padding: 30px 0 50px 0;
+      font-family: SFPRODISPLAYMEDIUM;
+      color: #000;
+  }
+}
