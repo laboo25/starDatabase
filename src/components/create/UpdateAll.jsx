@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Space, Table, Input } from 'antd';
 import axios from 'axios';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import avater from '/avater.webp';
 import { Link } from 'react-router-dom';
 
@@ -17,12 +17,13 @@ const columns = [
     title: 'RowHead',
     dataIndex: 'key',
     rowScope: 'row',
+    size: 20
   },
   {
     title: 'profile',
     dataIndex: 'profile',
     key: 'profile',
-    render: (profile) => profile ? <CheckCircleOutlined style={{ color: 'green' }} /> : <CloseCircleOutlined style={{ color: 'red' }} />,
+    render: (profile) => profile ? <CheckCircleFilled style={{ color: '#0096ff' }} /> : <CloseCircleFilled style={{ color: 'red' }} />,
   },
   {
     title: 'Avatar',
@@ -42,19 +43,19 @@ const columns = [
     title: 'Bio',
     dataIndex: 'bio',
     key: 'bio',
-    render: (bio) => bio ? <CheckCircleOutlined style={{ color: 'green' }} /> : <CloseCircleOutlined style={{ color: 'red' }} />,
+    render: (bio) => bio ? <CheckCircleFilled style={{ color: '#0096ff' }} /> : <CloseCircleFilled style={{ color: 'red' }} />,
   },
   {
     title: 'Images',
     dataIndex: 'images',
     key: 'images',
-    render: (images) => images.length > 0 ? images.length : <CloseCircleOutlined style={{ color: 'red' }} />,
+    render: (images) => images.length > 0 ? images.length : <CloseCircleFilled style={{ color: 'red' }} />,
   },
   {
     title: 'Albums',
     dataIndex: 'albums',
     key: 'albums',
-    render: (albums) => albums.length > 0 ? albums.length : <CloseCircleOutlined style={{ color: 'red' }} />,
+    render: (albums) => albums.length > 0 ? albums.length : <CloseCircleFilled style={{ color: 'red' }} />,
   },
   {
     title: 'Action',
@@ -118,10 +119,11 @@ const UpdateAll = () => {
         />
         <div className="max-h-600px overflow-x-auto">
           <Table
+          
             columns={columns}
             dataSource={filteredData}
             rowKey="key"
-            pagination={{ defaultPageSize: 20, showSizeChanger: true, pageSizeOptions: ['10', '20', '30'] }}
+            pagination={{ defaultPageSize: 25, showSizeChanger: true, pageSizeOptions: ['10', '20', '30'] }}
             defaultSortOrder={{ order: 'ascend', columnKey: 'name' }} // Set default sort order
             onChange={(pagination, filters, sorter) => {
               if (sorter.order === 'ascend') {
