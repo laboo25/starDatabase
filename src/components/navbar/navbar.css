@@ -5,56 +5,69 @@
     border-radius: 50px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
-/* #DFE1DE */
 #navbar #logo {
     font-size: 20px;
     font-weight: bold;
     font-family: sans-serif;
     padding: 0 10px;
     -webkit-user-select: none;
-    /* Safari */
     -ms-user-select: none;
-    /* IE 10 and IE 11 */
     user-select: none;
-    /* Standard syntax */
 }
 
 #navbar #search_fields {
     padding: 0 20px;
-    position: relative;
     border-bottom: 1px solid black;
 }
+
 #navbar #search_fields .search-toggle-icon {
     display: none;
 }
+
+#navbar #search_fields .search-inpt {
+    display: none; /* Hidden by default */
+    position: relative;
+    width: 300px; /* Adjust width as needed */
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 10;
+}
+
 #navbar #search_fields input {
     outline: none;
     background: none;
-    
+    width: calc(100% - 30px); /* Adjust width to fit the container */
 }
-/* #navbar #search_fields button {
-} */
+
 #navbar #search_fields .suggestion {
     position: absolute;
-    width: 254px;
-    height: 100px;
+    width: 100%;
     background-color: rgb(240, 240, 240);
-    padding: 20px;
+    z-index: 15;
+    max-height: 300px;
+    overflow-y: auto;
 }
-@media only screen and (max-width: 600px){
+
+@media only screen and (max-width: 600px) {
     #navbar #search_fields .search-toggle-icon {
         display: block;
-        
     }
-    #search_fields .search-inpt {
+    #navbar #search_fields .search-inpt {
+        display: block; /* Show on small screens */
         width: 100%;
-        background: white;
         position: absolute;
         top: 20px;
         left: 0;
-        z-index: 1;
+        z-index: 15;
     }
+}
+
+/* Ensure search input is visible when isSearchVisible is true */
+#navbar #search_fields .search-inpt.show {
+    display: block;
 }

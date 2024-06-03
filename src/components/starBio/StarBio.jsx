@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './starBio.css';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { CiMenuFries } from "react-icons/ci";
 import moment from 'moment';
 import Sidebar from './Sidebar';
 
@@ -115,7 +116,7 @@ const StarBio = () => {
             <button 
                 className='menu-toggle' 
                 onClick={() => setSidebarVisible(!sidebarVisible)}>
-                Menu
+                <CiMenuFries />
             </button>
             <div ref={sidebarRef} className={`sidebar ${sidebarVisible ? 'show-sidebar' : ''}`}>
                 <Sidebar />

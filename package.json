@@ -12,9 +12,6 @@
   "dependencies": {
     "@fancyapps/ui": "^5.0.36",
     "@reduxjs/toolkit": "^2.2.5",
-    "@uppy/core": "^3.11.3",
-    "@uppy/progress-bar": "^3.1.1",
-    "@uppy/xhr-upload": "^3.6.7",
     "antd": "^5.17.3",
     "axios": "^1.6.8",
     "moment": "^2.30.1",

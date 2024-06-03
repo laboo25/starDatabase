@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './navbar.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Navbar = () => {
@@ -8,6 +8,7 @@ const Navbar = () => {
     const [suggestions, setSuggestions] = useState([]);
     const [isSearchVisible, setIsSearchVisible] = useState(false);
     const searchRef = useRef(null);
+    const navigate = useNavigate();
 
     const handleSearch = async () => {
         if (searchQuery) {
@@ -61,7 +62,7 @@ const Navbar = () => {
                             className='search-toggle-icon' 
                             onClick={() => setIsSearchVisible(!isSearchVisible)}
                         >
-                            search
+                            srch
                         </div>
                         {isSearchVisible && (
                             <div className='search-inpt'>
@@ -83,7 +84,10 @@ const Navbar = () => {
                                     <div className='suggestion'>
                                         {suggestions.map((star) => (
                                             <div key={star._id}>
-                                                <Link to={`/star/${star._id}`} onClick={() => setSearchQuery('')}>
+                                                <Link to={`/query/${star._id}`} onClick={() => { 
+                                                    setSearchQuery(''); 
+                                                    navigate(`/query/${star._id}`);
+                                                }}>
                                                     {star.starname}
                                                 </Link>
                                             </div>

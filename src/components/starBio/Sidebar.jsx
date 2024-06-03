@@ -43,15 +43,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             placeholder="Search Star"
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
+            allowClear
           />
         </div>
         
       </div>
       <div className='list-wrapper'>
-      <div className='list'>
+        <div className='list'>
           {filteredStars.map(star => (
             <div key={star._id}>
-              <Link to={`/star/${star._id}`} activeClassName='active'>{star.starname}</Link>
+              <NavLink to={`/star/${star._id}`} activeClassName='active'>{star.starname}</NavLink>
             </div>
           ))}
         </div>

@@ -16,6 +16,7 @@ import CreateAlbums from "./components/create/CreateAlbums";
 import CreateImages from "./components/create/CreateImages";
 import UpdateAll from "./components/create/UpdateAll";
 import StarUpdate from "./components/update/StarUpdate";
+import Search from "./components/search/Search";
 
 Fancybox.bind('[data-fancybox="gallery"]', {
   Carousel: {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "/star/:_id",
     element: <StarBio/>,
+  },
+  {
+    path: "/query",
+    element: <Search/>,
   },
   {
     path: "/create",
