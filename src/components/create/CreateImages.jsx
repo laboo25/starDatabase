@@ -25,9 +25,9 @@ const CreateImages = () => {
     fetchStars();
   }, []);
 
-  const fetchStars = async () => {
+  const fetchStars = async (searchQuery = '') => {
     try {
-      const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+      const response = await axios.get(`https://stardb-api.onrender.com/api/stars/create-star/get-all-star?search=${searchQuery}`);
       const sortedStars = response.data.sort((a, b) => a.starname.localeCompare(b.starname));
       setStars(sortedStars);
     } catch (error) {
@@ -84,7 +84,7 @@ const CreateImages = () => {
       <h2>Upload Images</h2>
       <Form form={form} onFinish={onFinish}>
         <Form.Item name="starIds" label="Stars">
-          <Select mode="multiple" placeholder="Select stars">
+          <Select mode="multiple" placeholder="Select stars" onSearch={fetchStars}>
             {stars.map((star) => (
               <Option key={star._id} value={star._id}>
                 {star.starname}
@@ -160,3 +160,4 @@ const CreateImages = () => {
 };
 
 export default CreateImages;
+              
