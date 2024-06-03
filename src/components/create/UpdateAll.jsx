@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Space, Table, Input } from 'antd';
 import axios from 'axios';
-import avater from '../../../public/avater.webp'
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import avater from '/avater.webp';
+import { Link } from 'react-router-dom';
+
 const { Search } = Input;
 
 // Function to capitalize the first letter of each word
@@ -16,6 +19,12 @@ const columns = [
     rowScope: 'row',
   },
   {
+    title: 'profile',
+    dataIndex: 'profile',
+    key: 'profile',
+    render: (profile) => profile ? <CheckCircleOutlined style={{ color: 'green' }} /> : <CloseCircleOutlined style={{ color: 'red' }} />,
+  },
+  {
     title: 'Avatar',
     dataIndex: 'cover',
     key: 'cover',
@@ -25,8 +34,27 @@ const columns = [
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    render: (text) => <a>{text}</a>,
+    render: (text, record) => <Link to={`/star/${record._id}`} >{text}</Link>,
     sorter: (a, b) => a.name.localeCompare(b.name),
+  },
+  
+  {
+    title: 'Bio',
+    dataIndex: 'bio',
+    key: 'bio',
+    render: (bio) => bio ? <CheckCircleOutlined style={{ color: 'green' }} /> : <CloseCircleOutlined style={{ color: 'red' }} />,
+  },
+  {
+    title: 'Images',
+    dataIndex: 'images',
+    key: 'images',
+    render: (images) => images.length > 0 ? images.length : <CloseCircleOutlined style={{ color: 'red' }} />,
+  },
+  {
+    title: 'Albums',
+    dataIndex: 'albums',
+    key: 'albums',
+    render: (albums) => albums.length > 0 ? albums.length : <CloseCircleOutlined style={{ color: 'red' }} />,
   },
   {
     title: 'Action',
@@ -51,7 +79,12 @@ const UpdateAll = () => {
         const stars = response.data.map((star, index) => ({
           key: index + 1,
           name: capitalize(star.starname),
+          _id: star._id,
           cover: star.starcover,
+          profile: star.starprofile,
+          bio: star.starbio,
+          images: star.starImages || [],
+          albums: star.starAlbums || [],
         }));
         stars.sort((a, b) => a.name.localeCompare(b.name)); // Sort data in ascending order by default
         setData(stars);
@@ -74,28 +107,32 @@ const UpdateAll = () => {
 
   return (
     <>
-      <Search
-        placeholder="Search star name"
-        onSearch={handleSearch}
-        style={{ marginBottom: 16 }}
-        value={searchQuery}
-        onChange={(e) => handleSearch(e.target.value)}
-        allowClear
-      />
-      <Table 
-        columns={columns} 
-        dataSource={filteredData} 
-        rowKey="index" 
-        pagination={{ defaultPageSize: 20, showSizeChanger: true, pageSizeOptions: ['10', '20', '30'] }}
-        defaultSortOrder={{ order: 'ascend', columnKey: 'name' }} // Set default sort order
-        onChange={(pagination, filters, sorter) => {
-          if (sorter.order === 'ascend') {
-            setFilteredData([...filteredData].sort((a, b) => a.name.localeCompare(b.name)));
-          } else if (sorter.order === 'descend') {
-            setFilteredData([...filteredData].sort((a, b) => b.name.localeCompare(a.name)));
-          }
-        }}
-      />
+      <div className='overflow-x-auto'>
+        <Search
+          placeholder="Search star name"
+          onSearch={handleSearch}
+          style={{ marginBottom: 16 }}
+          value={searchQuery}
+          onChange={(e) => handleSearch(e.target.value)}
+          allowClear
+        />
+        <div className="max-h-600px overflow-x-auto">
+          <Table
+            columns={columns}
+            dataSource={filteredData}
+            rowKey="key"
+            pagination={{ defaultPageSize: 20, showSizeChanger: true, pageSizeOptions: ['10', '20', '30'] }}
+            defaultSortOrder={{ order: 'ascend', columnKey: 'name' }} // Set default sort order
+            onChange={(pagination, filters, sorter) => {
+              if (sorter.order === 'ascend') {
+                setFilteredData([...filteredData].sort((a, b) => a.name.localeCompare(b.name)));
+              } else if (sorter.order === 'descend') {
+                setFilteredData([...filteredData].sort((a, b) => b.name.localeCompare(a.name)));
+              }
+            }}
+          />
+        </div>
+      </div>
     </>
   );
 };

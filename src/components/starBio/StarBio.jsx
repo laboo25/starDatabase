@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './starBio.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 import { CiMenuFries } from "react-icons/ci";
+import { IoChevronBackSharp } from "react-icons/io5";
 import moment from 'moment';
 import Sidebar from './Sidebar';
 
 const StarBio = () => {
     const { _id } = useParams();
+    const navigate = useNavigate(); // Initialize useNavigate
     const [starName, setStarName] = useState(null);
     const [starBio, setStarBio] = useState(null);
     const [albums, setAlbums] = useState([]);
@@ -113,6 +115,14 @@ const StarBio = () => {
 
     return (
         <div id='starbio-main'>
+            <button 
+                id='historyback' 
+                className='absolute top-5 left-5 p-1 bg-[#fff7] text-[red] md:hidden'
+                onClick={() => navigate(-1)} // Navigate back
+                style={{ display: window.history.length > 1 ? 'block' : 'none' }} // Conditionally render the button
+            >
+                <IoChevronBackSharp />
+            </button>
             <button 
                 className='menu-toggle' 
                 onClick={() => setSidebarVisible(!sidebarVisible)}>

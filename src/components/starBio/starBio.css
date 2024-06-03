@@ -98,7 +98,9 @@
   background: #32CD32;
   position: static;
 }
-
+#historyback{
+  display: none;
+}
 /* Menu toggle button */
 .menu-toggle {
   display: none;
@@ -117,7 +119,9 @@
   .menu-toggle {
       display: block;
   }
-
+  #historyback{
+    display: block;
+  }
   .sidebar {
       position: absolute;
       width: 250px;

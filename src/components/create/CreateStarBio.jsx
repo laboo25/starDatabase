@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './createStarBio.css';
 import axios from '../../app/axiosInstance';
 import { Select, Input, InputNumber, DatePicker, Button, message } from 'antd';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const CreateStarBio = () => {
   // const navigate = useNavigate();
@@ -107,7 +107,7 @@ const CreateStarBio = () => {
         message.success('Star bio created successfully', 5, { top: 0, left: '50%', transform: 'translateX(-50%)' });
         resetForm();
         sessionStorage.setItem('scrollPosition', window.scrollY);
-        // navigate('/path-to-redirect');
+        navigate('/star/:_id');
       })
       .catch(error => {
         console.error('Error creating star bio:', error);
