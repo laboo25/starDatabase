@@ -79,12 +79,22 @@ const CreateImages = () => {
 
   const handleFileChange = ({ fileList }) => setFileList(fileList);
 
+  const handleSearch = (value) => {
+    fetchStars(value);
+  };
+
   return (
     <div>
       <h2>Upload Images</h2>
       <Form form={form} onFinish={onFinish}>
         <Form.Item name="starIds" label="Stars">
-          <Select mode="multiple" placeholder="Select stars" onSearch={fetchStars}>
+          <Select
+            mode="multiple"
+            placeholder="Select stars"
+            onSearch={handleSearch}
+            showSearch
+            filterOption={false}
+          >
             {stars.map((star) => (
               <Option key={star._id} value={star._id}>
                 {star.starname}
@@ -160,4 +170,4 @@ const CreateImages = () => {
 };
 
 export default CreateImages;
-              
+                                       
