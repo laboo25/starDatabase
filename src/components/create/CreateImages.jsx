@@ -18,6 +18,7 @@ const CreateImages = () => {
     { label: 'toy', value: 'toy' },
     { label: 'nude', value: 'nude' },
     { label: 'sesso', value: 'sesso' },
+    { label: 'others', value: 'others' },
   ]);
 
   useEffect(() => {
