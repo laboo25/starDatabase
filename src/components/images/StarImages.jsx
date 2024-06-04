@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Spin, message } from 'antd';
 
-const StarImages = () => {
+const StarImages = ({ starId }) => {
   const [loading, setLoading] = useState(true);
   const [starImages, setStarImages] = useState([]);
 
@@ -20,21 +20,25 @@ const StarImages = () => {
       const starsData = starsResponse.data;
       const imagesData = imagesResponse.data;
 
-      // Map images to their corresponding stars
+      // Create a map of star IDs to star names
+      const starMap = starsData.reduce((acc, star) => {
+        acc[star._id] = star.starname;
+        return acc;
+      }, {});
+
+      // Filter and map images to their corresponding stars
       const starImagesMap = imagesData
+        .filter(imageEntry => imageEntry.starname.includes(starId)) // Filter images by the current starId
         .map(imageEntry => {
-          const starNames = imageEntry.starname.map(starId => {
-            const star = starsData.find(star => star._id === starId);
-            return star ? star.starname : 'Unknown';
-          }).filter(starname => starname !== 'Unknown');
+          const matchedStarNames = imageEntry.starname
+            .filter(starId => starMap[starId])
+            .map(starId => starMap[starId]);
 
           return {
             ...imageEntry,
-            starNames, // Ensure we have the starNames
-            starImages: imageEntry.starImages // Ensure we have the starImages
+            starNames: matchedStarNames,
           };
-        })
-        .filter(imageEntry => imageEntry.starNames.length > 0); // Only include entries with valid star names
+        });
 
       setStarImages(starImagesMap);
       setLoading(false);
@@ -47,6 +51,10 @@ const StarImages = () => {
 
   if (loading) {
     return <Spin size="large" className="loading-spinner" />;
+  }
+
+  if (starImages.length === 0) {
+    return <div>No images available for this star.</div>;
   }
 
   return (
@@ -62,7 +70,7 @@ const StarImages = () => {
             ))}
             <ul className='w-full flex gap-2 capitalize'>
               {item.starImages.map((image, index) => (
-                image.tags.map((tag, tagIdx) => (
+                image.tags.sort((a, b) => a.localeCompare(b)).map((tag, tagIdx) => ( // Sorting tags in ascending order
                   <li key={tagIdx}>{tag}</li>
                 ))
               ))}

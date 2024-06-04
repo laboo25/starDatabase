@@ -1,12 +1,14 @@
 
-
+a>img, .card>.tags {
+    user-select: none;
+}
 #image-main {
     padding: 100px 30px;
 }
 #image-wrapper {
     width: auto;
     height: 100%;
-    background-color: aqua;
+    /* background-color: aqua; */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     justify-content: center;
@@ -15,22 +17,30 @@
 }
 #image-wrapper #card {
     max-width: 250px;
-    height: 200px;
-    background-color: rgb(151, 174, 236);
+    height: auto;
+    /* background-color: rgb(151, 174, 236); */
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+
 }
 #image-wrapper #card #squire-box {
-    height: 100%;
+    height: 200px;
     aspect-ratio: 1;
-    background-color: crimson;
+    background-color: rgba(182, 182, 182, 0.61);
+    padding: 5px;
+    border-radius: 5px;
+    overflow: hidden;
 }
 #image-wrapper #card #squire-box img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    border-radius: 15px;
 }
-
+#image-wrapper #card .tags {
+    width: 100%;
+}
 @media only screen and (max-width: 375px) {
     #image-main::-webkit-scrollbar {
         width: 0px;
@@ -45,6 +55,6 @@
     #image-wrapper #card {
         max-width: 160px;
         height: 160px;
-        background-color: rgb(255, 103, 103);
+        /* background-color: rgb(255, 103, 103); */
     }
   }

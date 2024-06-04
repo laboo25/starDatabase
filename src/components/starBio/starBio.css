@@ -147,4 +147,13 @@
       font-family: SFPRODISPLAYMEDIUM;
       color: #000;
   }
+  #starbio-main #cover {
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+  }
+  #starbio-main #cover #cover-wrapper {
+    width: 150px;
+    aspect-ratio: 1;
+  }
 }

@@ -20,7 +20,7 @@ const columns = [
     size: 20
   },
   {
-    title: 'profile',
+    title: 'Profile',
     dataIndex: 'profile',
     key: 'profile',
     render: (profile) => profile ? <CheckCircleFilled style={{ color: '#0096ff' }} /> : <CloseCircleFilled style={{ color: 'red' }} />,
@@ -38,7 +38,6 @@ const columns = [
     render: (text, record) => <Link to={`/star/${record._id}`} >{text}</Link>,
     sorter: (a, b) => a.name.localeCompare(b.name),
   },
-  
   {
     title: 'Bio',
     dataIndex: 'bio',
@@ -49,7 +48,7 @@ const columns = [
     title: 'Images',
     dataIndex: 'images',
     key: 'images',
-    render: (images) => images.length > 0 ? images.length : <CloseCircleFilled style={{ color: 'red' }} />,
+    render: (images) => images && images.length > 0 ? images.length : <CloseCircleFilled style={{ color: 'red' }} />,
   },
   {
     title: 'Albums',
@@ -119,7 +118,6 @@ const UpdateAll = () => {
         />
         <div className="max-h-600px overflow-x-auto">
           <Table
-          
             columns={columns}
             dataSource={filteredData}
             rowKey="key"

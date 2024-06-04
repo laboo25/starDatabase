@@ -282,7 +282,7 @@ const StarBio = () => {
                         </div>
                     ) : (
                         <div id='cover' className='w-full flex items-center'>
-                            <div className='w-[250px] h-[250px] rounded-full'>
+                            <div id='cover-wrapper' className='w-[250px] h-[250px] rounded-full'>
                                 {starName && <img src={starName.starcover} alt={`Cover for ${starName.starname}`} className='w-full h-full object-cover rounded-full' />}
                             </div>
 
@@ -303,7 +303,7 @@ const StarBio = () => {
                 </div>
             </div>
             <div className='w-full block'>
-                <StarImages />
+                <StarImages starId={_id} />
             </div>
         </div>
     );
