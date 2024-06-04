@@ -93,7 +93,9 @@ const CreateImages = () => {
             placeholder="Select stars"
             onSearch={handleSearch}
             showSearch
-            filterOption={false}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
           >
             {stars.map((star) => (
               <Option key={star._id} value={star._id}>
@@ -112,7 +114,7 @@ const CreateImages = () => {
             showSearch
             optionFilterProp="children"
             filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              option.children.toLowerCase().includes(input.toLowerCase())
             }
           >
             {subfolders.map((subfolder) => (
@@ -129,7 +131,7 @@ const CreateImages = () => {
             showSearch
             optionFilterProp="children"
             filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              option.children.toLowerCase().includes(input.toLowerCase())
             }
           >
             <Option value="mio">mio</Option>
@@ -170,4 +172,4 @@ const CreateImages = () => {
 };
 
 export default CreateImages;
-                                       
+         
