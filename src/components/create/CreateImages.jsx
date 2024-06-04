@@ -83,6 +83,10 @@ const CreateImages = () => {
     fetchStars(value);
   };
 
+  const handleBlur = () => {
+    fetchStars();
+  };
+
   return (
     <div>
       <h2>Upload Images</h2>
@@ -92,8 +96,12 @@ const CreateImages = () => {
             mode="multiple"
             placeholder="Select stars"
             onSearch={handleSearch}
+            onBlur={handleBlur}
             showSearch
-            filterOption={false}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
+            notFoundContent={null}
           >
             {stars.map((star) => (
               <Option key={star._id} value={star._id}>
