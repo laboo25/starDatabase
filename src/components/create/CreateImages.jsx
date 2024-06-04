@@ -11,7 +11,7 @@ const CreateImages = () => {
   const [loading, setLoading] = useState(false);
   const [stars, setStars] = useState([]);
   const [fileList, setFileList] = useState([]);
-  const [subfolders, setSubfolders] = useState([
+  const [subfolders] = useState([
     { label: 'mio', value: 'mio' },
     { label: 'foot', value: 'foot' },
     { label: 'face', value: 'face' },
@@ -93,9 +93,7 @@ const CreateImages = () => {
             placeholder="Select stars"
             onSearch={handleSearch}
             showSearch
-            filterOption={(input, option) =>
-              option.children.toLowerCase().includes(input.toLowerCase())
-            }
+            filterOption={false}
           >
             {stars.map((star) => (
               <Option key={star._id} value={star._id}>
@@ -172,4 +170,3 @@ const CreateImages = () => {
 };
 
 export default CreateImages;
-         
