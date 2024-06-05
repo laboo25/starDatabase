@@ -113,11 +113,6 @@ const UpdateAll = () => {
 
   return (
     <>
-      <style>
-        th.ant-table-cell:nth-child(1) {
-          max-width: 50px;
-        }
-      </style>
       <div className='overflow-x-auto'>
         <Search
           placeholder="Search star name"
