@@ -18,7 +18,10 @@ const CreateImages = () => {
     { label: 'toy', value: 'toy' },
     { label: 'nude', value: 'nude' },
     { label: 'sesso', value: 'sesso' },
-    { label: 'others', value: 'others' },
+    { label: 'wallpaper', value: 'wallpaper' },
+    { label: 'pussy', value: 'pussy' },
+    { label: 'ass', value: 'ass' },
+    { label: 'boobs', value: 'boobs' },
   ]);
 
   useEffect(() => {
@@ -146,6 +149,10 @@ const CreateImages = () => {
             <Option value="face">face</Option>
             <Option value="toy">toy</Option>
             <Option value="sesso">sesso</Option>
+            <Option value="wallpaper">wallpaper</Option>
+            <Option value="boobs">boobs</Option>
+            <Option value="ass">ass</Option>
+            <Option value="pussy">pussy</Option>
           </Select>
         </Form.Item>
         <Form.Item
