@@ -12,65 +12,64 @@ const capitalize = (str) => {
   return str.replace(/\b\w/g, char => char.toUpperCase());
 };
 
-const columns = [
-  {
-    title: 'RowHead',
-    dataIndex: 'key',
-    rowScope: 'row',
-    size: 20
-  },
-  {
-    title: 'Profile',
-    dataIndex: 'profile',
-    key: 'profile',
-    render: (profile) => profile ? <CheckCircleFilled style={{ color: '#0096ff' }} /> : <CloseCircleFilled style={{ color: 'red' }} />,
-  },
-  {
-    title: 'Avatar',
-    dataIndex: 'cover',
-    key: 'cover',
-    render: (cover) => <img src={cover || avater} alt="cover" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />,
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text, record) => <Link to={`/star/${record._id}`} >{text}</Link>,
-    sorter: (a, b) => a.name.localeCompare(b.name),
-  },
-  {
-    title: 'Bio',
-    dataIndex: 'bio',
-    key: 'bio',
-    render: (bio) => bio ? <CheckCircleFilled style={{ color: '#0096ff' }} /> : <CloseCircleFilled style={{ color: 'red' }} />,
-  },
-  {
-    title: 'Images',
-    dataIndex: 'images',
-    key: 'images',
-    render: (images) => images && images.length > 0 ? images.length : <CloseCircleFilled style={{ color: 'red' }} />,
-  },
-  {
-    title: 'Albums',
-    dataIndex: 'albums',
-    key: 'albums',
-    render: (albums) => albums.length > 0 ? albums.length : <CloseCircleFilled style={{ color: 'red' }} />,
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <Button disabled>delete</Button>
-      </Space>
-    ),
-  },
-];
-
 const UpdateAll = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [columns, setColumns] = useState([
+    {
+      title: 'RowHead',
+      dataIndex: 'key',
+      rowScope: 'row',
+      size: 20
+    },
+    {
+      title: 'Profile',
+      dataIndex: 'profile',
+      key: 'profile',
+      render: (profile) => profile ? <CheckCircleFilled style={{ color: '#0096ff' }} /> : <CloseCircleFilled style={{ color: 'red' }} />,
+    },
+    {
+      title: 'Avatar',
+      dataIndex: 'cover',
+      key: 'cover',
+      render: (cover) => <img src={cover || avater} alt="cover" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />,
+    },
+    {
+      title: 'Name', // Placeholder, will be updated dynamically
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, record) => <Link to={`/star/${record._id}`} >{text}</Link>,
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: 'Bio',
+      dataIndex: 'bio',
+      key: 'bio',
+      render: (bio) => bio ? <CheckCircleFilled style={{ color: '#0096ff' }} /> : <CloseCircleFilled style={{ color: 'red' }} />,
+    },
+    {
+      title: 'Images',
+      dataIndex: 'images',
+      key: 'images',
+      render: (images) => images && images.length > 0 ? images.length : <CloseCircleFilled style={{ color: 'red' }} />,
+    },
+    {
+      title: 'Albums',
+      dataIndex: 'albums',
+      key: 'albums',
+      render: (albums) => albums.length > 0 ? albums.length : <CloseCircleFilled style={{ color: 'red' }} />,
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <Button disabled>delete</Button>
+        </Space>
+      ),
+    },
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,6 +88,13 @@ const UpdateAll = () => {
         stars.sort((a, b) => a.name.localeCompare(b.name)); // Sort data in ascending order by default
         setData(stars);
         setFilteredData(stars);
+
+        // Update the "Name" column title with the length of the star list
+        setColumns((prevColumns) =>
+          prevColumns.map((column) =>
+            column.dataIndex === 'name' ? { ...column, title: `Name (${stars.length})` } : column
+          )
+        );
       } catch (error) {
         console.error('Error fetching star data:', error);
       }
