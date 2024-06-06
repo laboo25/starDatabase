@@ -50,7 +50,7 @@ const CreateAlbums = () => {
     setUploading(true);
     
     try {
-      const response = await axios.post('http://localhost:1769/api/stars/albums/create-album', formData, {
+      const response = await axios.post('https://stardb-api.onrender.com/api/stars/albums/create-album', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
