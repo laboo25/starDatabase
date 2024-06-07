@@ -171,8 +171,8 @@ const CreateImages = () => {
             <Option value="ass lick">ass lick</Option>
             <Option value="celeb">celeb</Option>
             <Option value="bdsm">bdsm</Option>
-            <Option value="flexible">flexible</Option>
-{/*             <Option value="flexible">flexible</Option> */}
+            <Option value="flex">flex</Option>
+            <Option value="pose">pose</Option>
             
           </Select>
         </Form.Item>
