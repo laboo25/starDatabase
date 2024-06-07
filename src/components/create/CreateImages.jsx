@@ -48,12 +48,15 @@ const CreateImages = () => {
     setLoading(true);
     const formData = new FormData();
 
+    // Append starIds if they exist
     if (values.starIds && values.starIds.length > 0) {
       values.starIds.forEach((id) => formData.append('starIds[]', id));
     }
+    // Append other form fields
     if (values.subfolder) formData.append('subfolder', values.subfolder);
     if (values.tags && values.tags.length > 0) formData.append('tags', values.tags.join(','));
 
+    // Append image files
     fileList.forEach((file) => {
       formData.append('images', file.originFileObj);
     });
@@ -97,7 +100,7 @@ const CreateImages = () => {
         <Form.Item name="starIds" label="Stars">
           <Select
             mode="multiple"
-            placeholder="Select stars"
+            placeholder="Select stars (optional)"
             onSearch={handleSearch}
             onBlur={handleBlur}
             showSearch
