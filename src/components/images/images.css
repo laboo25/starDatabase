@@ -1,60 +1,96 @@
 
-a>img, .card>.tags {
-    user-select: none;
-}
+
+/* Main image container */
 #image-main {
+    user-select: none;
     padding: 100px 30px;
 }
-#image-wrapper {
+
+/* Images wrapper grid */
+#images-wrapper {
     width: auto;
     height: 100%;
-    /* background-color: aqua; */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     justify-content: center;
     grid-gap: 15px;
-    /* grid-row-gap: 20px; */
 }
-#image-wrapper #card {
+
+/* Card styles */
+#images-wrapper #card {
     max-width: 250px;
     height: auto;
-    /* background-color: rgb(151, 174, 236); */
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-
 }
-#image-wrapper #card #squire-box {
+
+/* Square box container */
+#images-wrapper #card #squire-box {
     height: 200px;
     aspect-ratio: 1;
-    background-color: rgba(182, 182, 182, 0.61);
+    
     padding: 5px;
     border-radius: 5px;
     overflow: hidden;
 }
-#image-wrapper #card #squire-box img {
+#images-wrapper #card #squire-box:hover{
+    background-color: rgba(240, 240, 240, 0.418);
+} 
+/* Image inside square box */
+#images-wrapper #card #squire-box img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    border-radius: 15px;
+    /* border-radius: 15px; */
 }
-#image-wrapper #card .tags {
+
+/* Tags container */
+#images-wrapper #card .tags {
     width: 100%;
 }
+
+/* Options for square box */
+#squire-box-options {
+    position: absolute;
+    background: rgba(197, 197, 197, 0.397);
+    padding: 4px 8px;
+    bottom: 4px;
+    right: 4px;
+    display: none;
+    border-radius: 7px;
+}
+
+/* Transition effect for options */
+#options:hover #squire-box-options {
+    display: block;
+}
+
+/* Responsive styles */
 @media only screen and (max-width: 375px) {
+    /* Hide scrollbar */
     #image-main::-webkit-scrollbar {
         width: 0px;
-      }
+    }
+
+    /* Adjust padding for smaller screens */
     #image-main {
         padding: 50px 20px;
     }
-    #image-wrapper {
+
+    /* Adjust grid for smaller screens */
+    #images-wrapper {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        /* grid-gap: 10px; */
     }
-    #image-wrapper #card {
+
+    /* Adjust card size for smaller screens */
+    #images-wrapper #card {
         max-width: 160px;
         height: 160px;
-        /* background-color: rgb(255, 103, 103); */
     }
-  }
+
+    /* Adjust square box height for smaller screens */
+    #images-wrapper #card #squire-box {
+        height: 155px;
+    }
+}

@@ -34,19 +34,16 @@ const Images = () => {
   return (
     <div id='image-main'>
       {error && <div className='error'>{error}</div>} {/* Display error message */}
-      <div id='image-wrapper'>
+      <div id='images-wrapper'>
         {images.map((item) => 
           item.starImages.map((image) => (
             <div key={uuidv4()} className='card' id='card'>
               <div id='options' className='relative'>
-                <div className='absolute top-1 right-1 bg-[#69696944] py-1 px-2 rounded'>
-                  <button><BsThreeDotsVertical /></button>
-                </div>
               <div id='squire-box'>
                 <a
                   href={image.imageurl}
                   data-fancybox="gallery"
-                  data-caption={getStarName(image.starId)} // Use caption if available, otherwise fallback to star name
+                  data-caption={getStarName(image.starname)} // Use caption if available, otherwise fallback to star name
                   draggable="false"
                 >
                   <img src={image.imageThumb} alt='' draggable="false" />
@@ -59,6 +56,9 @@ const Images = () => {
                   ))}
                 </div>
               )}
+              <div id='squire-box-options' >
+                  <button><BsThreeDotsVertical /></button>
+                </div>
               </div>
             </div>
           ))

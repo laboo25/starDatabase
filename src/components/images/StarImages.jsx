@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { BsThreeDotsVertical } from "react-icons/bs";
+import './images.css'
 import axios from 'axios';
 import { Spin, message } from 'antd';
+
 
 const StarImages = ({ starId }) => {
   const [loading, setLoading] = useState(true);
@@ -60,21 +63,36 @@ const StarImages = ({ starId }) => {
   return (
     <div>
       <h2>Star Images</h2>
-      <div className="gallery">
+      <div id='images-wrapper ' className="gallery">
         {starImages.map((item, idx) => (
-          <div key={idx} className="card sm:w-full max-w-[300px]">
-            {item.starImages.map((image, index) => (
-              <a key={index} href={image.imageurl} data-fancybox="gallery" data-caption={item.starNames.join(', ')}>
-                <img src={image.imageThumb} alt={`Thumbnail of ${item.starNames.join(', ')}`} />
-              </a>
-            ))}
-            <ul className='w-full flex gap-2 capitalize'>
+          <div key={idx} id='card' className="card">
+            <div id='options' className='relative'>
               {item.starImages.map((image, index) => (
-                image.tags.sort((a, b) => a.localeCompare(b)).map((tag, tagIdx) => ( // Sorting tags in ascending order
-                  <li key={tagIdx}>{tag}</li>
-                ))
+                <div id="squire-box">
+                  <a
+                    key={index}
+                    href={image.imageurl}
+                    data-fancybox="gallery"
+                    data-caption={item.starNames.join(', ')}
+                  >
+                    <img
+                      src={image.imageThumb}
+                      alt={`Thumbnail of ${item.starNames.join(', ')}`} />
+                  </a>
+                  <div className='tags'>
+                    {item.starImages.map((image, index) => (
+                      image.tags.sort((a, b) => a.localeCompare(b)).map((tag, tagIdx) => ( // Sorting tags in ascending order
+                        <span key={tagIdx} className='tag'>{tag}</span>
+                      ))
+                    ))}
+                  </div>
+                </div>
               ))}
-            </ul>
+              <div id='squire-box-options' >
+                <button><BsThreeDotsVertical /></button>
+              </div>
+            </div>
+
           </div>
         ))}
       </div>
