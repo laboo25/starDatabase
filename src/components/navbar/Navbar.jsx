@@ -56,6 +56,11 @@ const Navbar = () => {
                         <div className='bg-[#ff5733] p-[10px] uppercase rounded-[20px] w-fit ml-[20px] text-white px-[20px]'>
                             <Link to='create' className=''>create data</Link>
                         </div>
+                        <div>
+                            <Link to='/images' draggable="false">
+                            images
+                        </Link>
+                        </div>
                     </div>
                     <div id='search_fields' ref={searchRef}>
                         <div 
