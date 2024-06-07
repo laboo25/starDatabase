@@ -22,6 +22,8 @@ const CreateImages = () => {
     { label: 'pussy', value: 'pussy' },
     { label: 'ass', value: 'ass' },
     { label: 'boobs', value: 'boobs' },
+    { label: 'models', value: 'models' },
+    { label: 'ai', value: 'ai' },
   ]);
 
   useEffect(() => {
@@ -156,6 +158,8 @@ const CreateImages = () => {
             <Option value="boobs">boobs</Option>
             <Option value="ass">ass</Option>
             <Option value="pussy">pussy</Option>
+            <Option value="models">models</Option>
+            <Option value="ai">ai</Option>
           </Select>
         </Form.Item>
         <Form.Item
