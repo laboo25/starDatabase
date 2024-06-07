@@ -152,6 +152,11 @@ const CreateImages = () => {
           >
             <Option value="mio">mio</Option>
             <Option value="feet">feet</Option>
+            <Option value="sole">sole</Option>
+            <Option value="foot lick">foot lick</Option>
+            <Option value="foot job">foot job</Option>
+            <Option value="toe">toe</Option>
+            <Option value="shoe">shoe</Option>
             <Option value="nude">nude</Option>
             <Option value="face">face</Option>
             <Option value="toy">toy</Option>
@@ -162,14 +167,11 @@ const CreateImages = () => {
             <Option value="pussy">pussy</Option>
             <Option value="models">models</Option>
             <Option value="ai">ai</Option>
-            <Option value="toe">toe</Option>
             <Option value="pussy lick">pussy lick</Option>
             <Option value="ass lick">ass lick</Option>
-            <Option value="foot lick">foot lick</Option>
-            <Option value="foot job">foot job</Option>
-            <Option value="shoe">shoe</Option>
             <Option value="celeb">celeb</Option>
             <Option value="bdsm">bdsm</Option>
+            
           </Select>
         </Form.Item>
         <Form.Item
