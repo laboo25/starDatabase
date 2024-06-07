@@ -165,6 +165,7 @@ const CreateImages = () => {
             <Option value="ass lick">ass lick</Option>
             <Option value="foot lick">foot lick</Option>
             <Option value="foot job">foot job</Option>
+            <Option value="shoe">shoe</Option>
             <Option value="celeb">celeb</Option>
           </Select>
         </Form.Item>
