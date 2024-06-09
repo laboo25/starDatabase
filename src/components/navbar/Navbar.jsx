@@ -53,13 +53,18 @@ const Navbar = () => {
                         </Link>
                     </div>
                     <div>
-                        <div className='bg-[#ff5733] p-[10px] uppercase rounded-[20px] w-fit ml-[20px] text-white px-[20px]'>
-                            <Link to='create' className=''>create data</Link>
+                        <div className='bg-green-500 uppercase rounded-[20px] w-fit  text-white'>
+                            <Link to='/albums' className='p-[10px] px-[20px]'>albums</Link>
                         </div>
-                        <div>
-                            <Link to='/images' draggable="false">
-                            images
-                        </Link>
+                    </div>
+                    <div>
+                        <div className='bg-blue-500 uppercase rounded-[20px] w-fit  text-white'>
+                            <Link to='/images' className='p-[10px] px-[20px]'>images</Link>
+                        </div>
+                    </div>
+                    <div>
+                        <div className='bg-[#ff5733] uppercase rounded-[20px] w-fit  text-white'>
+                            <Link to='create' className='p-[10px] px-[20px]'>create data</Link>
                         </div>
                     </div>
                     <div id='search_fields' ref={searchRef}>
