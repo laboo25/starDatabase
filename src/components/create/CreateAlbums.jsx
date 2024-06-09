@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Upload, message, Select } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Upload, message, Select, Progress } from 'antd';
+import { UploadOutlined, RedoOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const { Option } = Select;
 
+const MAX_CONCURRENT_UPLOADS = 5; // Set concurrency limit
+
 const CreateAlbums = () => {
     const [stars, setStars] = useState([]);
+    const [uploadQueue, setUploadQueue] = useState([]);
+    const [ongoingUploads, setOngoingUploads] = useState(0);
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -22,7 +26,7 @@ const CreateAlbums = () => {
         fetchStars();
     }, []);
 
-    const onFinish = async (values) => {
+    const onFinish = (values) => {
         const formData = new FormData();
         formData.append('albumname', values.albumname);
         if (values.starname) {
@@ -32,20 +36,78 @@ const CreateAlbums = () => {
             values.tags.forEach(tag => formData.append('tags', tag));
         }
         if (values.albums) {
-            values.albums.forEach(file => formData.append('albums', file.originFileObj));
+            const files = values.albums.map(file => ({
+                file: file.originFileObj,
+                status: 'pending',
+                progress: 0,
+            }));
+            setUploadQueue(files);
         }
+    };
+
+    const uploadFile = async (fileData, index) => {
+        const formData = new FormData();
+        formData.append('albums', fileData.file);
+        setUploadQueue(prevQueue => {
+            const newQueue = [...prevQueue];
+            newQueue[index].status = 'uploading';
+            return newQueue;
+        });
+        setOngoingUploads(prev => prev + 1);
 
         try {
-            const response = await axios.post('https://stardb-api.onrender.com/api/stars/albums/create-album', formData, {
+            await axios.post('https://stardb-api.onrender.com/api/stars/albums/create-album', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
+                },
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setUploadQueue(prevQueue => {
+                        const newQueue = [...prevQueue];
+                        newQueue[index].progress = percentCompleted;
+                        return newQueue;
+                    });
                 }
             });
-            message.success('Album created successfully');
-            form.resetFields();
+            setUploadQueue(prevQueue => {
+                const newQueue = [...prevQueue];
+                newQueue[index].status = 'done';
+                return newQueue;
+            });
+            message.success('File uploaded successfully');
         } catch (error) {
-            message.error('Failed to create album');
+            setUploadQueue(prevQueue => {
+                const newQueue = [...prevQueue];
+                newQueue[index].status = 'error';
+                return newQueue;
+            });
+            message.error('Failed to upload file');
+        } finally {
+            setOngoingUploads(prev => prev - 1);
+            processQueue(); // Trigger next upload if any
         }
+    };
+
+    const processQueue = () => {
+        if (ongoingUploads < MAX_CONCURRENT_UPLOADS) {
+            const nextIndex = uploadQueue.findIndex(file => file.status === 'pending');
+            if (nextIndex !== -1) {
+                uploadFile(uploadQueue[nextIndex], nextIndex);
+            }
+        }
+    };
+
+    useEffect(() => {
+        processQueue();
+    }, [uploadQueue, ongoingUploads]);
+
+    const handleRetry = (index) => {
+        setUploadQueue(prevQueue => {
+            const newQueue = [...prevQueue];
+            newQueue[index].status = 'pending';
+            return newQueue;
+        });
+        processQueue(); // Trigger next upload if any
     };
 
     return (
@@ -56,7 +118,7 @@ const CreateAlbums = () => {
                     label="Album Name"
                     rules={[{ required: true, message: 'Please input the album name!' }]}
                 >
-                    <Input placeholder="Enter album name" />
+                    <Input placeholder="Enter album name" allowClear/>
                 </Form.Item>
             </div>
             <div>
@@ -67,6 +129,10 @@ const CreateAlbums = () => {
                     <Select
                         mode="multiple"
                         placeholder="Select star names (optional)"
+                        showSearch
+                        filterOption={(input, option) =>
+                            option.children.toLowerCase().includes(input.toLowerCase())
+                        }
                     >
                         {stars.map(star => (
                             <Option key={star._id} value={star._id}>
@@ -108,9 +174,19 @@ const CreateAlbums = () => {
                         <Button icon={<UploadOutlined />}>Upload</Button>
                     </Upload>
                 </Form.Item>
+                {uploadQueue.map((fileData, index) => (
+                    <div key={index}>
+                        <Progress percent={fileData.progress} />
+                        {fileData.status === 'error' && (
+                            <Button icon={<RedoOutlined />} onClick={() => handleRetry(index)}>
+                                Retry
+                            </Button>
+                        )}
+                    </div>
+                ))}
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" className='w-full bg-blue-500'>
-                        Create Album
+                    <Button type="primary" htmlType="submit" className='w-full bg-blue-500' disabled={ongoingUploads > 0}>
+                        {ongoingUploads > 0 ? 'Uploading...' : 'Create Album'}
                     </Button>
                 </Form.Item>
             </div>

@@ -18,7 +18,7 @@ const UpdateAll = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [columns, setColumns] = useState([
     {
-      title: 'no',
+      title: 'RowHead',
       dataIndex: 'key',
       rowScope: 'row',
       size: 20

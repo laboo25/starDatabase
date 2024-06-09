@@ -12,7 +12,6 @@ const CreateImages = () => {
   const [stars, setStars] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [subfolders] = useState([
-    { label: 'other', value: 'other' },
     { label: 'mio', value: 'mio' },
     { label: 'foot', value: 'foot' },
     { label: 'face', value: 'face' },
