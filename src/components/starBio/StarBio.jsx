@@ -1,82 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
-import './starBio.css';
-import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
-import axios from 'axios';
+import React from 'react';
 import { CiMenuFries } from "react-icons/ci";
 import { IoChevronBackSharp } from "react-icons/io5";
 import moment from 'moment';
 import Sidebar from './Sidebar';
-import StarImages from '../images/StarImages';
 
-const StarBio = () => {
-    const { _id } = useParams();
-    const navigate = useNavigate(); // Initialize useNavigate
-    const [starName, setStarName] = useState(null);
-    const [starBio, setStarBio] = useState(null);
-    const [albums, setAlbums] = useState([]);
-    const [error, setError] = useState(null);
-    const [showCover, setShowCover] = useState(false); // New state to toggle between showing cover or profile
-    const [sidebarVisible, setSidebarVisible] = useState(false); // State to manage sidebar visibility
-    const sidebarRef = useRef(null); // Ref for the sidebar
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const storedStarName = localStorage.getItem(`starName_${_id}`);
-                const storedStarBio = localStorage.getItem(`starBio_${_id}`);
-
-                if (storedStarName && storedStarBio) {
-                    setStarName(JSON.parse(storedStarName));
-                    setStarBio(JSON.parse(storedStarBio));
-                } else {
-                    // Fetch star title data
-                    const titleRes = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
-                    const titleData = titleRes.data.find((item) => item._id === _id);
-                    if (titleData) {
-                        setStarName(titleData);
-                        localStorage.setItem(`starName_${_id}`, JSON.stringify(titleData));
-
-                        // Fetch star bio data using the star name or id
-                        const bioRes = await axios.get('https://stardb-api.onrender.com/api/stars/star-bio/get-all-bio');
-                        const bioData = bioRes.data.find((bio) => bio.starname === _id);
-                        if (bioData) {
-                            setStarBio(bioData);
-                            localStorage.setItem(`starBio_${_id}`, JSON.stringify(bioData));
-                        }
-                    } else {
-                        setError('Star not found');
-                    }
-                }
-
-                // Fetch star album data
-                const albumRes = await axios.get('https://stardb-api.onrender.com/api/stars/albums/get-all-albums');
-                const albumData = albumRes.data.filter((albm) => albm.starname && albm.starname.includes(_id));
-                setAlbums(albumData);
-
-                // Check if both starName and starBio are not null, then show the profile
-                setShowCover(!(starName && starBio));
-
-            } catch (error) {
-                setError(error.message);
-            }
-        };
-
-        fetchData();
-    }, [_id]);
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-                setSidebarVisible(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
+const StarBio = ({ starName, starBio, navigate, sidebarVisible, setSidebarVisible, sidebarRef, showCover }) => {
     const calculateAge = (birthdate) => {
         return moment().diff(birthdate, 'years');
     };
@@ -120,8 +48,8 @@ const StarBio = () => {
                 <button
                     id='historyback'
                     className='absolute top-5 left-5 p-1 bg-[#fff7] text-[red] md:hidden'
-                    onClick={() => navigate(-1)} // Navigate back
-                    style={{ display: window.history.length > 1 ? 'block' : 'none' }} // Conditionally render the button
+                    onClick={() => navigate(-1)}
+                    style={{ display: window.history.length > 1 ? 'block' : 'none' }}
                 >
                     <IoChevronBackSharp />
                 </button>
@@ -285,28 +213,15 @@ const StarBio = () => {
                             <div id='cover-wrapper' className='w-[250px] h-[250px] rounded-full'>
                                 {starName && <img src={starName.starcover} alt={`Cover for ${starName.starname}`} className='w-full h-full object-cover rounded-full' />}
                             </div>
-
                             <div>
                                 {starName && <h2 className='title'>{starName.starname}</h2>}
                             </div>
                         </div>
                     )}
-                    <div id='albums_page' className='albums-container'>
-                        {albums.map((album, index) => (
-                            <div key={index} className='album'>
-                                <div>{album.albumname}</div>
-                                <img src={album.thumburl} alt={`Album ${index + 1}`} />
-                            </div>
-                        ))}
-                    </div>
-
                 </div>
-            </div>
-            <div className='w-full block'>
-                <StarImages starId={_id} />
             </div>
         </div>
     );
-};
+}
 
 export default StarBio;

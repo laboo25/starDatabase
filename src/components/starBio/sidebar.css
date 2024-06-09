@@ -17,6 +17,7 @@
   height: 100%;
   overflow: hidden;
   padding-bottom: 120px;
+  padding-top: 20px;
 }
 #sidebar-main .list {
     width: 100%;

@@ -46,13 +46,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             allowClear
           />
         </div>
-        
       </div>
-      <div className='list-wrapper'>
+      <div className='list-wrapper '>
         <div className='list'>
           {filteredStars.map(star => (
             <div key={star._id}>
-              <NavLink to={`/star/${star._id}`} activeClassName='active'>{star.starname}</NavLink>
+              <NavLink 
+                to={`/star/${star._id}`} 
+                className={({ isActive }) => isActive ? 'active' : ''}
+              >
+                {star.starname}
+              </NavLink>
             </div>
           ))}
         </div>

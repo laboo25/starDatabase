@@ -114,6 +114,10 @@
   border-radius: 5px;
   cursor: pointer;
 }
+#album-images-block .active {
+  background-color: #0f0f0f; /* Example active background color */
+  color: #fff; /* Example active text color */
+}
 
 @media only screen and (max-width: 600px) {
   .menu-toggle {
