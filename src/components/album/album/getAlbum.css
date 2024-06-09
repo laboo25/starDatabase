@@ -1,0 +1,19 @@
+.album-container {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .album-container:nth-child(even) {
+    transition-delay: 0.1s;
+  }
+  
+  .album-container:nth-child(odd) {
+    transition-delay: 0.2s;
+  }
+  
+  .w-full.flex.gap-3.py-10.flex-wrap .album-container {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
