@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import "./index.css";
 import App from "./App";
-import StarBio from "./components/starBio/StarBio";
+import StarDeltails from "./components/starBio/StarDeltails";
 import Create from "./components/create/Create";
 import CreateStar from "./components/create/CreateStar";
 import CreateStarBio from "./components/create/CreateStarBio";
@@ -18,6 +18,7 @@ import UpdateAll from "./components/create/UpdateAll";
 import StarUpdate from "./components/update/StarUpdate";
 import Search from "./components/search/Search";
 import Images from "./components/images/Images";
+import GetAlbum from "./components/album/GetAlbum";
 
 Fancybox.bind('[data-fancybox="gallery"]', {
   Carousel: {
@@ -45,11 +46,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/star/:_id",
-    element: <StarBio/>,
+    element: <StarDeltails/>,
   },
   {
     path: "/query",
     element: <Search/>,
+  },
+  {
+    path: "/albums",
+    element: <GetAlbum/>,
   },
   {
     path: "/images",
