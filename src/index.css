@@ -50,6 +50,10 @@ html::-webkit-scrollbar-thumb:hover {
     
 }
 
-/* For IE and Edge */
-/* Microsoft Edge (EdgeHTML) and Internet Explorer do not support styling of scrollbar directly with CSS. */
-/* You may need to use custom JavaScript-based solutions for these browsers */
+.fancybox__backdrop,.fancybox__container{
+    
+    background-color: #ffffff !important;
+}
+#fancybox__caption_1_0 {
+    color: black !important;
+}
