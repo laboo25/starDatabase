@@ -1,94 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import './modalAlbum.css';
+import React, { useEffect, useState, useRef } from 'react';
+import './starBio.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import StarImages from '../images/StarImages';
+import StarAlbums from '../album/StarAlbums';
+import StarBio from './StarBio';
 
-const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [starnameFilters, setStarnameFilters] = useState({});
-  const [tagFilters, setTagFilters] = useState({});
+const StarDetails = () => {
+    const { _id } = useParams();
+    const navigate = useNavigate();
+    const [starName, setStarName] = useState(null);
+    const [starBio, setStarBio] = useState(null);
+    const [albums, setAlbums] = useState([]);
+    const [error, setError] = useState(null);
+    const [showCover, setShowCover] = useState(false);
+    const [sidebarVisible, setSidebarVisible] = useState(false);
+    const sidebarRef = useRef(null);
 
-  useEffect(() => {
-    const uniqueStarnames = [...new Set(images.map(image => image.starname))];
-    const initialStarnameFilters = uniqueStarnames.reduce((acc, starname) => {
-      acc[starname] = false;
-      return acc;
-    }, {});
-    setStarnameFilters(initialStarnameFilters);
-  }, [images]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const storedStarName = localStorage.getItem(`starName_${_id}`);
+                const storedStarBio = localStorage.getItem(`starBio_${_id}`);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+                if (storedStarName && storedStarBio) {
+                    setStarName(JSON.parse(storedStarName));
+                    setStarBio(JSON.parse(storedStarBio));
+                } else {
+                    const titleRes = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+                    const titleData = titleRes.data.find((item) => item._id === _id);
+                    if (titleData) {
+                        setStarName(titleData);
+                        localStorage.setItem(`starName_${_id}`, JSON.stringify(titleData));
 
-  const handleStarnameChange = (starname) => {
-    setStarnameFilters(prev => ({ ...prev, [starname]: !prev[starname] }));
-  };
+                        const bioRes = await axios.get('https://stardb-api.onrender.com/api/stars/star-bio/get-all-bio');
+                        const bioData = bioRes.data.find((bio) => bio.starname === _id);
+                        if (bioData) {
+                            setStarBio(bioData);
+                            localStorage.setItem(`starBio_${_id}`, JSON.stringify(bioData));
+                        }
+                    } else {
+                        setError('Star not found');
+                    }
+                }
 
-  const handleTagChange = (tag) => {
-    setTagFilters(prev => ({ ...prev, [tag]: !prev[tag] }));
-  };
+                const albumRes = await axios.get('https://stardb-api.onrender.com/api/stars/albums/get-all-albums');
+                const albumData = albumRes.data.filter((albm) => albm.starname && albm.starname.includes(_id));
+                setAlbums(albumData);
 
-  const filteredImages = images.filter(image => {
-    const matchesStarname = Object.keys(starnameFilters).every(starname => !starnameFilters[starname] || image.starname === starname);
-    const matchesTags = Object.keys(tagFilters).every(tag => !tagFilters[tag] || image.tags.includes(tag));
-    return matchesStarname && matchesTags;
-  });
+                setShowCover(!(starName && starBio));
+            } catch (error) {
+                setError(error.message);
+            }
+        };
 
-  if (!visible) return null;
+        fetchData();
+    }, [_id]);
 
-  return (
-    <div className='modal-main'>
-      <div className={`modal-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+                setSidebarVisible(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    return (
         <div>
-          <p>Filter by Starname</p>
-          <div>
-            {Object.keys(starnameFilters).map(starname => (
-              <label key={starname}>
-                <input
-                  type="checkbox"
-                  checked={starnameFilters[starname]}
-                  onChange={() => handleStarnameChange(starname)}
+            <div>
+                <StarBio
+                    starName={starName}
+                    starBio={starBio}
+                    navigate={navigate}
+                    sidebarVisible={sidebarVisible}
+                    setSidebarVisible={setSidebarVisible}
+                    sidebarRef={sidebarRef}
+                    showCover={showCover}
                 />
-                {starname}
-              </label>
-            ))}
-          </div>
+            </div>
+            <div className='w-full block'>
+                <StarAlbums starId={_id} />
+            </div>
+            <div className='w-full block'>
+                <StarImages starId={_id} />
+            </div>
         </div>
-        <div>
-          <p>Filter by Tags</p>
-          <div>
-            {['tag1', 'tag2', 'tag3'].map(tag => (
-              <label key={tag}>
-                <input
-                  type="checkbox"
-                  checked={tagFilters[tag] || false}
-                  onChange={() => handleTagChange(tag)}
-                />
-                {tag}
-              </label>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="custom-modal-overlay">
-        <div>
-          <button onClick={toggleSidebar} className='top-2 left-2'>Open Sidebar</button>
-        </div>
-        <button className="custom-modal-close" onClick={onClose}>×</button>
-        <div className="custom-modal-content">
-          <div className='pb-10 text-[20px]'>
-            <h3 draggable={false}>{albumname} <span className='text-red-500'>{`x${length}`}</span></h3>
-          </div>
-          <div className="image-grid card">
-            {filteredImages.map((image, index) => (
-              <a href={image.imageurl} data-fancybox="gallery" key={index}>
-                <img src={image.thumburl} alt={`Album image ${index + 1}`} draggable={false} />
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-export default ModalAlbum;
+export default StarDetails;

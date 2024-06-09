@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './modalAlbum.css'
+import './modalAlbum.css';
 import axios from 'axios';
 
 const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
