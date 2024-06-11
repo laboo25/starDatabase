@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ModalAlbum from './ModalAlbum';
-import './getAlbum.css'
+import './getAlbum.css';
 
 const GetAlbum = () => {
   const [albums, setAlbums] = useState([]);
   const [sortedAlbums, setSortedAlbums] = useState([]);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(localStorage.getItem('modalVisible') === 'true');
   const [isSorted, setIsSorted] = useState(false);
 
   useEffect(() => {
@@ -19,14 +19,33 @@ const GetAlbum = () => {
       .catch(error => console.error('Error fetching albums:', error));
   }, []);
 
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (isModalVisible) {
+        closeModal();
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isModalVisible]);
+
   const openModal = (album) => {
     setSelectedAlbum(album);
     setIsModalVisible(true);
+    document.body.style.overflow = 'hidden';
+    window.history.pushState({ modalOpen: true }, '');
   };
 
   const closeModal = () => {
     setIsModalVisible(false);
     setSelectedAlbum(null);
+    document.body.style.overflow = 'auto';
+    window.history.back();
   };
 
   const toggleSorting = () => {
@@ -40,7 +59,7 @@ const GetAlbum = () => {
   };
 
   return (
-    <div className='px-10'>
+    <div id='getAlbum' className='px-10'>
       <div className='text-[#dfdfdf] text-[10px]'>{`${sortedAlbums.length} albums available`}</div>
       <button onClick={toggleSorting} className='mb-4 px-4 py-2 bg-blue-500 text-white rounded'>
         {isSorted ? 'Date ⇅' : 'Name ⇅'}
@@ -48,9 +67,9 @@ const GetAlbum = () => {
       {sortedAlbums.length === 0 ? (
         <p>Loading...</p>
       ) : (
-        <div className='w-full flex gap-3 py-10 flex-wrap'>
+        <div id='wrapper' className='w-full flex py-10 flex-wrap'>
           {sortedAlbums.map(album => (
-            <div key={album._id} className='album-container w-1/4'>
+            <div key={album._id} className='album-container'>
               {album.albumimages.length > 0 && (
                 <div className='w-full aspect-video' onClick={() => openModal(album)}>
                   <img 

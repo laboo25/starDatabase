@@ -7,12 +7,27 @@ import ModalAlbum from './ModalAlbum';
 const StarAlbums = ({ starId }) => {
   const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(localStorage.getItem('modalVisible') === 'true');
   const [selectedAlbum, setSelectedAlbum] = useState(null);
 
   useEffect(() => {
     fetchAlbums();
   }, [starId]);
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (isModalVisible) {
+        handleCancel();
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isModalVisible]);
 
   const fetchAlbums = async () => {
     try {
@@ -41,11 +56,15 @@ const StarAlbums = ({ starId }) => {
   const showModal = (album) => {
     setSelectedAlbum(album);
     setIsModalVisible(true);
+    document.body.style.overflow = 'hidden';
+    window.history.pushState({ modalOpen: true }, '');
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
     setSelectedAlbum(null);
+    document.body.style.overflow = 'auto';
+    window.history.back();
   };
 
   if (loading) {
