@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './starAlbum.css';
 import axios from 'axios';
-import { Card, Spin, message } from 'antd';
+import {  Spin, message } from 'antd';
 import ModalAlbum from './ModalAlbum';
 
 const StarAlbums = ({ starId }) => {

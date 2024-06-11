@@ -7,13 +7,17 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   padding: 10px 0;
-  gap: 10px;
+  padding-bottom: 80px;
+  gap: 30px 20px;
 }
 #getAlbum #wrapper .album-container {
     transform: translateY(20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
-  
+  #getAlbum #wrapper .album-container:hover {
+    background-color: rgb(243, 243, 243);
+    padding: 10px;
+  }
   .album-container:nth-child(even) {
     transition-delay: 0.1s;
   }

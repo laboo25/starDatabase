@@ -91,7 +91,7 @@
 
 .custom-modal-close {
   position: absolute;
-  top: 8px;
+  top: -20px;
   right: 10px;
   background: transparent;
   border: none;
@@ -100,9 +100,10 @@
   position: fixed;
   color: black;
   z-index: 99999999;
+  font-size: 60px;
 }
 .custom-modal-close:hover {
-  color: #f00;
+  color: rgb(255, 0, 0);
 }
 .image-grid {
   display: flex;

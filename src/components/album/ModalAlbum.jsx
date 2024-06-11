@@ -80,7 +80,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
       </div>
       <div className="custom-modal-overlay">
         <div>
-          <button onClick={toggleSidebar} className='top-2 left-2'>Open Sidebar</button>
+          <button onClick={toggleSidebar} className='top-2 left-2 pl-6 text-[30px]'>◧</button>
         </div>
         <button className="custom-modal-close" onClick={onClose}>×</button>
         <div className="custom-modal-content">

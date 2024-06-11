@@ -1,18 +1,24 @@
 .album-gallery {
-  padding: 50px 50px;
+  /* padding: 50px 50px; */
   width: 100%;
-  display: flex;
-  gap: 30px;
-  user-select: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 10px 20px;
+  padding-bottom: 80px;
+  gap: 30px 20px;
+  margin-top: 30px;
 }
 .album-gallery #album-card {
-  width: 33%;
-  padding: 0 20px;
+  /* width: 33%; */
+  /* padding: 0 20px; */
   cursor: pointer;
   transition: all linear .5s;
 }
 .album-gallery #album-card:hover {
   background-color: rgb(247, 247, 247);
+}
+.album-gallery #album-card:hover>img {
+  object-fit: contain;
 }
 .album-gallery #album-card #card {
   width: 100%;
@@ -50,3 +56,11 @@
     display: block;
   }
   
+
+  @media only screen and (max-width: 375px) {
+    
+  .album-gallery {
+    grid-template-columns: 1fr 1fr;
+    font-size: 10px;
+  }
+}

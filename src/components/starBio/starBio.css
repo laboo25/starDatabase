@@ -161,3 +161,7 @@
     aspect-ratio: 1;
   }
 }
+.active {
+  background-color: #0f0f0f; /* Example active background color */
+  color: #fff; /* Example active text color */
+}

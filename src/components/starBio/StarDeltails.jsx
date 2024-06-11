@@ -15,6 +15,7 @@ const StarDetails = () => {
     const [error, setError] = useState(null);
     const [showCover, setShowCover] = useState(false);
     const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [activeTab, setActiveTab] = useState('images');
     const sidebarRef = useRef(null);
 
     useEffect(() => {
@@ -83,11 +84,27 @@ const StarDetails = () => {
                     showCover={showCover}
                 />
             </div>
-            <div className='w-full block'>
-                <StarAlbums starId={_id} />
-            </div>
-            <div className='w-full block'>
-                <StarImages starId={_id} />
+            <div className='w-full '>
+                <div className='w-full flex bg-[#e7e7e7] capitalize'>
+                    <div className={`w-1/2 text-center ${activeTab === 'images' ? 'active' : ''}`}>
+                        <button className='w-full py-3' onClick={() => setActiveTab('images')}>images</button>
+                    </div>
+                    <div className={`w-1/2 text-center ${activeTab === 'albums' ? 'active' : ''}`}>
+                        <button className='w-full py-3' onClick={() => setActiveTab('albums')}>albums</button>
+                    </div>
+                </div>
+                <div>
+                    {activeTab === 'images' && (
+                        <div className='w-full block'>
+                            <StarImages starId={_id} />
+                        </div>
+                    )}
+                    {activeTab === 'albums' && (
+                        <div className='w-full block'>
+                            <StarAlbums starId={_id} />
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
