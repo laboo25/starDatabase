@@ -1,5 +1,6 @@
 #getAlbum {
   width: 100%;
+  padding: 0 50px;
 }
 #getAlbum #wrapper {
   width: 100%;
@@ -25,8 +26,14 @@
     opacity: 1;
     transform: translateY(0);
   }
+
+
   @media only screen and (max-width: 375px) {
+    #getAlbum {
+      padding: 0 20px;
+    }
   #getAlbum #wrapper {
     grid-template-columns: 1fr 1fr;
+    font-size: 10px;
   }
 }
