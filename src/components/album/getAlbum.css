@@ -1,5 +1,14 @@
-.album-container {
-    opacity: 0;
+#getAlbum {
+  width: 100%;
+}
+#getAlbum #wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 10px 0;
+  gap: 10px;
+}
+#getAlbum #wrapper .album-container {
     transform: translateY(20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
@@ -16,4 +25,8 @@
     opacity: 1;
     transform: translateY(0);
   }
-  
+  @media only screen and (max-width: 375px) {
+  #getAlbum #wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+}
