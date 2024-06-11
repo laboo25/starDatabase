@@ -59,7 +59,7 @@ const GetAlbum = () => {
   };
 
   return (
-    <div id='getAlbum' className='px-10'>
+    <div id='getAlbum' className=''>
       <div className='text-[#dfdfdf] text-[10px]'>{`${sortedAlbums.length} albums available`}</div>
       <button onClick={toggleSorting} className='mb-4 px-4 py-2 bg-blue-500 text-white rounded'>
         {isSorted ? 'Date ⇅' : 'Name ⇅'}
