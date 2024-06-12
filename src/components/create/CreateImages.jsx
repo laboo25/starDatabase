@@ -25,6 +25,7 @@ const CreateImages = () => {
     { label: 'models', value: 'models' },
     { label: 'ai', value: 'ai' },
     { label: 'bdsm', value: 'bdsm' },
+    { label: 'gif', value: 'gif' },
     
   ]);
 
@@ -173,6 +174,7 @@ const CreateImages = () => {
             <Option value="bdsm">bdsm</Option>
             <Option value="flex">flex</Option>
             <Option value="pose">pose</Option>
+            <Option value="gif">gif</Option>
             
           </Select>
         </Form.Item>
