@@ -26,6 +26,7 @@ const CreateImages = () => {
     { label: 'ai', value: 'ai' },
     { label: 'bdsm', value: 'bdsm' },
     { label: 'gif', value: 'gif' },
+    { label: 'other', value: 'other' },
     
   ]);
 
