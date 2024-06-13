@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Upload, message, Select, Progress } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import category from '../../category.json';
 
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -11,6 +12,7 @@ const CreateAlbums = () => {
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [form] = Form.useForm();
+    const [tags] = useState(category.tags || []);
 
     useEffect(() => {
         const fetchStars = async () => {
@@ -102,11 +104,7 @@ const CreateAlbums = () => {
                     <Select
                         mode="tags"
                         placeholder="Enter tags (optional)"
-                        options={[
-                            { value: 'tag1', label: 'tag1' },
-                            { value: 'tag3', label: 'tag3' },
-                            { value: 'tag2', label: 'tag2' }
-                        ].sort((a, b) => a.label.localeCompare(b.label))}
+                        options={tags.map(tag => ({ value: tag, label: tag })).sort((a, b) => a.label.localeCompare(b.label))}
                     />
                 </Form.Item>
             </div>

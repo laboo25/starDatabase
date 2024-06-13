@@ -5,7 +5,7 @@
 #getAlbum #wrapper {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 10px 0;
   padding-bottom: 80px;
   gap: 30px 20px;

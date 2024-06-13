@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, message, Select, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import category from '../../category.json'; // Import the category.json file
 
 const { Dragger } = Upload;
 const { Option } = Select;
@@ -11,24 +12,8 @@ const CreateImages = () => {
   const [loading, setLoading] = useState(false);
   const [stars, setStars] = useState([]);
   const [fileList, setFileList] = useState([]);
-  const [subfolders] = useState([
-    { label: 'mio', value: 'mio' },
-    { label: 'foot', value: 'foot' },
-    { label: 'face', value: 'face' },
-    { label: 'toy', value: 'toy' },
-    { label: 'nude', value: 'nude' },
-    { label: 'sesso', value: 'sesso' },
-    { label: 'wallpaper', value: 'wallpaper' },
-    { label: 'pussy', value: 'pussy' },
-    { label: 'ass', value: 'ass' },
-    { label: 'boobs', value: 'boobs' },
-    { label: 'models', value: 'models' },
-    { label: 'ai', value: 'ai' },
-    { label: 'bdsm', value: 'bdsm' },
-    { label: 'gif', value: 'gif' },
-    { label: 'other', value: 'other' },
-    
-  ]);
+  const [subfolders] = useState(category.subfolder || []);
+  const [tags] = useState(category.tags || []);
 
   useEffect(() => {
     fetchStars();
@@ -47,7 +32,7 @@ const CreateImages = () => {
 
   const onFinish = async (values) => {
     if (fileList.length === 0) {
-      message.error('Please select images to upload.');
+      message.error('Please select images.');
       return;
     }
 
@@ -66,6 +51,11 @@ const CreateImages = () => {
     fileList.forEach((file) => {
       formData.append('images', file.originFileObj);
     });
+
+    // Log form data for debugging
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
 
     try {
       const response = await axios.post(
@@ -136,8 +126,8 @@ const CreateImages = () => {
             }
           >
             {subfolders.map((subfolder) => (
-              <Option key={subfolder.value} value={subfolder.value}>
-                {subfolder.label}
+              <Option key={subfolder} value={subfolder}>
+                {subfolder}
               </Option>
             ))}
           </Select>
@@ -152,38 +142,17 @@ const CreateImages = () => {
               option.children.toLowerCase().includes(input.toLowerCase())
             }
           >
-            <Option value="mio">mio</Option>
-            <Option value="feet">feet</Option>
-            <Option value="sole">sole</Option>
-            <Option value="foot lick">foot lick</Option>
-            <Option value="foot job">foot job</Option>
-            <Option value="toe">toe</Option>
-            <Option value="shoe">shoe</Option>
-            <Option value="nude">nude</Option>
-            <Option value="face">face</Option>
-            <Option value="toy">toy</Option>
-            <Option value="sesso">sesso</Option>
-            <Option value="wallpaper">wallpaper</Option>
-            <Option value="boobs">boobs</Option>
-            <Option value="ass">ass</Option>
-            <Option value="pussy">pussy</Option>
-            <Option value="models">models</Option>
-            <Option value="ai">ai</Option>
-            <Option value="pussy lick">pussy lick</Option>
-            <Option value="ass lick">ass lick</Option>
-            <Option value="celeb">celeb</Option>
-            <Option value="bdsm">bdsm</Option>
-            <Option value="flex">flex</Option>
-            <Option value="pose">pose</Option>
-            <Option value="gif">gif</Option>
-            
+            {tags.map((tag) => (
+              <Option key={tag} value={tag}>
+                {tag}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item
           name="images"
           valuePropName="fileList"
           getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
-          rules={[{ required: true, message: 'Please select images' }]}
         >
           <Dragger
             name="images"

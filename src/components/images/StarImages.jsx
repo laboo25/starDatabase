@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BsThreeDotsVertical } from "react-icons/bs";
-import './images.css'
+import './starImages.css'
 import axios from 'axios';
 import { Spin, message } from 'antd';
 
@@ -61,12 +61,12 @@ const StarImages = ({ starId }) => {
   }
 
   return (
-    <div>
-      <h2>Star Images</h2>
-      <div id='images-wrapper ' className="gallery">
+    <div id='star-img-main'>
+      {/* <h2>Star Images</h2> */}
+      <div id='images-wrapper' className="gallery">
         {starImages.map((item, idx) => (
           <div key={idx} id='card' className="card">
-            <div id='options' className='relative'>
+            <div id='options' >
               {item.starImages.map((image, index) => (
                 <div id="squire-box">
                   <a

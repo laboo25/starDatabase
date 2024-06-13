@@ -1,8 +1,9 @@
+// CreateStar.js or StarUpdate.js
 import React, { useState } from 'react';
-import './createStar.css';
-import { Upload, message, Button, Input, Form, Progress } from 'antd';
+import { Modal, message, Button, Input, Form, Progress, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import ImageCropper from './ImageCropper';
 
 const { Dragger } = Upload;
 
@@ -12,13 +13,55 @@ const CreateStar = () => {
   const [starprofile, setStarprofile] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
+  const [previewImage, setPreviewImage] = useState('');
+  const [cropperVisible, setCropperVisible] = useState(false);
+  const [currentFile, setCurrentFile] = useState(null);
+  const [croppingType, setCroppingType] = useState('');
 
   const handleCoverChange = ({ fileList }) => {
+    if (fileList.length > 0) {
+      const file = fileList[0].originFileObj || fileList[0];
+      setCurrentFile(file);
+      setCroppingType('cover');
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
+        setCropperVisible(true);
+      };
+      reader.readAsDataURL(file);
+    }
     setStarcover(fileList);
   };
 
   const handleProfileChange = ({ fileList }) => {
+    if (fileList.length > 0) {
+      const file = fileList[0].originFileObj || fileList[0];
+      setCurrentFile(file);
+      setCroppingType('profile');
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
+        setCropperVisible(true);
+      };
+      reader.readAsDataURL(file);
+    }
     setStarprofile(fileList);
+  };
+
+  const handleCrop = (blob) => {
+    const croppedFile = new File([blob], currentFile.name, { type: currentFile.type });
+    if (croppingType === 'cover') {
+      setStarcover([{ ...starcover[0], originFileObj: croppedFile }]);
+    } else {
+      setStarprofile([{ ...starprofile[0], originFileObj: croppedFile }]);
+    }
+    const preview = URL.createObjectURL(croppedFile);
+    setPreviewImage(preview);
+    setCropperVisible(false);
+  };
+
+  const handleCancelCrop = () => {
+    setCropperVisible(false);
   };
 
   const handleSubmit = async () => {
@@ -32,10 +75,10 @@ const CreateStar = () => {
     const formData = new FormData();
     formData.append('starname', starname);
     if (starcover.length > 0) {
-      formData.append('starcover', starcover[0].originFileObj);
+      formData.append('starcover', starcover[0].originFileObj || starcover[0]);
     }
     if (starprofile.length > 0) {
-      formData.append('starprofile', starprofile[0].originFileObj);
+      formData.append('starprofile', starprofile[0].originFileObj || starprofile[0]);
     }
 
     try {
@@ -82,7 +125,7 @@ const CreateStar = () => {
           >
             <Dragger
               fileList={starcover}
-              beforeUpload={() => false} // Prevent automatic upload
+              beforeUpload={() => false}
               onChange={handleCoverChange}
               onRemove={() => setStarcover([])}
               className='cover-input'
@@ -102,9 +145,10 @@ const CreateStar = () => {
           >
             <Dragger
               fileList={starprofile}
-              beforeUpload={() => false} // Prevent automatic upload
+              beforeUpload={() => false}
               onChange={handleProfileChange}
               onRemove={() => setStarprofile([])}
+              className='cover-input'
             >
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
@@ -119,6 +163,13 @@ const CreateStar = () => {
         </Button>
       </Form>
       {uploadPercentage > 0 && <Progress percent={uploadPercentage} />}
+      <ImageCropper
+        visible={cropperVisible}
+        image={previewImage}
+        onCancel={handleCancelCrop}
+        onCrop={handleCrop}
+        aspectRatio={croppingType === 'cover' ? 16 / 9 : 2 / 3}
+      />
     </div>
   );
 };

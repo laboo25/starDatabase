@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import './starUpdate.css'
-import { Form, Input, Button, Select, Upload, message } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import './starUpdate.css';
+import { Form, Input, Button, Select, Upload, message, Modal } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import ImageCropper from '../create/ImageCropper';
 
 const { Dragger } = Upload;
 const { Option } = Select;
@@ -13,6 +14,10 @@ const StarUpdate = () => {
   const [stars, setStars] = useState([]);
   const [selectedStar, setSelectedStar] = useState(null);
   const [fileList, setFileList] = useState({ starprofile: [], starcover: [] });
+  const [cropData, setCropData] = useState({ starprofile: null, starcover: null });
+  const [cropImage, setCropImage] = useState(null);
+  const [cropType, setCropType] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     fetchStars();
@@ -24,7 +29,7 @@ const StarUpdate = () => {
       const sortedStars = response.data.sort((a, b) => a.starname.localeCompare(b.starname));
       setStars(sortedStars);
     } catch (error) {
-      console.error('Error fetching stars:', error);
+      console.error('Error fetching stars', error);
       message.error('Failed to fetch stars. Please try again.');
     }
   };
@@ -41,12 +46,12 @@ const StarUpdate = () => {
     const formData = new FormData();
     formData.append('starname', values.starname);
 
-    if (fileList.starprofile.length > 0) {
-      formData.append('starprofile', fileList.starprofile[0].originFileObj);
+    if (fileList.starcover.length > 0 && cropData.starcover) {
+      formData.append('starcover', cropData.starcover);
     }
 
-    if (fileList.starcover.length > 0) {
-      formData.append('starcover', fileList.starcover[0].originFileObj);
+    if (fileList.starprofile.length > 0 && cropData.starprofile) {
+      formData.append('starprofile', cropData.starprofile);
     }
 
     try {
@@ -59,13 +64,14 @@ const StarUpdate = () => {
           },
         }
       );
-      console.log('Update success:', response.data);
+      console.log('Update success', response.data);
       message.success('Star updated successfully');
       form.resetFields();
       setFileList({ starprofile: [], starcover: [] });
+      setCropData({ starprofile: null, starcover: null });
       fetchStars(); // Refresh stars list
     } catch (error) {
-      console.error('Update failed:', error);
+      console.error('Update failed', error);
       message.error('Update failed. Please try again.');
     }
 
@@ -74,6 +80,21 @@ const StarUpdate = () => {
 
   const handleFileChange = (info, type) => {
     setFileList({ ...fileList, [type]: info.fileList });
+    if (info.fileList.length > 0) {
+      setCropImage(URL.createObjectURL(info.fileList[0].originFileObj));
+      setCropType(type);
+      setIsModalVisible(true);
+    }
+  };
+
+  const handleCrop = (blob) => {
+    const file = new File([blob], `${cropType}.png`, { type: 'image/png' });
+    setCropData({ ...cropData, [cropType]: file });
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -108,15 +129,12 @@ const StarUpdate = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          name="starprofile"
-          label="Profile Image"
-        >
+        <Form.Item name="starcover" label="Cover Image">
           <Dragger
-            name="starprofile"
-            fileList={fileList.starprofile}
+            name="starcover"
+            fileList={fileList.starcover}
             beforeUpload={() => false} // prevent automatic upload
-            onChange={(info) => handleFileChange(info, 'starprofile')}
+            onChange={(info) => handleFileChange(info, 'starcover')}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
@@ -124,15 +142,12 @@ const StarUpdate = () => {
             <p className="ant-upload-text">Click or drag file to this area to upload</p>
           </Dragger>
         </Form.Item>
-        <Form.Item
-          name="starcover"
-          label="Cover Image"
-        >
+        <Form.Item name="starprofile" label="Profile Image">
           <Dragger
-            name="starcover"
-            fileList={fileList.starcover}
+            name="starprofile"
+            fileList={fileList.starprofile}
             beforeUpload={() => false} // prevent automatic upload
-            onChange={(info) => handleFileChange(info, 'starcover')}
+            onChange={(info) => handleFileChange(info, 'starprofile')}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
@@ -146,6 +161,13 @@ const StarUpdate = () => {
           </Button>
         </Form.Item>
       </Form>
+      <ImageCropper
+        visible={isModalVisible}
+        image={cropImage}
+        onCancel={handleCancel}
+        onCrop={handleCrop}
+        aspectRatio={16 / 9}
+      />
     </div>
   );
 };

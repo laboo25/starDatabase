@@ -84,7 +84,7 @@ const StarDetails = () => {
                     showCover={showCover}
                 />
             </div>
-            <div className='w-full '>
+            <div className='w-full ' id='star-img-albm'>
                 <div className='w-full flex bg-[#e7e7e7] capitalize'>
                     <div className={`w-1/2 text-center ${activeTab === 'images' ? 'active' : ''}`}>
                         <button className='w-full py-3' onClick={() => setActiveTab('images')}>images</button>

@@ -1,0 +1,35 @@
+#star-img-main {
+    width: 100%;
+    padding: 50px;
+}
+
+#star-img-main #images-wrapper {
+    width: 100%;
+    background-color: brown;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 30px;
+}
+#star-img-main #images-wrapper #card {
+    height: auto;
+    background-color: blueviolet;
+}
+#star-img-main #images-wrapper #card #options {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
