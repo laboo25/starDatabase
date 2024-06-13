@@ -78,6 +78,7 @@ const ImageCropper = ({ visible, image, onCancel, onCrop, aspectRatio }) => {
             onChange={handleSliderChange}
             guides={true}
             responsive={true}
+            tooltipVisible
             marks={{ 0: '0°', 45: '45°', 90: '90°', 135: '135°', 180: '180°', '-45': '-45°', '-90': '-90°', '-135': '-135°', '-180': '-180°' }}
           />
         </Col>

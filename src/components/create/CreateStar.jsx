@@ -1,4 +1,3 @@
-// CreateStar.js or StarUpdate.js
 import React, { useState } from 'react';
 import { Modal, message, Button, Input, Form, Progress, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
@@ -14,7 +13,8 @@ const CreateStar = () => {
   const [loading, setLoading] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [previewImage, setPreviewImage] = useState('');
-  const [cropperVisible, setCropperVisible] = useState(false);
+  const [isCoverModalVisible, setIsCoverModalVisible] = useState(false);
+  const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
   const [currentFile, setCurrentFile] = useState(null);
   const [croppingType, setCroppingType] = useState('');
 
@@ -26,7 +26,7 @@ const CreateStar = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreviewImage(e.target.result);
-        setCropperVisible(true);
+        setIsCoverModalVisible(true);
       };
       reader.readAsDataURL(file);
     }
@@ -41,27 +41,34 @@ const CreateStar = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreviewImage(e.target.result);
-        setCropperVisible(true);
+        setIsProfileModalVisible(true);
       };
       reader.readAsDataURL(file);
     }
     setStarprofile(fileList);
   };
 
-  const handleCrop = (blob) => {
+  const handleCrop = (blob, type) => {
     const croppedFile = new File([blob], currentFile.name, { type: currentFile.type });
-    if (croppingType === 'cover') {
+    if (type === 'starcover') {
       setStarcover([{ ...starcover[0], originFileObj: croppedFile }]);
-    } else {
+      setIsCoverModalVisible(false);
+    } else if (type === 'starprofile') {
       setStarprofile([{ ...starprofile[0], originFileObj: croppedFile }]);
+      setIsProfileModalVisible(false);
     }
     const preview = URL.createObjectURL(croppedFile);
     setPreviewImage(preview);
-    setCropperVisible(false);
   };
 
-  const handleCancelCrop = () => {
-    setCropperVisible(false);
+  const handleCancel = (type) => {
+    if (type === 'starcover') {
+      setIsCoverModalVisible(false);
+      setStarcover([]);
+    } else if (type === 'starprofile') {
+      setIsProfileModalVisible(false);
+      setStarprofile([]);
+    }
   };
 
   const handleSubmit = async () => {
@@ -164,11 +171,18 @@ const CreateStar = () => {
       </Form>
       {uploadPercentage > 0 && <Progress percent={uploadPercentage} />}
       <ImageCropper
-        visible={cropperVisible}
+        visible={isCoverModalVisible}
         image={previewImage}
-        onCancel={handleCancelCrop}
-        onCrop={handleCrop}
-        aspectRatio={croppingType === 'cover' ? 16 / 9 : 2 / 3}
+        onCancel={() => handleCancel('starcover')}
+        onCrop={(blob) => handleCrop(blob, 'starcover')}
+        aspectRatio={16 / 9} // Aspect ratio for cover image
+      />
+      <ImageCropper
+        visible={isProfileModalVisible}
+        image={previewImage}
+        onCancel={() => handleCancel('starprofile')}
+        onCrop={(blob) => handleCrop(blob, 'starprofile')}
+        aspectRatio={2 / 3} // Aspect ratio for profile image
       />
     </div>
   );

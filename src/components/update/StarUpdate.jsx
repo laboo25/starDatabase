@@ -16,8 +16,8 @@ const StarUpdate = () => {
   const [fileList, setFileList] = useState({ starprofile: [], starcover: [] });
   const [cropData, setCropData] = useState({ starprofile: null, starcover: null });
   const [cropImage, setCropImage] = useState(null);
-  const [cropType, setCropType] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+  const [isCoverModalVisible, setIsCoverModalVisible] = useState(false);
 
   useEffect(() => {
     fetchStars();
@@ -97,21 +97,32 @@ const StarUpdate = () => {
     if (info.fileList.length > 0) {
       const objectUrl = URL.createObjectURL(info.fileList[0].originFileObj);
       setCropImage(objectUrl);
-      setCropType(type);
-      setIsModalVisible(true);
+      if (type === 'starcover') {
+        setIsCoverModalVisible(true);
+      } else {
+        setIsProfileModalVisible(true);
+      }
     }
   };
 
-  const handleCrop = (blob) => {
-    const file = new File([blob], `${cropType}.png`, { type: 'image/png' });
-    setCropData({ ...cropData, [cropType]: file });
-    setIsModalVisible(false);
+  const handleCrop = (blob, type) => {
+    const file = new File([blob], `${type}.png`, { type: 'image/png' });
+    setCropData({ ...cropData, [type]: file });
+    if (type === 'starcover') {
+      setIsCoverModalVisible(false);
+    } else {
+      setIsProfileModalVisible(false);
+    }
     URL.revokeObjectURL(cropImage); // Revoke the object URL after cropping
     setCropImage(null);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
+  const handleCancel = (type) => {
+    if (type === 'starcover') {
+      setIsCoverModalVisible(false);
+    } else {
+      setIsProfileModalVisible(false);
+    }
     URL.revokeObjectURL(cropImage); // Revoke the object URL when canceling
     setCropImage(null);
   };
@@ -181,11 +192,18 @@ const StarUpdate = () => {
         </Form.Item>
       </Form>
       <ImageCropper
-        visible={isModalVisible}
+        visible={isCoverModalVisible}
         image={cropImage}
-        onCancel={handleCancel}
-        onCrop={handleCrop}
-        aspectRatio={cropType === 'starcover' ? 16 / 9 : 2 / 3} // Fix cropType here
+        onCancel={() => handleCancel('starcover')}
+        onCrop={(blob) => handleCrop(blob, 'starcover')}
+        aspectRatio={16 / 9} // Aspect ratio for cover image
+      />
+      <ImageCropper
+        visible={isProfileModalVisible}
+        image={cropImage}
+        onCancel={() => handleCancel('starprofile')}
+        onCrop={(blob) => handleCrop(blob, 'starprofile')}
+        aspectRatio={2 / 3} // Aspect ratio for profile image
       />
     </div>
   );
