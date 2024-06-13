@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './starUpdate.css';
 import { Form, Input, Button, Select, Upload, message, Modal } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
@@ -23,6 +23,14 @@ const StarUpdate = () => {
     fetchStars();
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (cropImage) {
+        URL.revokeObjectURL(cropImage); // Revoke the object URL on cleanup
+      }
+    };
+  }, [cropImage]);
+
   const fetchStars = async () => {
     try {
       const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
@@ -38,6 +46,8 @@ const StarUpdate = () => {
     const star = stars.find(star => star._id === starId);
     setSelectedStar(star);
     form.setFieldsValue({ starname: star.starname });
+    setFileList({ starprofile: [], starcover: [] });
+    setCropData({ starprofile: null, starcover: null });
   };
 
   const onFinish = async (values) => {
@@ -79,9 +89,14 @@ const StarUpdate = () => {
   };
 
   const handleFileChange = (info, type) => {
-    setFileList({ ...fileList, [type]: info.fileList });
+    const updatedFileList = info.fileList.map((file) => ({
+      ...file,
+      uid: file.uid || file.name, // Ensure each file has a unique `uid`
+    }));
+    setFileList({ ...fileList, [type]: updatedFileList });
     if (info.fileList.length > 0) {
-      setCropImage(URL.createObjectURL(info.fileList[0].originFileObj));
+      const objectUrl = URL.createObjectURL(info.fileList[0].originFileObj);
+      setCropImage(objectUrl);
       setCropType(type);
       setIsModalVisible(true);
     }
@@ -91,10 +106,14 @@ const StarUpdate = () => {
     const file = new File([blob], `${cropType}.png`, { type: 'image/png' });
     setCropData({ ...cropData, [cropType]: file });
     setIsModalVisible(false);
+    URL.revokeObjectURL(cropImage); // Revoke the object URL after cropping
+    setCropImage(null);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    URL.revokeObjectURL(cropImage); // Revoke the object URL when canceling
+    setCropImage(null);
   };
 
   return (
@@ -166,7 +185,7 @@ const StarUpdate = () => {
         image={cropImage}
         onCancel={handleCancel}
         onCrop={handleCrop}
-        aspectRatio={16 / 9}
+        aspectRatio={cropType === 'starcover' ? 16 / 9 : 2 / 3} // Fix cropType here
       />
     </div>
   );

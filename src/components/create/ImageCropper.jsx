@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { Modal, Row, Col, Slider, Button, Space } from 'antd';
 import { ReloadOutlined, ZoomInOutlined, ZoomOutOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import Cropper from 'react-cropper';
-// import 'cropperjs/dist/cropper.css';
 
 const ImageCropper = ({ visible, image, onCancel, onCrop, aspectRatio }) => {
   const cropperRef = useRef(null);
@@ -56,14 +55,19 @@ const ImageCropper = ({ visible, image, onCancel, onCrop, aspectRatio }) => {
   };
 
   return (
-    <Modal visible={visible} footer={null} onCancel={onCancel}>
+    <Modal open={visible} footer={null} onCancel={onCancel}>
       <Cropper
         src={image}
         style={{ height: 400, width: '100%' }}
         viewMode={1}
-        guides={false}
+        guides={true} // Enable grid lines
         ref={cropperRef}
         aspectRatio={aspectRatio}
+        checkCrossOrigin={false}
+        autoCropArea={1}
+        cropBoxResizable={true} // Allow resizing
+        dragMode="move" // Allow moving the crop box
+        background={false}
       />
       <Row gutter={16} justify="center" className='cropper-footer'>
         <Col span={24}>
@@ -72,7 +76,8 @@ const ImageCropper = ({ visible, image, onCancel, onCrop, aspectRatio }) => {
             max={180}
             value={rotation}
             onChange={handleSliderChange}
-            tooltipVisible
+            guides={true}
+            responsive={true}
             marks={{ 0: '0°', 45: '45°', 90: '90°', 135: '135°', 180: '180°', '-45': '-45°', '-90': '-90°', '-135': '-135°', '-180': '-180°' }}
           />
         </Col>
