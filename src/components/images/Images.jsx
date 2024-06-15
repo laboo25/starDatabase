@@ -126,8 +126,8 @@ const Images = () => {
         />
       </div>
       <div className='flex-1'>
-        <button onClick={toggleSidebar} className='m-2 p-2 bg-blue-500 text-white'>
-          Toggle Sidebar
+        <button onClick={toggleSidebar} className='m-2 p-2  text-black text-[30px]'>
+          ◧
         </button>
         <div id='image-main'>
           {error && <div className='error'>{error}</div>}

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BsThreeDotsVertical } from "react-icons/bs";
-import './starImages.css'
+import './images.css';
 import axios from 'axios';
 import { Spin, message } from 'antd';
-
 
 const StarImages = ({ starId }) => {
   const [loading, setLoading] = useState(true);
@@ -11,7 +10,7 @@ const StarImages = ({ starId }) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [starId]);
 
   const fetchData = async () => {
     try {
@@ -34,12 +33,13 @@ const StarImages = ({ starId }) => {
         .filter(imageEntry => imageEntry.starname.includes(starId)) // Filter images by the current starId
         .map(imageEntry => {
           const matchedStarNames = imageEntry.starname
-            .filter(starId => starMap[starId])
-            .map(starId => starMap[starId]);
+            .filter(id => starMap[id])
+            .map(id => starMap[id]);
 
           return {
             ...imageEntry,
             starNames: matchedStarNames,
+            starImages: imageEntry.starImages || [], // Ensure starImages is an array
           };
         });
 
@@ -62,15 +62,20 @@ const StarImages = ({ starId }) => {
 
   return (
     <div id='star-img-main'>
-      {/* <h2>Star Images</h2> */}
+        <div id='image-count' className='w-full flex justify-center items-center'>
+            <div id="image-count-wrapper" className='w-auto h-auto text-center font-bold pt-3 uppercase text-[30px]'>
+              <p id="image-count-text" className='font-black'>{starImages.length}</p>
+              <p>images</p>
+            </div>
+        </div>
       <div id='images-wrapper' className="gallery">
-        {starImages.map((item, idx) => (
-          <div key={idx} id='card' className="card">
-            <div id='options' >
-              {item.starImages.map((image, index) => (
+        
+        {starImages.map((item, index) => (
+          item.starImages.map((image, imgIndex) => (
+            <div key={`${index}-${imgIndex}`} id='card' className="card">
+              <div id='options'>
                 <div id="squire-box">
                   <a
-                    key={index}
                     href={image.imageurl}
                     data-fancybox="gallery"
                     data-caption={item.starNames.join(', ')}
@@ -79,21 +84,20 @@ const StarImages = ({ starId }) => {
                       src={image.imageThumb}
                       alt={`Thumbnail of ${item.starNames.join(', ')}`} />
                   </a>
-                  <div className='tags'>
-                    {item.starImages.map((image, index) => (
-                      image.tags.sort((a, b) => a.localeCompare(b)).map((tag, tagIdx) => ( // Sorting tags in ascending order
+                  {image.tags && image.tags.length > 0 && (
+                    <div className='tags'>
+                      {image.tags.sort((a, b) => a.localeCompare(b)).map((tag, tagIdx) => (
                         <span key={tagIdx} className='tag'>{tag}</span>
-                      ))
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              ))}
-              <div id='squire-box-options' >
-                <button><BsThreeDotsVertical /></button>
+                <div id='squire-box-options'>
+                  <button><BsThreeDotsVertical /></button>
+                </div>
               </div>
             </div>
-
-          </div>
+          ))
         ))}
       </div>
     </div>

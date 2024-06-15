@@ -5,6 +5,15 @@
     display: flex;
     overflow: hidden;
 }
+#star-img-main {
+    padding: 50px 0;
+}
+#image-count {
+    font-family: SFPRODISPLAYBOLD !important;
+}
+#star-img-main #images-wrapper {
+    padding-top: 50px;
+}
 /* Main image container */
 #image-main {
     width: 100%;
@@ -17,14 +26,14 @@
 
 /* Images wrapper grid */
 #images-wrapper {
-    width: auto;
+    width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     justify-content: center;
     grid-gap: 15px;
     overflow: auto;
-    padding: 100px 0;
+    padding: 0 30px;
 }
 
 /* Card styles */
@@ -92,6 +101,7 @@
     /* Adjust grid for smaller screens */
     #images-wrapper {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        padding: 0 20px;
     }
 
     /* Adjust card size for smaller screens */

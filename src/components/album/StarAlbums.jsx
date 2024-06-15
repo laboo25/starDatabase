@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './starAlbum.css';
 import axios from 'axios';
-import {  Spin, message } from 'antd';
+import { Spin, message } from 'antd';
 import ModalAlbum from './ModalAlbum';
 
 const StarAlbums = ({ starId }) => {
@@ -67,6 +67,10 @@ const StarAlbums = ({ starId }) => {
     window.history.back();
   };
 
+  const getTotalImages = () => {
+    return albums.reduce((total, album) => total + album.albumimages.length, 0);
+  };
+
   if (loading) {
     return <Spin size="large" className="loading-spinner" />;
   }
@@ -76,31 +80,40 @@ const StarAlbums = ({ starId }) => {
   }
 
   return (
-    <div className="album-gallery">
-      {albums.map(album => (
-        <div key={album._id} id="album-card">
-          <div onClick={() => showModal(album)} id='card'>
-            <img
-              src={album.albumimages[0].thumburl}
-              alt={`Thumbnail for ${album.albumname}`}
-              draggable={false}
-              className=""
-            />
+    <div id='star-album'>
+      <div className='w-full h-auto flex justify-center flex-col'>
+        <p id='album-count' className='w-[100px] h-auto'>
+          <span>{albums.length}</span>
+          <span>{getTotalImages()}</span>
+        </p>
+        <p>albums & images</p>
+      </div>
+      <div className="album-gallery">
+        {albums.map(album => (
+          <div key={album._id} id="album-card">
+            <div onClick={() => showModal(album)} id='card'>
+              <img
+                src={album.albumimages[0].thumburl}
+                alt={`Thumbnail for ${album.albumname}`}
+                draggable={false}
+                className=""
+              />
+            </div>
+            <div>
+              <p id="album-title" className='py-5' draggable={false}>{album.albumname}</p>
+            </div>
           </div>
-          <div>
-            <p id="album-title" className='py-5' draggable={false}>{album.albumname}</p>
-          </div>
-        </div>
-      ))}
-      {selectedAlbum && (
-        <ModalAlbum
-          visible={isModalVisible}
-          albumname={selectedAlbum.albumname}
-          length={selectedAlbum.albumimages.length}
-          images={selectedAlbum.albumimages}
-          onClose={handleCancel}
-        />
-      )}
+        ))}
+        {selectedAlbum && (
+          <ModalAlbum
+            visible={isModalVisible}
+            albumname={selectedAlbum.albumname}
+            length={selectedAlbum.albumimages.length}
+            images={selectedAlbum.albumimages}
+            onClose={handleCancel}
+          />
+        )}
+      </div>
     </div>
   );
 };

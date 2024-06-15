@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import logo from '../../../public/meu.svg'
+import { IoIosAlbums } from "react-icons/io";
+import { BsImages } from "react-icons/bs";
 import './navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -46,20 +49,24 @@ const Navbar = () => {
     return (
         <>
             <div style={{ padding: '10px', height: '5vh;' }}>
-                <div id='navbar'>
-                    <div id='logo'>
+                <div id='navbar' className='py-2'>
+                    <div id='logo' >
                         <Link to='/' draggable="false">
-                            starDB
+                            <img src={logo} alt="" className='w-full h-[25px]' draggable={false}/>
                         </Link>
                     </div>
                     <div>
-                        <div className='bg-green-500 uppercase rounded-[20px] w-fit  text-white'>
-                            <Link to='/albums' className='p-[10px] px-[20px]'>albums</Link>
+                        <div className='uppercase rounded-[20px] w-fit mx-2 text-black'>
+                            <Link to='/albums' className='p-[10px] px-[20px]' draggable={false}>
+                                <IoIosAlbums className='size-[25px]' />
+                            </Link>
                         </div>
                     </div>
                     <div>
-                        <div className='bg-blue-500 uppercase rounded-[20px] w-fit  text-white'>
-                            <Link to='/images' className='p-[10px] px-[20px]'>images</Link>
+                        <div className='uppercase rounded-[20px] w-fit mx-2 text-black ' >
+                            <Link to='/images' className='p-[10px] px-[20px]' draggable={false}>
+                                <BsImages className='size-[25px]'/>
+                            </Link>
                         </div>
                     </div>
                     <div>

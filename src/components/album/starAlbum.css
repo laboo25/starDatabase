@@ -1,8 +1,17 @@
+#star-album #album-count {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+#star-album #album-count>span {
+  width: fit-content;
+  padding: 0 10px;
+}
 .album-gallery {
   /* padding: 50px 50px; */
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 10px 20px;
   padding-bottom: 80px;
   gap: 30px 20px;
