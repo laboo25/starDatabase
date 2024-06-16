@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Space, Table, Input } from 'antd';
+import { Button, Space, Table, Input, Modal } from 'antd';
 import axios from 'axios';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import avater from '/avater.webp';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 const { Search } = Input;
 
@@ -16,6 +17,9 @@ const UpdateAll = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [deleteRecord, setDeleteRecord] = useState(null);
+
   const [columns, setColumns] = useState([
     {
       title: 'RowHead',
@@ -65,7 +69,7 @@ const UpdateAll = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button disabled>delete</Button>
+          <Button onClick={() => showDeleteConfirm(record)}>delete</Button>
         </Space>
       ),
     },
@@ -111,6 +115,31 @@ const UpdateAll = () => {
     setFilteredData(filtered);
   };
 
+  const showDeleteConfirm = (record) => {
+    setDeleteRecord(record);
+    setIsModalVisible(true);
+  };
+
+  const handleOk = async () => {
+    try {
+      // Make API call to delete the star
+      await axios.delete(`https://stardb-api.onrender.com/api/stars/create-star/delete-star/${deleteRecord._id}`);
+      // Remove the deleted record from data and filteredData
+      const newData = data.filter(item => item._id !== deleteRecord._id);
+      setData(newData);
+      setFilteredData(newData);
+      setIsModalVisible(false);
+      setDeleteRecord(null);
+    } catch (error) {
+      console.error('Error deleting star:', error);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setDeleteRecord(null);
+  };
+
   return (
     <>
       <div className='overflow-x-auto'>
@@ -139,6 +168,24 @@ const UpdateAll = () => {
           />
         </div>
       </div>
+      <Modal
+        title="Confirm Delete"
+        open={isModalVisible}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="cancel" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button key="ok" onClick={handleOk} className="bg-red-500 text-white">
+            OK
+          </Button>,
+        ]}
+      >
+        <p>
+          Are you sure you want to delete 
+          <span style={{ color: 'red' }}> {deleteRecord?.name}</span>?
+        </p>
+      </Modal>
     </>
   );
 };
