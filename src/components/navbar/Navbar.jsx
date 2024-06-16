@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import logo from '../../../public/meu.svg'
 import { IoIosAlbums } from "react-icons/io";
 import { BsImages } from "react-icons/bs";
+import { RiAddBoxFill } from "react-icons/ri";
 import './navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -56,22 +57,24 @@ const Navbar = () => {
                         </Link>
                     </div>
                     <div>
-                        <div className='uppercase rounded-[20px] w-fit mx-2 text-black'>
+                        <div className='mx-2 text-black'>
                             <Link to='/albums' className='p-[10px] px-[20px]' draggable={false}>
                                 <IoIosAlbums className='size-[25px]' />
                             </Link>
                         </div>
                     </div>
                     <div>
-                        <div className='uppercase rounded-[20px] w-fit mx-2 text-black ' >
+                        <div className=' mx-2  ' >
                             <Link to='/images' className='p-[10px] px-[20px]' draggable={false}>
                                 <BsImages className='size-[25px]'/>
                             </Link>
                         </div>
                     </div>
                     <div>
-                        <div className='bg-[#ff5733] uppercase rounded-[20px] w-fit  text-white'>
-                            <Link to='create' className='p-[10px] px-[20px]'>create data</Link>
+                        <div className='mx-2 text-black'>
+                            <Link to='create' className='p-[10px] px-[20px]' draggable={false}>
+                                <RiAddBoxFill  className='size-[25px]'/> 
+                            </Link>
                         </div>
                     </div>
                     <div id='search_fields' ref={searchRef}>
