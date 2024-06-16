@@ -54,6 +54,9 @@
 }
 
 @media only screen and (max-width: 600px) {
+    #navbar #search_fields {
+        border: none;
+    }
     #navbar #search_fields .search-toggle-icon {
         display: block;
     }
