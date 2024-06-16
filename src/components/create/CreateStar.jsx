@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Modal, message, Button, Input, Form, Progress, Upload } from 'antd';
+import './createStar.css';
+import { Upload, message, Button, Input, Form, Progress } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import ImageCropper from './ImageCropper';
 
 const { Dragger } = Upload;
 
@@ -12,63 +12,13 @@ const CreateStar = () => {
   const [starprofile, setStarprofile] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
-  const [previewImage, setPreviewImage] = useState('');
-  const [isCoverModalVisible, setIsCoverModalVisible] = useState(false);
-  const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
-  const [currentFile, setCurrentFile] = useState(null);
-  const [croppingType, setCroppingType] = useState('');
 
   const handleCoverChange = ({ fileList }) => {
-    if (fileList.length > 0) {
-      const file = fileList[0].originFileObj || fileList[0];
-      setCurrentFile(file);
-      setCroppingType('cover');
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreviewImage(e.target.result);
-        setIsCoverModalVisible(true);
-      };
-      reader.readAsDataURL(file);
-    }
     setStarcover(fileList);
   };
 
   const handleProfileChange = ({ fileList }) => {
-    if (fileList.length > 0) {
-      const file = fileList[0].originFileObj || fileList[0];
-      setCurrentFile(file);
-      setCroppingType('profile');
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreviewImage(e.target.result);
-        setIsProfileModalVisible(true);
-      };
-      reader.readAsDataURL(file);
-    }
     setStarprofile(fileList);
-  };
-
-  const handleCrop = (blob, type) => {
-    const croppedFile = new File([blob], currentFile.name, { type: currentFile.type });
-    if (type === 'starcover') {
-      setStarcover([{ ...starcover[0], originFileObj: croppedFile }]);
-      setIsCoverModalVisible(false);
-    } else if (type === 'starprofile') {
-      setStarprofile([{ ...starprofile[0], originFileObj: croppedFile }]);
-      setIsProfileModalVisible(false);
-    }
-    const preview = URL.createObjectURL(croppedFile);
-    setPreviewImage(preview);
-  };
-
-  const handleCancel = (type) => {
-    if (type === 'starcover') {
-      setIsCoverModalVisible(false);
-      setStarcover([]);
-    } else if (type === 'starprofile') {
-      setIsProfileModalVisible(false);
-      setStarprofile([]);
-    }
   };
 
   const handleSubmit = async () => {
@@ -82,10 +32,10 @@ const CreateStar = () => {
     const formData = new FormData();
     formData.append('starname', starname);
     if (starcover.length > 0) {
-      formData.append('starcover', starcover[0].originFileObj || starcover[0]);
+      formData.append('starcover', starcover[0].originFileObj);
     }
     if (starprofile.length > 0) {
-      formData.append('starprofile', starprofile[0].originFileObj || starprofile[0]);
+      formData.append('starprofile', starprofile[0].originFileObj);
     }
 
     try {
@@ -132,7 +82,7 @@ const CreateStar = () => {
           >
             <Dragger
               fileList={starcover}
-              beforeUpload={() => false}
+              beforeUpload={() => false} // Prevent automatic upload
               onChange={handleCoverChange}
               onRemove={() => setStarcover([])}
               className='cover-input'
@@ -152,10 +102,9 @@ const CreateStar = () => {
           >
             <Dragger
               fileList={starprofile}
-              beforeUpload={() => false}
+              beforeUpload={() => false} // Prevent automatic upload
               onChange={handleProfileChange}
               onRemove={() => setStarprofile([])}
-              className='cover-input'
             >
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
@@ -170,20 +119,6 @@ const CreateStar = () => {
         </Button>
       </Form>
       {uploadPercentage > 0 && <Progress percent={uploadPercentage} />}
-      <ImageCropper
-        visible={isCoverModalVisible}
-        image={previewImage}
-        onCancel={() => handleCancel('starcover')}
-        onCrop={(blob) => handleCrop(blob, 'starcover')}
-        aspectRatio={16 / 9} // Aspect ratio for cover image
-      />
-      <ImageCropper
-        visible={isProfileModalVisible}
-        image={previewImage}
-        onCancel={() => handleCancel('starprofile')}
-        onCrop={(blob) => handleCrop(blob, 'starprofile')}
-        aspectRatio={2 / 3} // Aspect ratio for profile image
-      />
     </div>
   );
 };
