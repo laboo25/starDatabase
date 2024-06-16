@@ -3,6 +3,7 @@ import logo from '../../../public/meu.svg'
 import { IoIosAlbums } from "react-icons/io";
 import { BsImages } from "react-icons/bs";
 import { RiAddBoxFill } from "react-icons/ri";
+import { FaSearch } from "react-icons/fa";
 import './navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -73,16 +74,16 @@ const Navbar = () => {
                     <div>
                         <div className='mx-2 text-black'>
                             <Link to='create' className='p-[10px] px-[20px]' draggable={false}>
-                                <RiAddBoxFill  className='size-[25px]'/> 
+                                <RiAddBoxFill className='size-[25px]'/> 
                             </Link>
                         </div>
                     </div>
-                    <div id='search_fields' ref={searchRef}>
+                    <div id='search_fields' className="mx-2 text-black" ref={searchRef}>
                         <div 
-                            className='search-toggle-icon' 
+                            className='search-toggle-icon p-[10px] px-[20px]' 
                             onClick={() => setIsSearchVisible(!isSearchVisible)}
                         >
-                            srch
+                            <FaSearch className='size-[25px]'/>
                         </div>
                         {isSearchVisible && (
                             <div className='search-inpt'>
