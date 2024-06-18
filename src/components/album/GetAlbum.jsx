@@ -7,7 +7,8 @@ const GetAlbum = () => {
   const [sortedAlbums, setSortedAlbums] = useState([]);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(localStorage.getItem('modalVisible') === 'true');
-  const [isSorted, setIsSorted] = useState(false);
+  const [sortField, setSortField] = useState('date'); // 'date' or 'name'
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
 
   useEffect(() => {
     fetch('https://stardb-api.onrender.com/api/stars/albums/get-all-albums')
@@ -34,6 +35,10 @@ const GetAlbum = () => {
     };
   }, [isModalVisible]);
 
+  useEffect(() => {
+    sortAlbums();
+  }, [sortField, sortOrder, albums]);
+
   const openModal = (album) => {
     setSelectedAlbum(album);
     setIsModalVisible(true);
@@ -48,22 +53,40 @@ const GetAlbum = () => {
     window.history.back();
   };
 
-  const toggleSorting = () => {
-    if (isSorted) {
-      setSortedAlbums(albums);
-    } else {
-      const sorted = [...albums].sort((a, b) => a.albumname.localeCompare(b.albumname));
-      setSortedAlbums(sorted);
-    }
-    setIsSorted(!isSorted);
+  const sortAlbums = () => {
+    const sorted = [...albums].sort((a, b) => {
+      if (sortField === 'name') {
+        return sortOrder === 'asc'
+          ? a.albumname.localeCompare(b.albumname)
+          : b.albumname.localeCompare(a.albumname);
+      } else {
+        return sortOrder === 'asc'
+          ? new Date(a.createdAt) - new Date(b.createdAt)
+          : new Date(b.createdAt) - new Date(a.createdAt);
+      }
+    });
+    setSortedAlbums(sorted);
+  };
+
+  const toggleSortField = () => {
+    setSortField(prev => (prev === 'date' ? 'name' : 'date'));
+  };
+
+  const toggleSortOrder = () => {
+    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
   return (
     <div id='getAlbum' className=''>
       <div className='text-[#dfdfdf] text-[10px]'>{`${sortedAlbums.length} albums available`}</div>
-      <button onClick={toggleSorting} className='mb-4 px-4 py-2 bg-blue-500 text-white rounded'>
-        {isSorted ? 'Date ⇅' : 'Name ⇅'}
-      </button>
+      <div className='mb-4'>
+        <button onClick={toggleSortField} className='px-4 py-2 bg-blue-500 text-white rounded'>
+          {sortField === 'date' ? 'name' : 'date'}
+        </button>
+        <button onClick={toggleSortOrder} className='ml-2 px-4 py-2 bg-blue-500 text-white rounded'>
+          {sortOrder === 'asc' ? 'a↑' : 'z↓'}
+        </button>
+      </div>
       {sortedAlbums.length === 0 ? (
         <p>Loading...</p>
       ) : (
@@ -91,7 +114,9 @@ const GetAlbum = () => {
           albumname={selectedAlbum.albumname} 
           length={selectedAlbum.albumimages.length} 
           images={selectedAlbum.albumimages} 
-          onClose={closeModal} 
+          onClose={closeModal}
+          sortField={sortField}
+          sortOrder={sortOrder}
         />
       )}
     </div>
