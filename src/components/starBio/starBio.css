@@ -160,6 +160,9 @@
     width: 150px;
     aspect-ratio: 1;
   }
+  #bio-page .profile {
+  height: 100dvh;
+}
 }
 #star-img-albm .active {
   background-color: #0f0f0f; /* Example active background color */
