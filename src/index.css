@@ -52,7 +52,7 @@ html::-webkit-scrollbar-thumb:hover {
 
 .fancybox__backdrop,.fancybox__container{
     
-    background-color: #ffffff !important;
+    background-color: #292929 !important;
 }
 #fancybox__caption_1_0 {
     color: black !important;
