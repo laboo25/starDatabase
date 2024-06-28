@@ -115,7 +115,6 @@ const StarUpdate = () => {
           <Dragger
             name="starprofile"
             fileList={fileList.starprofile}
-            beforeUpload={() => false} // prevent automatic upload
             onChange={(info) => handleFileChange(info, 'starprofile')}
           >
             <p className="ant-upload-drag-icon">
@@ -131,7 +130,6 @@ const StarUpdate = () => {
           <Dragger
             name="starcover"
             fileList={fileList.starcover}
-            beforeUpload={() => false} // prevent automatic upload
             onChange={(info) => handleFileChange(info, 'starcover')}
           >
             <p className="ant-upload-drag-icon">
