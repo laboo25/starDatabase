@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import logo from '../../../public/meu.svg'
+import logo from '../../../public/meu.svg';
 import { IoIosAlbums } from "react-icons/io";
 import { BsImages } from "react-icons/bs";
 import { RiAddBoxFill } from "react-icons/ri";
@@ -12,10 +12,11 @@ const Navbar = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [isSearchVisible, setIsSearchVisible] = useState(false);
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 600);
     const searchRef = useRef(null);
     const navigate = useNavigate();
 
-    const handleSearch = async () => {
+    const fetchSuggestions = async () => {
         if (searchQuery) {
             try {
                 const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
@@ -31,8 +32,14 @@ const Navbar = () => {
         }
     };
 
+    const handleSearch = () => {
+        if (searchQuery) {
+            navigate(`/query?search=${searchQuery}`);
+        }
+    };
+
     useEffect(() => {
-        handleSearch();
+        fetchSuggestions();
     }, [searchQuery]);
 
     useEffect(() => {
@@ -42,85 +49,88 @@ const Navbar = () => {
                 setIsSearchVisible(false);
             }
         };
+
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth <= 600);
+        };
+
         document.addEventListener('mousedown', handleClickOutside);
+        window.addEventListener('resize', handleResize);
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener('resize', handleResize);
         };
-    }, [searchRef]);
+    }, []);
 
     return (
-        <>
-            <div style={{ padding: '10px', height: '5vh;' }}>
-                <div id='navbar' className='py-2'>
-                    <div id='logo' >
-                        <Link to='/' draggable="false">
-                            <img src={logo} alt="" className='w-full h-[25px]' draggable={false}/>
-                        </Link>
+        <div id='navbar'>
+            <div id='logo'>
+                <Link to='/' draggable="false">
+                    <img src={logo} alt="Logo" className='w-full h-[25px]' draggable={false} />
+                </Link>
+            </div>
+            <div>
+                <Link to='/albums' className='p-[10px] px-[20px]' draggable={false}>
+                    <IoIosAlbums className='size-[25px]' />
+                </Link>
+            </div>
+            <div>
+                <Link to='/images' className='p-[10px] px-[20px]' draggable={false}>
+                    <BsImages className='size-[25px]' />
+                </Link>
+            </div>
+            <div>
+                <Link to='/create' className='p-[10px] px-[20px]' draggable={false}>
+                    <RiAddBoxFill className='size-[25px]' />
+                </Link>
+            </div>
+            <div id='search_fields' className="mx-2 text-black" ref={searchRef}>
+                {isSmallScreen && (
+                    <div
+                        className='search-toggle-icon p-[10px] px-[20px]'
+                        onClick={() => setIsSearchVisible(!isSearchVisible)}
+                    >
+                        <FaSearch className='size-[25px]' />
                     </div>
+                )}
+                <div className={`search-inpt ${isSearchVisible || !isSmallScreen ? 'show' : ''}`}>
                     <div>
-                        <div className='mx-2 text-black'>
-                            <Link to='/albums' className='p-[10px] px-[20px]' draggable={false}>
-                                <IoIosAlbums className='size-[25px]' />
-                            </Link>
-                        </div>
-                    </div>
-                    <div>
-                        <div className=' mx-2  ' >
-                            <Link to='/images' className='p-[10px] px-[20px]' draggable={false}>
-                                <BsImages className='size-[25px]'/>
-                            </Link>
-                        </div>
-                    </div>
-                    <div>
-                        <div className='mx-2 text-black'>
-                            <Link to='create' className='p-[10px] px-[20px]' draggable={false}>
-                                <RiAddBoxFill className='size-[25px]'/> 
-                            </Link>
-                        </div>
-                    </div>
-                    <div id='search_fields' className="mx-2 text-black" ref={searchRef}>
-                        <div 
-                            className='search-toggle-icon p-[10px] px-[20px]' 
-                            onClick={() => setIsSearchVisible(!isSearchVisible)}
-                        >
-                            <FaSearch className='size-[25px]'/>
-                        </div>
-                        {isSearchVisible && (
-                            <div className='search-inpt'>
-                                <input 
-                                    type="search" 
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search stars..."
-                                />
-                                {searchQuery && (
-                                    <button onClick={() => { setSearchQuery(''); setSuggestions([]); }}>
-                                        <div className='mx-2 px-[5px] py-[-1px] bg-[#cfcfcf98] rounded-[50%]'>
-                                            x
-                                        </div>
-                                    </button>
-                                )}
-                                <button onClick={handleSearch}>search</button>
-                                {suggestions.length > 0 && (
-                                    <div className='suggestion'>
-                                        {suggestions.map((star) => (
-                                            <div key={star._id}>
-                                                <Link to={`/query/${star._id}`} onClick={() => { 
-                                                    setSearchQuery(''); 
-                                                    navigate(`/query/${star._id}`);
-                                                }}>
-                                                    {star.starname}
-                                                </Link>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                    <div className='search-wrapper'>
+                    <input
+                        type="search"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search stars..."
+                    />
+                    {searchQuery && (
+                        <button onClick={() => { setSearchQuery(''); setSuggestions([]); }} className='clear'>
+                            <div className='mx-2 px-[5px] py-[-1px] bg-[#cfcfcf98] rounded-[50%]'>
+                                x
                             </div>
-                        )}
+                        </button>
+                    )}
+                    <button onClick={handleSearch}><FaSearch className='search'/></button>
+                    {suggestions.length > 0 && (
+                        <div className='suggestion'>
+                            {suggestions.map((star) => (
+                                <div key={star._id}>
+                                    <Link to={`/star/${star._id}`} onClick={() => {
+                                        setSearchQuery('');
+                                        navigate(`/star/${star._id}`);
+                                    }}>
+                                        <p className='capitalize font-bold'>{star.starname}</p>
+                                        <p className='text-[10px] text-gray-400'>profile</p>
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

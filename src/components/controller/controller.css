@@ -1,0 +1,23 @@
+#controller-main {
+    width: 100%;
+    height: auto;
+    background-color: rgba(189, 189, 189, 0.575);
+    padding: 0 70px;
+}
+#controller-main #controllers {
+    width: 100%;
+    display: flex;
+
+}
+#controller-main #controllers button {
+    margin: 3px ;
+    padding: 3px 5px;
+}
+
+
+
+@media only screen and (max-width: 375px) {
+    #controller-main {
+        padding: 0 1px;
+    }
+  }

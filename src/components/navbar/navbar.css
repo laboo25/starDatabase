@@ -1,8 +1,7 @@
 #navbar {
     width: 100%;
-    height: 100%;
+    height: 50px;
     background-color: #F5F5F5;
-    border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -19,58 +18,109 @@
 }
 
 #navbar #search_fields {
-    padding: 0 20px;
-    border-bottom: 1px solid black;
+    position: relative;
 }
 
 #navbar #search_fields .search-toggle-icon {
-    display: none;
+    display: none; /* Hide search button by default */
+    cursor: pointer; /* Add cursor pointer for better UX */
 }
 
 #navbar #search_fields .search-inpt {
-    display: none; /* Hidden by default */
-    position: relative;
-    width: 300px; /* Adjust width as needed */
-    background-color: white;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    display: flex; /* Flex for layout */
+    align-items: center;
+    position: relative; /* Remove absolute positioning */
+    max-width: 300px; /* Adjust width as needed */
+    border-bottom: 1px solid #000000;
     z-index: 10;
 }
-
+#navbar #search_fields .search-inpt .search {
+    position: absolute;
+    top: 0px;
+    right: 20px;
+}
 #navbar #search_fields input {
+    width: calc(100% - 40px); /* Full width minus space for clear button */
     outline: none;
     background: none;
-    width: calc(100% - 30px); /* Adjust width to fit the container */
+    padding: 0 5px;
+}
+
+#navbar #search_fields .clear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    right: 30px;
 }
 
 #navbar #search_fields .suggestion {
     position: absolute;
+    top: 55px; /* Position below the input field */
+    left: 0;
     width: 100%;
-    background-color: rgb(240, 240, 240);
+    background-color: #F0F0F0;
     z-index: 15;
     max-height: 300px;
     overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#navbar #search_fields .suggestion div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#navbar #search_fields .suggestion div:hover {
+    background-color: #e0e0e0;
 }
 
 @media only screen and (max-width: 600px) {
-    #navbar #search_fields {
-        border: none;
-    }
     #navbar #search_fields .search-toggle-icon {
-        display: block;
+        display: block; /* Show search button on small screens */
     }
     #navbar #search_fields .search-inpt {
-        display: block; /* Show on small screens */
-        width: 100%;
+        display: none; 
         position: absolute;
-        top: 20px;
-        left: 0;
-        z-index: 15;
+        top: 0px; 
+        right: 0;
+        z-index: 1995;
     }
-}
-
-/* Ensure search input is visible when isSearchVisible is true */
-#navbar #search_fields .search-inpt.show {
-    display: block;
+    #navbar #search_fields .search-inpt .search-wrapper {
+        width: 100%;
+        height: 100vh;
+        /* background-color: chartreuse; */
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #navbar #search_fields .search-inpt .search {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+    #navbar #search_fields .clear {
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 50px;
+    }
+    /* Ensure search input is visible when isSearchVisible is true */
+    #navbar #search_fields .search-inpt.show {
+        display: flex; /* Flex for layout */
+    align-items: center;
+    position: relative; /* Remove absolute positioning */
+    width: 300px; 
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
+    z-index: 10;
+    }
 }

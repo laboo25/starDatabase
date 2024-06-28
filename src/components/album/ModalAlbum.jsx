@@ -8,6 +8,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
   const [starnameFilters, setStarnameFilters] = useState({});
   const [tagFilters, setTagFilters] = useState({});
   const [tags, setTags] = useState([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null); // State to track the selected image for options
 
   useEffect(() => {
     const fetchStarnamesAndTags = async () => {
@@ -51,6 +52,10 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
 
   const handleTagChange = (tag) => {
     setTagFilters(prev => ({ ...prev, [tag]: !prev[tag] }));
+  };
+
+  const toggleImageOptions = (index) => {
+    setSelectedImageIndex(index === selectedImageIndex ? null : index); // Toggle the selected image
   };
 
   const filteredImages = images.filter(image => {
@@ -99,6 +104,15 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
                       <li key={idx}>{tag}</li>
                     ))}
                   </ul>
+                </div>
+                <div>
+                  <button onClick={() => toggleImageOptions(index)}>option</button>
+                  {selectedImageIndex === index && (
+                    <div className="options-menu">
+                      <button>Edit</button>
+                      <button>Delete</button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

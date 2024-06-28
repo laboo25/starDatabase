@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import './createStar.css';
-import { Upload, message, Button, Input, Form, Progress } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Modal, message, Button, Input, Form, Progress, Upload } from 'antd';
+import { InboxOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import ImageCropper from './ImageCropper';
 
 const { Dragger } = Upload;
 
@@ -12,18 +12,91 @@ const CreateStar = () => {
   const [starprofile, setStarprofile] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
+  const [previewImage, setPreviewImage] = useState('');
+  const [isCoverModalVisible, setIsCoverModalVisible] = useState(false);
+  const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+  const [currentFile, setCurrentFile] = useState(null);
+  const [croppingType, setCroppingType] = useState('');
+  const [starExists, setStarExists] = useState(false);
 
   const handleCoverChange = ({ fileList }) => {
+    if (fileList.length > 0) {
+      const file = fileList[0].originFileObj || fileList[0];
+      setCurrentFile(file);
+      setCroppingType('cover');
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
+        setIsCoverModalVisible(true);
+      };
+      reader.readAsDataURL(file);
+    }
     setStarcover(fileList);
   };
 
   const handleProfileChange = ({ fileList }) => {
+    if (fileList.length > 0) {
+      const file = fileList[0].originFileObj || fileList[0];
+      setCurrentFile(file);
+      setCroppingType('profile');
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
+        setIsProfileModalVisible(true);
+      };
+      reader.readAsDataURL(file);
+    }
     setStarprofile(fileList);
   };
+
+  const handleCrop = (blob, type) => {
+    const croppedFile = new File([blob], currentFile.name, { type: currentFile.type });
+    if (type === 'starcover') {
+      setStarcover([{ ...starcover[0], originFileObj: croppedFile }]);
+      setIsCoverModalVisible(false);
+    } else if (type === 'starprofile') {
+      setStarprofile([{ ...starprofile[0], originFileObj: croppedFile }]);
+      setIsProfileModalVisible(false);
+    }
+    const preview = URL.createObjectURL(croppedFile);
+    setPreviewImage(preview);
+  };
+
+  const handleCancel = (type) => {
+    if (type === 'starcover') {
+      setIsCoverModalVisible(false);
+      setStarcover([]);
+    } else if (type === 'starprofile') {
+      setIsProfileModalVisible(false);
+      setStarprofile([]);
+    }
+  };
+
+  const checkStarExists = async (name) => {
+    try {
+      const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+      const stars = response.data;
+      const exists = stars.some((star) => star.starname.toLowerCase() === name.toLowerCase());
+      setStarExists(exists);
+    } catch (error) {
+      console.error('Error checking star existence:', error.response ? error.response.data : error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (starname) {
+      checkStarExists(starname);
+    }
+  }, [starname]);
 
   const handleSubmit = async () => {
     if (!starname) {
       message.error('Please input the star name');
+      return;
+    }
+
+    if (starExists) {
+      message.error('This star already exists');
       return;
     }
 
@@ -32,10 +105,10 @@ const CreateStar = () => {
     const formData = new FormData();
     formData.append('starname', starname);
     if (starcover.length > 0) {
-      formData.append('starcover', starcover[0].originFileObj);
+      formData.append('starcover', starcover[0].originFileObj || starcover[0]);
     }
     if (starprofile.length > 0) {
-      formData.append('starprofile', starprofile[0].originFileObj);
+      formData.append('starprofile', starprofile[0].originFileObj || starprofile[0]);
     }
 
     try {
@@ -72,7 +145,15 @@ const CreateStar = () => {
             name="starname"
             rules={[{ required: true, message: 'Please input the star name!' }]}
           >
-            <Input value={starname} onChange={(e) => setStarname(e.target.value)} allowClear className='title-input' />
+            <Input 
+              value={starname} 
+              onChange={(e) => setStarname(e.target.value)} 
+              allowClear 
+              className='title-input' 
+              status={starExists ? 'warning' : ''}
+              prefix={starExists ? <ClockCircleOutlined /> : null}
+              placeholder={starExists ? 'This star already exists' : ''}
+            />
           </Form.Item>
         </div>
         <div className='py-3'>
@@ -82,7 +163,7 @@ const CreateStar = () => {
           >
             <Dragger
               fileList={starcover}
-              beforeUpload={() => false} // Prevent automatic upload
+              beforeUpload={() => false}
               onChange={handleCoverChange}
               onRemove={() => setStarcover([])}
               className='cover-input'
@@ -102,9 +183,10 @@ const CreateStar = () => {
           >
             <Dragger
               fileList={starprofile}
-              beforeUpload={() => false} // Prevent automatic upload
+              beforeUpload={() => false}
               onChange={handleProfileChange}
               onRemove={() => setStarprofile([])}
+              className='cover-input'
             >
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
@@ -119,6 +201,20 @@ const CreateStar = () => {
         </Button>
       </Form>
       {uploadPercentage > 0 && <Progress percent={uploadPercentage} />}
+      <ImageCropper
+        visible={isCoverModalVisible}
+        image={previewImage}
+        onCancel={() => handleCancel('starcover')}
+        onCrop={(blob) => handleCrop(blob, 'starcover')}
+        aspectRatio={16 / 9} // Aspect ratio for cover image
+      />
+      <ImageCropper
+        visible={isProfileModalVisible}
+        image={previewImage}
+        onCancel={() => handleCancel('starprofile')}
+        onCrop={(blob) => handleCrop(blob, 'starprofile')}
+        aspectRatio={2 / 3} // Aspect ratio for profile image
+      />
     </div>
   );
 };
