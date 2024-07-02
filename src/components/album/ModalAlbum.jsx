@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './modalAlbum.css';
 import axios from 'axios';
 import { Select, Input, Modal, Button } from 'antd'; // Import Select and Input components from Ant Design
-import category from '../../category.json';
+import category from 'https://res.cloudinary.com/dnphaxunn/raw/upload/v1719946259/json/category_ucqkqw.json';
 import { HiDotsVertical } from "react-icons/hi";
 
 const { Option } = Select;
