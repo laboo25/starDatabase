@@ -1,75 +1,191 @@
-#star-album #album-count {
-  text-align: center;
+/* customModal.css */
+img {
+  user-select: none;
+}
+.modal-main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  background: rgb(255, 255, 255);
   display: flex;
   justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
 }
-#star-album #album-count>span {
-  width: fit-content;
-  padding: 0 10px;
-}
-.album-gallery {
-  /* padding: 50px 50px; */
+
+.modal-main .modal-sidebar {
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  padding: 10px 20px;
-  padding-bottom: 80px;
-  gap: 30px 20px;
-  margin-top: 30px;
+  height: 100svh;
+  background-color: rgb(238, 238, 238);
+  transition: width 0.3s ease;
+  overflow: hidden;
+  user-select: none;
 }
-.album-gallery #album-card {
-  /* width: 33%; */
-  /* padding: 0 20px; */
-  cursor: pointer;
-  transition: all linear .5s;
-}
-.album-gallery #album-card:hover {
-  background-color: rgb(247, 247, 247);
-}
-.album-gallery #album-card:hover>img {
-  object-fit: contain;
-}
-.album-gallery #album-card #card {
+.modal-main .modal-sidebar #filter-option {
   width: 100%;
-  aspect-ratio: 16/9;
-  
+  min-height: 100svh;
+  /* background: #f00; */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0 20px;
+  padding-top: 100px;
 }
-.album-gallery #album-card #card img {
+.modal-main .modal-sidebar #filter-option p {
+  font-size: 20px;
+  font-weight: 500;
+  padding: 20px;
+}
+.modal-main .modal-sidebar #filter-option>div{
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+#tags-wrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+#tags-wrapper label {
+  /* cursor: pointer; */
+  margin: 3px 0;
+  padding: 3px 10px;
+  transition: all linear 0.3s;
+}
+#tags-wrapper label:hover {
+  color: #f00;
+}
+#tags-wrapper label input {
+  padding-left: 10px;
+}
+.modal-main .modal-sidebar.closed {
+  width: 0;
+}
+
+.modal-main .modal-sidebar.open {
+  width: 300px;
+}
+
+.modal-main .custom-modal-overlay {
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
-.fullscreen-modal .ant-modal-content {
-    width: 100%;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-  
-  .image-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .image-item {
-    flex: 1 0 30%; /* Adjust this value to control the number of images per row */
-    box-sizing: border-box;
-  }
-  
-  .image-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  
 
-  @media only screen and (max-width: 375px) {
-    
-  .album-gallery {
-    grid-template-columns: 1fr 1fr;
-    font-size: 10px;
+.custom-modal-content {
+  background: white;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.custom-modal-close {
+  position: absolute;
+  top: -20px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 8px;
+  cursor: pointer;
+  position: fixed;
+  color: black;
+  z-index: 99999999;
+  font-size: 60px;
+}
+.custom-modal-close:hover {
+  color: rgb(255, 0, 0);
+}
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 20px;
+}
+
+.image-grid a:hover {
+  box-shadow: 0px 0px 14px -6px rgba(0,0,0,0.69);
+}
+
+.image-item {
+  flex: 1 0 30%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.image-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.edit-tags-modal {
+  width: 70%;
+  height: 70vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  box-shadow: 0px 0px 29px -3px rgba(0,0,0,0.75);
+}
+
+.edit-tags-modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+}
+.edit-tags-modal .modal-content .buttons {
+  display: flex;
+  justify-content: center;
+  column-gap: 50px;
+  padding-top: 20px;
+}
+
+.tag-input {
+  display: flex;
+  gap: 10px;
+}
+
+.tag-input input {
+  flex: 1;
+}
+
+.options-menu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  z-index: 10;
+}
+
+@media only screen and (max-width: 600px) {
+  .edit-tags-modal  {
+    width: 100%;
+    height: 100dvh;
+
   }
+  .edit-tags-modal .modal-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
 }
