@@ -126,7 +126,7 @@ const Images = () => {
         />
       </div>
       <div className='flex-1'>
-        <button onClick={toggleSidebar} className='m-2 p-2  text-black text-[30px]'>
+        <button onClick={toggleSidebar} className='m-2 p-2 text-black text-[30px]'>
           ◧
         </button>
         <div id='image-main'>

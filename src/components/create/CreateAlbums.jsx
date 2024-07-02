@@ -48,7 +48,6 @@ const CreateAlbums = () => {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
-                timeout: 10 * 60 * 1000, // Set timeout to 10 minutes
                 onUploadProgress: (progressEvent) => {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                     setUploadProgress(percentCompleted);

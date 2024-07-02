@@ -1,4 +1,7 @@
 /* customModal.css */
+img {
+  user-select: none;
+}
 .modal-main {
   position: fixed;
   top: 0;
@@ -129,6 +132,8 @@
   display: block;
 }
 .edit-tags-modal {
+  width: 70%;
+  height: 70vh;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -137,12 +142,20 @@
   padding: 20px;
   border-radius: 8px;
   z-index: 1000;
+  box-shadow: 0px 0px 29px -3px rgba(0,0,0,0.75);
 }
 
 .edit-tags-modal .modal-content {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  
+}
+.edit-tags-modal .modal-content .buttons {
+  display: flex;
+  justify-content: center;
+  column-gap: 50px;
+  padding-top: 20px;
 }
 
 .tag-input {
@@ -161,4 +174,18 @@
   border-radius: 4px;
   padding: 5px;
   z-index: 10;
+}
+
+@media only screen and (max-width: 600px) {
+  .edit-tags-modal  {
+    width: 100%;
+    height: 100dvh;
+
+  }
+  .edit-tags-modal .modal-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
 }
