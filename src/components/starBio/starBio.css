@@ -42,7 +42,7 @@
 }
 #bio-page .profile {
   min-width: 300px;
-  height: 100vh;
+  height: 100svh;
   object-fit: cover;
 }
 #bio-page .profile img {
