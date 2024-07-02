@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './sidebar.css';
+import logo from '/meu.svg'
 import { NavLink, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Input } from 'antd';
@@ -33,10 +34,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div id='sidebar-main'>
       <div className='sidebar-content'>
-        <div className='w-full text-center h-[60px]'>
-          <h2>
-            <Link to='/'>Home</Link>
-          </h2>
+        <div className='w-full h-[60px] flex justify-center items-center'>
+          
+            <Link to='/'>
+              <img src={logo} alt=""  className='w-auto h-[20px]'/>
+            </Link>
+          
         </div>
         <div className='pb-[10px]'>
           <Input
@@ -47,13 +50,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           />
         </div>
       </div>
-      <div className='list-wrapper '>
+      <div className='list-wrapper'>
         <div className='list'>
           {filteredStars.map(star => (
-            <div key={star._id}>
+            <div key={star._id} draggable={false}>
               <NavLink 
                 to={`/star/${star._id}`} 
                 className={({ isActive }) => isActive ? 'active' : ''}
+                draggable={false}
               >
                 {star.starname}
               </NavLink>

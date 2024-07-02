@@ -20,6 +20,11 @@ const StarDetails = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            // Reset state to avoid showing old data
+            setStarName(null);
+            setStarBio(null);
+            setError(null);
+
             try {
                 const storedStarName = localStorage.getItem(`starName_${_id}`);
                 const storedStarBio = localStorage.getItem(`starBio_${_id}`);
@@ -39,6 +44,8 @@ const StarDetails = () => {
                         if (bioData) {
                             setStarBio(bioData);
                             localStorage.setItem(`starBio_${_id}`, JSON.stringify(bioData));
+                        } else {
+                            setStarBio(null); // Clear bio if not found
                         }
                     } else {
                         setError('Star not found');

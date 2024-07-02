@@ -43,7 +43,7 @@
 #bio-page .profile {
   min-width: 300px;
   height: 100vh;
-/*   object-fit: cover; */
+  object-fit: cover;
 }
 #bio-page .profile img {
   width: 100%;
@@ -63,7 +63,7 @@
   margin: 0;
   padding: 30px 0 50px 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #6c47ff;
+  color: #2563eb;
 }
 #bio-page .bio .bio-texts {
   font-size: 15px;

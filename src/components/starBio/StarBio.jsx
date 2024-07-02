@@ -65,12 +65,12 @@ const StarBio = ({ starName, starBio, navigate, sidebarVisible, setSidebarVisibl
                     {starName && starName.starprofile ? (
                         <div id='bio-page' className='w-full flex'>
                             <div className='profile'>
-                                {starName && <img src={starName.starprofile} alt={starName.starname} />}
+                                {starName && <img src={starName.starprofile} alt={starName.starname} draggable={false} />}
                             </div>
                             <div className='bio'>
                                 {starName && <h2 className='title'>{starName.starname}</h2>}
                                 <div className='bio-texts'>
-                                    {starBio && (
+                                    {starBio ? (
                                         <>
                                             {starBio.aliases && (
                                                 <div>
@@ -204,6 +204,10 @@ const StarBio = ({ starName, starBio, navigate, sidebarVisible, setSidebarVisibl
                                                 </div>
                                             )}
                                         </>
+                                    ) : (
+                                        <div className='bio-message'>
+                                            <p>Empty</p>
+                                        </div>
                                     )}
                                 </div>
                             </div>
