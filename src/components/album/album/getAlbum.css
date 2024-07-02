@@ -1,20 +1,19 @@
 #getAlbum {
   width: 100%;
+  padding: 0 50px;
 }
 #getAlbum #wrapper {
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 10px 0;
-  gap: 10px;
+  padding-bottom: 80px;
+  gap: 30px 20px;
 }
 #getAlbum #wrapper .album-container {
-    width: 24%;
-    /* opacity: 0; */
     transform: translateY(20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
-  
   .album-container:nth-child(even) {
     transition-delay: 0.1s;
   }
@@ -27,8 +26,14 @@
     opacity: 1;
     transform: translateY(0);
   }
+
+
   @media only screen and (max-width: 375px) {
-  #getAlbum #wrapper .album-container {
-    width: 49%;
+    #getAlbum {
+      padding: 0 20px;
+    }
+  #getAlbum #wrapper {
+    grid-template-columns: 1fr 1fr;
+    font-size: 10px;
   }
 }
