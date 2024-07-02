@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import './modalAlbum.css';
 import axios from 'axios';
+import { Select } from 'antd';
+import category from '../../category.json';
 
-const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
+const { Option } = Select;
+
+const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId }) => {
+  console.log('albumId:', albumId); // Log albumId to verify it's received
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [starnames, setStarnames] = useState([]);
   const [starnameFilters, setStarnameFilters] = useState({});
   const [tagFilters, setTagFilters] = useState({});
   const [tags, setTags] = useState([]);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null); // State to track the selected image for options
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [editTagsModalVisible, setEditTagsModalVisible] = useState(false);
+  const [newTags, setNewTags] = useState([]);
+  const [currentTags, setCurrentTags] = useState([]);
 
   useEffect(() => {
     const fetchStarnamesAndTags = async () => {
@@ -16,8 +25,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
         const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
         const fetchedStarnames = response.data.map(star => star.starname);
         setStarnames(fetchedStarnames);
-  
-        // Extracting tags from images
+
         const fetchedTags = images.reduce((acc, image) => {
           image.tags.forEach(tag => {
             if (!acc.includes(tag)) {
@@ -27,7 +35,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
           return acc;
         }, []);
         setTags(fetchedTags);
-  
+
         const initialStarnameFilters = fetchedStarnames.reduce((acc, starname) => {
           acc[starname] = false;
           return acc;
@@ -37,10 +45,9 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
         console.error('Error fetching starnames and tags:', error);
       }
     };
-  
+
     fetchStarnamesAndTags();
   }, [images]);
-  
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -55,8 +62,38 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
   };
 
   const toggleImageOptions = (index) => {
-    setSelectedImageIndex(index === selectedImageIndex ? null : index); // Toggle the selected image
+    setSelectedImageIndex(index === selectedImageIndex ? null : index);
   };
+
+  const openEditTagsModal = (tags) => {
+    setCurrentTags(tags);
+    setNewTags(tags);
+    setEditTagsModalVisible(true);
+  };
+
+  // ModalAlbum.jsx
+const saveTags = async () => {
+  if (!albumId) {
+    console.error('Album ID is undefined');
+    return;
+  }
+  try {
+    const updatedImages = [...images];
+    updatedImages[selectedImageIndex].tags = newTags;
+
+    await axios.put(`https://stardb-api.onrender.com/api/stars/albums/update/${albumId}`, {
+      albumname,
+      starname: updatedImages[selectedImageIndex].starname,
+      albumimages: updatedImages
+    });
+
+    setEditTagsModalVisible(false);
+    setTags([...new Set(newTags)]);
+  } catch (error) {
+    console.error('Error saving tags:', error);
+  }
+};
+
 
   const filteredImages = images.filter(image => {
     const matchesStarname = Object.keys(starnameFilters).every(starname => !starnameFilters[starname] || image.starname === starname);
@@ -109,7 +146,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
                   <button onClick={() => toggleImageOptions(index)}>option</button>
                   {selectedImageIndex === index && (
                     <div className="options-menu">
-                      <button>Edit</button>
+                      <button className='edit-tags' onClick={() => openEditTagsModal(image.tags)}>Edit</button>
                       <button>Delete</button>
                     </div>
                   )}
@@ -119,6 +156,29 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose }) => {
           </div>
         </div>
       </div>
+
+      {editTagsModalVisible && (
+        <div className="edit-tags-modal">
+          <div className="modal-content">
+            <h2>Edit Tags</h2>
+            <Select
+              mode="multiple"
+              value={newTags}
+              onChange={setNewTags}
+              style={{ width: '100%' }}
+              placeholder="Select tags"
+            >
+              {Array.isArray(category.tags) && category.tags.map((tag, index) => (
+                <Option key={index} value={tag}>
+                  {tag}
+                </Option>
+              ))}
+            </Select>
+            <button onClick={saveTags}>Save</button>
+            <button onClick={() => setEditTagsModalVisible(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

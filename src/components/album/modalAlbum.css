@@ -128,3 +128,37 @@
   height: auto;
   display: block;
 }
+.edit-tags-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.edit-tags-modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tag-input {
+  display: flex;
+  gap: 10px;
+}
+
+.tag-input input {
+  flex: 1;
+}
+
+.options-menu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  z-index: 10;
+}

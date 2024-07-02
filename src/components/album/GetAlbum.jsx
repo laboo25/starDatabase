@@ -115,6 +115,7 @@ const GetAlbum = () => {
           length={selectedAlbum.albumimages.length} 
           images={selectedAlbum.albumimages} 
           onClose={closeModal}
+          albumId={selectedAlbum._id}  // Pass albumId here
           sortField={sortField}
           sortOrder={sortOrder}
         />
