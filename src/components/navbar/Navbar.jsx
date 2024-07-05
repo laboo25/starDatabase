@@ -81,7 +81,7 @@ const Navbar = () => {
                 </Link>
             </div>
             <div>
-                <Link to='/create' className='p-[10px] px-[20px]' draggable={false}>
+                <Link to='/create' target="_blank" className='p-[10px] px-[20px]' draggable={false}>
                     <RiAddBoxFill className='size-[25px]' />
                 </Link>
             </div>
