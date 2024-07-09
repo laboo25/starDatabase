@@ -43,7 +43,7 @@ const UpdateAll = () => {
       title: 'Name', // Placeholder, will be updated dynamically
       dataIndex: 'name',
       key: 'name',
-      render: (text, record) => <Link to={`/star/${record._id}`} >{text}</Link>,
+      render: (text, record) => <Link to={`/star/${record._id}`} target="_blank">{text}</Link>,
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
