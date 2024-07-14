@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://stardb-api.onrender.com/api',
+  baseURL: 'https://stardb-api.vercel.app/api',
 });
 
 axiosInstance.interceptors.response.use(

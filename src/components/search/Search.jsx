@@ -12,7 +12,7 @@ const Search = () => {
         const fetchResults = async () => {
             if (query) {
                 try {
-                    const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+                    const response = await axios.get('https://stardb-api.vercel.app/api/stars/create-star/get-all-star');
                     const filteredData = response.data.filter(star => 
                         star.starname.toLowerCase().includes(query.toLowerCase())
                     );

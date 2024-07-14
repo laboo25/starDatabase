@@ -63,7 +63,8 @@ const StarBio = ({ starName, starBio, navigate, sidebarVisible, setSidebarVisibl
                 </div>
                 <div id='star-bio'>
                     {starName && starName.starprofile ? (
-                        <div id='bio-page' className='w-full flex'>
+                        <div id='bio-page' className='w-full flex '>
+                            
                             <div className='profile'>
                                 {starName && <img src={starName.starprofile} alt={starName.starname} draggable={false} />}
                             </div>

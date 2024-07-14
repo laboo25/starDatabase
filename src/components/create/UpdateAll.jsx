@@ -43,7 +43,7 @@ const UpdateAll = () => {
       title: 'Name', // Placeholder, will be updated dynamically
       dataIndex: 'name',
       key: 'name',
-      render: (text, record) => <Link to={`/star/${record._id}`} target="_blank">{text}</Link>,
+      render: (text, record) => <Link to={`/star/${record._id}`} >{text}</Link>,
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
@@ -78,7 +78,7 @@ const UpdateAll = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+        const response = await axios.get('https://stardb-api.vercel.app/api/stars/create-star/get-all-star');
         const stars = response.data.map((star, index) => ({
           key: index + 1,
           name: capitalize(star.starname),
@@ -123,7 +123,7 @@ const UpdateAll = () => {
   const handleOk = async () => {
     try {
       // Make API call to delete the star
-      await axios.delete(`https://stardb-api.onrender.com/api/stars/create-star/delete-star/${deleteRecord._id}`);
+      await axios.delete(`https://stardb-api.vercel.app/api/stars/create-star/delete-star/${deleteRecord._id}`);
       // Remove the deleted record from data and filteredData
       const newData = data.filter(item => item._id !== deleteRecord._id);
       setData(newData);

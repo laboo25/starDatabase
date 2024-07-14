@@ -36,7 +36,7 @@ const CreateStarBio = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star')
+    axios.get('https://stardb-api.vercel.app/api/stars/create-star/get-all-star')
       .then(response => {
         const sortedStars = response.data.sort((a, b) => a.starname.localeCompare(b.starname));
         setStarNames(sortedStars);
@@ -102,7 +102,7 @@ const CreateStarBio = () => {
       boobs: boobs || null,
     };
 
-    axios.post('https://stardb-api.onrender.com/api/stars/star-bio/create-star-bio', starData)
+    axios.post('https://stardb-api.vercel.app/api/stars/star-bio/create-star-bio', starData)
       .then(response => {
         message.success('Star bio created successfully', 5, { top: 0, left: '50%', transform: 'translateX(-50%)' });
         resetForm();

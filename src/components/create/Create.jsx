@@ -35,7 +35,7 @@ const Create = () => {
         </button>
         <div id='sidebar' className={isSidebarVisible ? 'visible' : ''}>
           <div>
-            <Link to='/' target="_blank" className='text-right'>home</Link>
+            <Link to='/' className='text-right'>home</Link>
           </div>
           <h1>Create</h1>
           <Link to='/create' className={getLinkClass('/create')}>create star</Link>

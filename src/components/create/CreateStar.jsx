@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, message, Button, Input, Form, Progress, Upload } from 'antd';
-import { InboxOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import ImageCropper from './ImageCropper';
 
@@ -18,6 +18,8 @@ const CreateStar = () => {
   const [currentFile, setCurrentFile] = useState(null);
   const [croppingType, setCroppingType] = useState('');
   const [starExists, setStarExists] = useState(false);
+  const [checkingStarname, setCheckingStarname] = useState(false);
+  const [isLowerCase, setIsLowerCase] = useState(true);
 
   const handleCoverChange = ({ fileList }) => {
     if (fileList.length > 0) {
@@ -74,18 +76,27 @@ const CreateStar = () => {
 
   const checkStarExists = async (name) => {
     try {
-      const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+      setCheckingStarname(true);
+      const response = await axios.get('https://stardb-api.vercel.app/api/stars/create-star/get-all-star');
       const stars = response.data;
       const exists = stars.some((star) => star.starname.toLowerCase() === name.toLowerCase());
       setStarExists(exists);
     } catch (error) {
       console.error('Error checking star existence:', error.response ? error.response.data : error.message);
+    } finally {
+      setCheckingStarname(false);
     }
   };
 
   useEffect(() => {
     if (starname) {
-      checkStarExists(starname);
+      const delayDebounceFn = setTimeout(() => {
+        checkStarExists(starname);
+      }, 500);
+
+      return () => clearTimeout(delayDebounceFn);
+    } else {
+      setStarExists(false);
     }
   }, [starname]);
 
@@ -112,7 +123,7 @@ const CreateStar = () => {
     }
 
     try {
-      await axios.post('https://stardb-api.onrender.com/api/stars/create-star/create-new-star', formData, {
+      await axios.post('https://stardb-api.vercel.app/api/stars/create-star/create-new-star', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -135,6 +146,16 @@ const CreateStar = () => {
     }
   };
 
+  const handleCaseToggle = () => {
+    setIsLowerCase(!isLowerCase);
+    setStarname((prevStarname) => (isLowerCase ? prevStarname.toLowerCase() : prevStarname));
+  };
+
+  const handleStarnameChange = (e) => {
+    const value = e.target.value;
+    setStarname(isLowerCase ? value.toLowerCase() : value);
+  };
+
   return (
     <div>
       <h2 className='title'>Create Star</h2>
@@ -147,12 +168,16 @@ const CreateStar = () => {
           >
             <Input 
               value={starname} 
-              onChange={(e) => setStarname(e.target.value)} 
+              onChange={handleStarnameChange} 
               allowClear 
               className='title-input' 
               status={starExists ? 'warning' : ''}
-              prefix={starExists ? <ClockCircleOutlined /> : null}
               placeholder={starExists ? 'This star already exists' : ''}
+              suffix={
+                <Button onClick={handleCaseToggle}>
+                  {isLowerCase ? 'A' : 'a'}
+                </Button>
+              }
             />
           </Form.Item>
         </div>

@@ -11,7 +11,7 @@ const GetAlbum = () => {
   const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
 
   useEffect(() => {
-    fetch('https://stardb-api.onrender.com/api/stars/albums/get-all-albums')
+    fetch('https://stardb-api.vercel.app/api/stars/albums/get-all-albums')
       .then(response => response.json())
       .then(data => {
         setAlbums(data);

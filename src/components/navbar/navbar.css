@@ -59,7 +59,7 @@
     position: absolute;
     top: 55px; /* Position below the input field */
     left: 0;
-    width: 100%;
+    width: 300px;
     background-color: #F0F0F0;
     z-index: 15;
     max-height: 300px;
@@ -70,7 +70,7 @@
 }
 
 #navbar #search_fields .suggestion div {
-    padding: 10px;
+    padding: 3px;
     cursor: pointer;
 }
 

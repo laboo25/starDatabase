@@ -2,6 +2,11 @@
     font-family: SFPRODISPLAYREGULAR;
     src: url(../fonts/SFPRODISPLAYREGULAR.OTF);
   }
+@font-face {
+    font-family: SFPRODISPLAYBOLD;
+    src: url(../fonts/SFPRODISPLAYBOLD.OTF);
+}
+
 * {
     font-family: SFPRODISPLAYREGULAR, sans-serif;
 }
@@ -52,7 +57,7 @@ html::-webkit-scrollbar-thumb:hover {
 
 .fancybox__backdrop,.fancybox__container{
     
-    background-color: #292929 !important;
+    background-color: #ffffff !important;
 }
 #fancybox__caption_1_0 {
     color: black !important;

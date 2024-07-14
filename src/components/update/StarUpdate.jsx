@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Upload, message } from 'antd';
+import './starUpdate.css';
+import { Form, Input, Button, Select, Upload, message, Modal } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import './starUpdate.css';
+import ImageCropper from '../create/ImageCropper';
 
-const { Option } = Select;
 const { Dragger } = Upload;
+const { Option } = Select;
 
 const StarUpdate = () => {
   const [form] = Form.useForm();
@@ -13,14 +14,26 @@ const StarUpdate = () => {
   const [stars, setStars] = useState([]);
   const [selectedStar, setSelectedStar] = useState(null);
   const [fileList, setFileList] = useState({ starprofile: [], starcover: [] });
+  const [cropData, setCropData] = useState({ starprofile: null, starcover: null });
+  const [cropImage, setCropImage] = useState(null);
+  const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+  const [isCoverModalVisible, setIsCoverModalVisible] = useState(false);
 
   useEffect(() => {
     fetchStars();
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (cropImage) {
+        URL.revokeObjectURL(cropImage); // Revoke the object URL on cleanup
+      }
+    };
+  }, [cropImage]);
+
   const fetchStars = async () => {
     try {
-      const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+      const response = await axios.get('https://stardb-api.vercel.app/api/stars/create-star/get-all-star');
       const sortedStars = response.data.sort((a, b) => a.starname.localeCompare(b.starname));
       setStars(sortedStars);
     } catch (error) {
@@ -33,6 +46,8 @@ const StarUpdate = () => {
     const star = stars.find(star => star._id === starId);
     setSelectedStar(star);
     form.setFieldsValue({ starname: star.starname });
+    setFileList({ starprofile: [], starcover: [] });
+    setCropData({ starprofile: null, starcover: null });
   };
 
   const onFinish = async (values) => {
@@ -41,17 +56,17 @@ const StarUpdate = () => {
     const formData = new FormData();
     formData.append('starname', values.starname);
 
-    if (fileList.starprofile.length > 0) {
-      formData.append('starprofile', fileList.starprofile[0].originFileObj);
+    if (fileList.starcover.length > 0 && cropData.starcover) {
+      formData.append('starcover', cropData.starcover);
     }
 
-    if (fileList.starcover.length > 0) {
-      formData.append('starcover', fileList.starcover[0].originFileObj);
+    if (fileList.starprofile.length > 0 && cropData.starprofile) {
+      formData.append('starprofile', cropData.starprofile);
     }
 
     try {
       const response = await axios.put(
-        `https://stardb-api.onrender.com/api/stars/create-star/update-star/${selectedStar._id}`,
+        `https://stardb-api.vercel.app/api/stars/create-star/update-star/${selectedStar._id}`,
         formData,
         {
           headers: {
@@ -63,6 +78,7 @@ const StarUpdate = () => {
       message.success('Star updated successfully');
       form.resetFields();
       setFileList({ starprofile: [], starcover: [] });
+      setCropData({ starprofile: null, starcover: null });
       fetchStars(); // Refresh stars list
     } catch (error) {
       console.error('Update failed', error);
@@ -73,7 +89,42 @@ const StarUpdate = () => {
   };
 
   const handleFileChange = (info, type) => {
-    setFileList({ ...fileList, [type]: info.fileList });
+    const updatedFileList = info.fileList.map((file) => ({
+      ...file,
+      uid: file.uid || file.name, // Ensure each file has a unique `uid`
+    }));
+    setFileList({ ...fileList, [type]: updatedFileList });
+    if (info.fileList.length > 0) {
+      const objectUrl = URL.createObjectURL(info.fileList[0].originFileObj);
+      setCropImage(objectUrl);
+      if (type === 'starcover') {
+        setIsCoverModalVisible(true);
+      } else {
+        setIsProfileModalVisible(true);
+      }
+    }
+  };
+
+  const handleCrop = (blob, type) => {
+    const file = new File([blob], `${type}.png`, { type: 'image/png' });
+    setCropData({ ...cropData, [type]: file });
+    if (type === 'starcover') {
+      setIsCoverModalVisible(false);
+    } else {
+      setIsProfileModalVisible(false);
+    }
+    URL.revokeObjectURL(cropImage); // Revoke the object URL after cropping
+    setCropImage(null);
+  };
+
+  const handleCancel = (type) => {
+    if (type === 'starcover') {
+      setIsCoverModalVisible(false);
+    } else {
+      setIsProfileModalVisible(false);
+    }
+    URL.revokeObjectURL(cropImage); // Revoke the object URL when canceling
+    setCropImage(null);
   };
 
   return (
@@ -108,15 +159,12 @@ const StarUpdate = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          name="starprofile"
-          label="Profile Image"
-        >
+        <Form.Item name="starcover" label="Cover Image">
           <Dragger
-            name="starprofile"
-            fileList={fileList.starprofile}
+            name="starcover"
+            fileList={fileList.starcover}
             beforeUpload={() => false} // prevent automatic upload
-            onChange={(info) => handleFileChange(info, 'starprofile')}
+            onChange={(info) => handleFileChange(info, 'starcover')}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
@@ -124,15 +172,12 @@ const StarUpdate = () => {
             <p className="ant-upload-text">Click or drag file to this area to upload</p>
           </Dragger>
         </Form.Item>
-        <Form.Item
-          name="starcover"
-          label="Cover Image"
-        >
+        <Form.Item name="starprofile" label="Profile Image">
           <Dragger
-            name="starcover"
-            fileList={fileList.starcover}
+            name="starprofile"
+            fileList={fileList.starprofile}
             beforeUpload={() => false} // prevent automatic upload
-            onChange={(info) => handleFileChange(info, 'starcover')}
+            onChange={(info) => handleFileChange(info, 'starprofile')}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
@@ -146,6 +191,20 @@ const StarUpdate = () => {
           </Button>
         </Form.Item>
       </Form>
+      <ImageCropper
+        visible={isCoverModalVisible}
+        image={cropImage}
+        onCancel={() => handleCancel('starcover')}
+        onCrop={(blob) => handleCrop(blob, 'starcover')}
+        aspectRatio={16 / 9} // Aspect ratio for cover image
+      />
+      <ImageCropper
+        visible={isProfileModalVisible}
+        image={cropImage}
+        onCancel={() => handleCancel('starprofile')}
+        onCrop={(blob) => handleCrop(blob, 'starprofile')}
+        aspectRatio={2 / 3} // Aspect ratio for profile image
+      />
     </div>
   );
 };

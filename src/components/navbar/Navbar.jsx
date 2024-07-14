@@ -8,6 +8,8 @@ import './navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+import avater from "/avater.webp"
+
 const Navbar = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
@@ -19,7 +21,7 @@ const Navbar = () => {
     const fetchSuggestions = async () => {
         if (searchQuery) {
             try {
-                const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+                const response = await axios.get('https://stardb-api.vercel.app/api/stars/create-star/get-all-star');
                 const filteredData = response.data.filter(star => 
                     star.starname.toLowerCase().includes(searchQuery.toLowerCase())
                 );
@@ -81,7 +83,7 @@ const Navbar = () => {
                 </Link>
             </div>
             <div>
-                <Link to='/create' target="_blank" className='p-[10px] px-[20px]' draggable={false}>
+                <Link to='/create' className='p-[10px] px-[20px]' draggable={false}>
                     <RiAddBoxFill className='size-[25px]' />
                 </Link>
             </div>
@@ -105,8 +107,8 @@ const Navbar = () => {
                     />
                     {searchQuery && (
                         <button onClick={() => { setSearchQuery(''); setSuggestions([]); }} className='clear'>
-                            <div className='mx-2 px-[5px] py-[-1px] bg-[#cfcfcf98] rounded-[50%]'>
-                                x
+                            <div className='mx-2 p-[3px] bg-[#cfcfcf98] rounded-[50%]'>
+                                ×
                             </div>
                         </button>
                     )}
@@ -119,8 +121,15 @@ const Navbar = () => {
                                         setSearchQuery('');
                                         navigate(`/star/${star._id}`);
                                     }}>
+                                        <div className='flex'>
+                                        <div className='w-[60px] aspect-square  '>
+                                            <img src={star.starcover || avater} alt="" className='w-full h-full object-cover rounded-[50%]'/>
+                                        </div>
+                                        <div className='w-auto h-auto flex items-start justify-center flex-col'>
                                         <p className='capitalize font-bold'>{star.starname}</p>
                                         <p className='text-[10px] text-gray-400'>profile</p>
+                                        </div>
+                                        </div>
                                     </Link>
                                 </div>
                             ))}

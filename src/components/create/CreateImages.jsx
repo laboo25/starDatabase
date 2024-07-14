@@ -21,7 +21,7 @@ const CreateImages = () => {
 
   const fetchStars = async (searchQuery = '') => {
     try {
-      const response = await axios.get(`https://stardb-api.onrender.com/api/stars/create-star/get-all-star?search=${searchQuery}`);
+      const response = await axios.get(`https://stardb-api.vercel.app/api/stars/create-star/get-all-star?search=${searchQuery}`);
       const sortedStars = response.data.sort((a, b) => a.starname.localeCompare(b.starname));
       setStars(sortedStars);
     } catch (error) {
@@ -59,7 +59,7 @@ const CreateImages = () => {
 
     try {
       const response = await axios.post(
-        'https://stardb-api.onrender.com/api/stars/images/create-star-images',
+        'https://stardb-api.vercel.app/api/stars/images/create-star-images',
         formData,
         {
           headers: {

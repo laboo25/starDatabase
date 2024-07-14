@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './modalAlbum.css';
 import axios from 'axios';
-import { Select, Input, Modal, Button } from 'antd'; // Import Select and Input components from Ant Design
+import { Select, Input, Modal, Button, Upload, Progress } from 'antd'; // Import Progress component from Ant Design
 import category from '../../category.json';
 import { HiDotsVertical } from "react-icons/hi";
 
 const { Option } = Select;
+const { Dragger } = Upload;
 
 const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sortField, sortOrder }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -17,14 +18,16 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
   const [editTagsModalVisible, setEditTagsModalVisible] = useState(false);
   const [newTags, setNewTags] = useState([]);
   const [currentTags, setCurrentTags] = useState([]);
-  const [editAlbumModalVisible, setEditAlbumModalVisible] = useState(false); // State for edit album modal
-  const [editAlbumname, setEditAlbumname] = useState(albumname); // State to store edited album name
-  const [editStarname, setEditStarname] = useState(images[selectedImageIndex]?.starname || []); // State to store edited star names
+  const [editAlbumModalVisible, setEditAlbumModalVisible] = useState(false);
+  const [editAlbumname, setEditAlbumname] = useState(albumname);
+  const [editStarname, setEditStarname] = useState(images[selectedImageIndex]?.starname || []);
+  const [fileList, setFileList] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     const fetchStarnamesAndTags = async () => {
       try {
-        const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+        const response = await axios.get('https://stardb-api.vercel.app/api/stars/create-star/get-all-star');
         const fetchedStarnames = response.data.map(star => star.starname).sort();
         setStarnames(fetchedStarnames);
 
@@ -82,7 +85,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
       const updatedImages = [...images];
       updatedImages[selectedImageIndex].tags = newTags.sort();
 
-      await axios.put(`https://stardb-api.onrender.com/api/stars/albums/update/${albumId}`, {
+      await axios.put(`https://stardb-api.vercel.app/api/stars/albums/update/${albumId}`, {
         albumname,
         starname: updatedImages[selectedImageIndex].starname,
         albumimages: updatedImages
@@ -101,12 +104,26 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
 
   const handleEditAlbum = async () => {
     try {
-      // Perform API call to update albumname and starname[] here
-      console.log('Updated albumname:', editAlbumname);
-      console.log('Updated starname:', editStarname);
+      const formData = new FormData();
+      formData.append('albumname', editAlbumname);
+      formData.append('starname', JSON.stringify(editStarname));
+      fileList.forEach(file => {
+        formData.append('newImages', file.originFileObj);
+      });
+
+      await axios.put(`https://stardb-api.vercel.app/api/stars/albums/update/${albumId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percentCompleted);
+        }
+      });
 
       // Close modal after updating
       setEditAlbumModalVisible(false);
+      setUploadProgress(0);
     } catch (error) {
       console.error('Error updating album:', error);
     }
@@ -122,6 +139,10 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
 
   const handleStarnameSelectChange = (value) => {
     setEditStarname(value);
+  };
+
+  const handleUploadChange = ({ fileList }) => {
+    setFileList(fileList);
   };
 
   const filteredImages = images.filter(image => {
@@ -233,6 +254,21 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
             </Option>
           ))}
         </Select>
+        <Dragger
+          fileList={fileList}
+          onChange={handleUploadChange}
+          beforeUpload={() => false}
+          multiple
+        >
+          <p className="ant-upload-drag-icon">
+            <i className="fas fa-cloud-upload-alt"></i>
+          </p>
+          <p className="ant-upload-text">Click or drag files to this area to upload</p>
+          <p className="ant-upload-hint">Support for multiple file upload.</p>
+          {uploadProgress > 0 && (
+            <Progress percent={uploadProgress} />
+          )}
+        </Dragger>
       </Modal>
     </div>
   );
