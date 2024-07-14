@@ -19,7 +19,6 @@ const CreateStar = () => {
   const [croppingType, setCroppingType] = useState('');
   const [starExists, setStarExists] = useState(false);
   const [checkingStarname, setCheckingStarname] = useState(false);
-  const [isLowerCase, setIsLowerCase] = useState(true);
 
   const handleCoverChange = ({ fileList }) => {
     if (fileList.length > 0) {
@@ -122,8 +121,10 @@ const CreateStar = () => {
       formData.append('starprofile', starprofile[0].originFileObj || starprofile[0]);
     }
 
+    console.log('Form Data:', formData);
+
     try {
-      await axios.post('https://stardb-api.vercel.app/api/stars/create-star/create-new-star', formData, {
+      const response = await axios.post('https://stardb-api.vercel.app/api/stars/create-star/create-new-star', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -132,6 +133,8 @@ const CreateStar = () => {
           setUploadPercentage(percentCompleted);
         },
       });
+
+      console.log('Response:', response);
 
       message.success('Star created successfully');
       setStarname('');
@@ -146,16 +149,6 @@ const CreateStar = () => {
     }
   };
 
-  const handleCaseToggle = () => {
-    setIsLowerCase(!isLowerCase);
-    setStarname((prevStarname) => (isLowerCase ? prevStarname.toLowerCase() : prevStarname));
-  };
-
-  const handleStarnameChange = (e) => {
-    const value = e.target.value;
-    setStarname(isLowerCase ? value.toLowerCase() : value);
-  };
-
   return (
     <div>
       <h2 className='title'>Create Star</h2>
@@ -168,16 +161,11 @@ const CreateStar = () => {
           >
             <Input 
               value={starname} 
-              onChange={handleStarnameChange} 
+              onChange={(e) => setStarname(e.target.value)} 
               allowClear 
               className='title-input' 
               status={starExists ? 'warning' : ''}
               placeholder={starExists ? 'This star already exists' : ''}
-              suffix={
-                <Button onClick={handleCaseToggle}>
-                  {isLowerCase ? 'A' : 'a'}
-                </Button>
-              }
             />
           </Form.Item>
         </div>

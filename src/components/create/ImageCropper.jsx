@@ -3,6 +3,7 @@ import { Modal, Row, Col, Slider, Button, Space } from 'antd';
 import { ReloadOutlined, ZoomInOutlined, ZoomOutOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import Cropper from 'react-cropper';
 
+
 const ImageCropper = ({ visible, image, onCancel, onCrop, aspectRatio }) => {
   const cropperRef = useRef(null);
   const [rotation, setRotation] = useState(0);
@@ -78,7 +79,7 @@ const ImageCropper = ({ visible, image, onCancel, onCrop, aspectRatio }) => {
             onChange={handleSliderChange}
             guides={true}
             responsive={true}
-            tooltipVisible
+            open
             marks={{ 0: '0°', 45: '45°', 90: '90°', 135: '135°', 180: '180°', '-45': '-45°', '-90': '-90°', '-135': '-135°', '-180': '-180°' }}
           />
         </Col>

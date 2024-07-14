@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import logo from '../../../public/meu.svg';
+import logo from '/meu.svg';
 import { IoIosAlbums } from "react-icons/io";
 import { BsImages } from "react-icons/bs";
 import { RiAddBoxFill } from "react-icons/ri";

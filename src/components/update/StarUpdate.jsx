@@ -26,7 +26,7 @@ const StarUpdate = () => {
   useEffect(() => {
     return () => {
       if (cropImage) {
-        URL.revokeObjectURL(cropImage); // Revoke the object URL on cleanup
+        URL.revokeObjectURL(cropImage);
       }
     };
   }, [cropImage]);
@@ -79,7 +79,7 @@ const StarUpdate = () => {
       form.resetFields();
       setFileList({ starprofile: [], starcover: [] });
       setCropData({ starprofile: null, starcover: null });
-      fetchStars(); // Refresh stars list
+      fetchStars();
     } catch (error) {
       console.error('Update failed', error);
       message.error('Update failed. Please try again.');
@@ -91,7 +91,7 @@ const StarUpdate = () => {
   const handleFileChange = (info, type) => {
     const updatedFileList = info.fileList.map((file) => ({
       ...file,
-      uid: file.uid || file.name, // Ensure each file has a unique `uid`
+      uid: file.uid || file.name,
     }));
     setFileList({ ...fileList, [type]: updatedFileList });
     if (info.fileList.length > 0) {
@@ -113,7 +113,7 @@ const StarUpdate = () => {
     } else {
       setIsProfileModalVisible(false);
     }
-    URL.revokeObjectURL(cropImage); // Revoke the object URL after cropping
+    URL.revokeObjectURL(cropImage);
     setCropImage(null);
   };
 
@@ -123,7 +123,7 @@ const StarUpdate = () => {
     } else {
       setIsProfileModalVisible(false);
     }
-    URL.revokeObjectURL(cropImage); // Revoke the object URL when canceling
+    URL.revokeObjectURL(cropImage);
     setCropImage(null);
   };
 
@@ -163,7 +163,7 @@ const StarUpdate = () => {
           <Dragger
             name="starcover"
             fileList={fileList.starcover}
-            beforeUpload={() => false} // prevent automatic upload
+            beforeUpload={() => false}
             onChange={(info) => handleFileChange(info, 'starcover')}
           >
             <p className="ant-upload-drag-icon">
@@ -176,7 +176,7 @@ const StarUpdate = () => {
           <Dragger
             name="starprofile"
             fileList={fileList.starprofile}
-            beforeUpload={() => false} // prevent automatic upload
+            beforeUpload={() => false}
             onChange={(info) => handleFileChange(info, 'starprofile')}
           >
             <p className="ant-upload-drag-icon">
@@ -196,14 +196,14 @@ const StarUpdate = () => {
         image={cropImage}
         onCancel={() => handleCancel('starcover')}
         onCrop={(blob) => handleCrop(blob, 'starcover')}
-        aspectRatio={16 / 9} // Aspect ratio for cover image
+        aspectRatio={16 / 9}
       />
       <ImageCropper
         visible={isProfileModalVisible}
         image={cropImage}
         onCancel={() => handleCancel('starprofile')}
         onCrop={(blob) => handleCrop(blob, 'starprofile')}
-        aspectRatio={2 / 3} // Aspect ratio for profile image
+        aspectRatio={2 / 3}
       />
     </div>
   );
