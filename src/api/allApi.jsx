@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL: 'https://stardb-api.vercel.app/api/',
+    baseURL: 'star-database-api.vercel.app/api/',
     // baseURL: 'http://localhost:1769/api/',
   });
 

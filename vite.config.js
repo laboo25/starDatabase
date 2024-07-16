@@ -2,7 +2,7 @@ export default {
   server: {
     proxy: {
       '/api': {
-        target: 'https://stardb-api.vercel.app',
+        target: 'star-database-api.vercel.app',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

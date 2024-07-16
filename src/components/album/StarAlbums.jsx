@@ -33,7 +33,7 @@ const StarAlbums = ({ starId }) => {
 
   const fetchAlbums = async () => {
     try {
-      const response = await axios.get('https://stardb-api.vercel.app/api/stars/albums/get-all-albums');
+      const response = await axios.get('star-database-api.vercel.app/api/stars/albums/get-all-albums');
       console.log('API response:', response.data);
 
       if (!Array.isArray(response.data)) {
