@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Modal, message, Button, Input, Form, Progress, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import ImageCropper from './ImageCropper';
+import imageCompression from 'browser-image-compression';
 
 const { Dragger } = Upload;
 
@@ -50,24 +51,45 @@ const CreateStar = () => {
     setStarprofile(fileList);
   };
 
-  const handleCrop = (blob, type) => {
-    const croppedFile = new File([blob], currentFile.name, { type: currentFile.type });
-    if (type === 'starcover') {
-      setStarcover([{ ...starcover[0], originFileObj: croppedFile }]);
-      setIsCoverModalVisible(false);
-    } else if (type === 'starprofile') {
-      setStarprofile([{ ...starprofile[0], originFileObj: croppedFile }]);
-      setIsProfileModalVisible(false);
+  const handleCrop = async (blob, type) => {
+    const file = new File([blob], currentFile.name, { type: currentFile.type });
+
+    let options;
+    if (type === 'cover') {
+      options = {
+        maxSizeMB: 0.017,
+        maxWidthOrHeight: 500,
+        useWebWorker: true,
+      };
+    } else if (type === 'profile') {
+      options = {
+        maxSizeMB: 0.09,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true,
+      };
     }
-    const preview = URL.createObjectURL(croppedFile);
-    setPreviewImage(preview);
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      if (type === 'cover') {
+        setStarcover([{ ...starcover[0], originFileObj: compressedFile }]);
+        setIsCoverModalVisible(false);
+      } else if (type === 'profile') {
+        setStarprofile([{ ...starprofile[0], originFileObj: compressedFile }]);
+        setIsProfileModalVisible(false);
+      }
+      const preview = URL.createObjectURL(compressedFile);
+      setPreviewImage(preview);
+    } catch (error) {
+      console.error('Error compressing image:', error);
+    }
   };
 
   const handleCancel = (type) => {
-    if (type === 'starcover') {
+    if (type === 'cover') {
       setIsCoverModalVisible(false);
       setStarcover([]);
-    } else if (type === 'starprofile') {
+    } else if (type === 'profile') {
       setIsProfileModalVisible(false);
       setStarprofile([]);
     }
@@ -217,15 +239,15 @@ const CreateStar = () => {
       <ImageCropper
         visible={isCoverModalVisible}
         image={previewImage}
-        onCancel={() => handleCancel('starcover')}
-        onCrop={(blob) => handleCrop(blob, 'starcover')}
+        onCancel={() => handleCancel('cover')}
+        onCrop={(blob) => handleCrop(blob, 'cover')}
         aspectRatio={16 / 9} // Aspect ratio for cover image
       />
       <ImageCropper
         visible={isProfileModalVisible}
         image={previewImage}
-        onCancel={() => handleCancel('starprofile')}
-        onCrop={(blob) => handleCrop(blob, 'starprofile')}
+        onCancel={() => handleCancel('profile')}
+        onCrop={(blob) => handleCrop(blob, 'profile')}
         aspectRatio={2 / 3} // Aspect ratio for profile image
       />
     </div>

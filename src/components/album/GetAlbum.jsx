@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ModalAlbum from './ModalAlbum';
 import './getAlbum.css';
+import { Pagination } from 'antd';
 
 const GetAlbum = () => {
   const [albums, setAlbums] = useState([]);
@@ -9,6 +10,8 @@ const GetAlbum = () => {
   const [isModalVisible, setIsModalVisible] = useState(localStorage.getItem('modalVisible') === 'true');
   const [sortField, setSortField] = useState('date'); // 'date' or 'name'
   const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50); // Set default page size to 40
 
   useEffect(() => {
     fetch('https://stardb-api.vercel.app/api/stars/albums/get-all-albums')
@@ -76,6 +79,13 @@ const GetAlbum = () => {
     setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
+  const paginatedAlbums = sortedAlbums.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   return (
     <div id='getAlbum' className=''>
       <div className='text-[#dfdfdf] text-[10px]'>{`${sortedAlbums.length} albums available`}</div>
@@ -91,7 +101,7 @@ const GetAlbum = () => {
         <p>Loading...</p>
       ) : (
         <div id='wrapper' className='w-full flex py-10 flex-wrap'>
-          {sortedAlbums.map(album => (
+          {paginatedAlbums.map(album => (
             <div key={album._id} className='album-container'>
               {album.albumimages.length > 0 && (
                 <div className='w-full aspect-video' onClick={() => openModal(album)}>
@@ -108,6 +118,14 @@ const GetAlbum = () => {
           ))}
         </div>
       )}
+      <Pagination
+        showSizeChanger
+        onShowSizeChange={handlePageChange}
+        onChange={handlePageChange}
+        defaultCurrent={currentPage}
+        total={sortedAlbums.length}
+        pageSize={pageSize}
+      />
       {selectedAlbum && (
         <ModalAlbum 
           visible={isModalVisible} 

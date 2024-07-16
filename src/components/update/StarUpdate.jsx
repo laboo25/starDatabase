@@ -4,6 +4,7 @@ import { Form, Input, Button, Select, Upload, message, Modal } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import ImageCropper from '../create/ImageCropper';
+import imageCompression from 'browser-image-compression';
 
 const { Dragger } = Upload;
 const { Option } = Select;
@@ -105,16 +106,38 @@ const StarUpdate = () => {
     }
   };
 
-  const handleCrop = (blob, type) => {
+  const handleCrop = async (blob, type) => {
     const file = new File([blob], `${type}.png`, { type: 'image/png' });
-    setCropData({ ...cropData, [type]: file });
+
+    let options;
     if (type === 'starcover') {
-      setIsCoverModalVisible(false);
-    } else {
-      setIsProfileModalVisible(false);
+      options = {
+        maxSizeMB: 0.017,
+        maxWidthOrHeight: 500,
+        useWebWorker: true,
+      };
+    } else if (type === 'starprofile') {
+      options = {
+        maxSizeMB: 0.09,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true,
+      };
     }
-    URL.revokeObjectURL(cropImage);
-    setCropImage(null);
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      setCropData({ ...cropData, [type]: compressedFile });
+
+      if (type === 'starcover') {
+        setIsCoverModalVisible(false);
+      } else {
+        setIsProfileModalVisible(false);
+      }
+      URL.revokeObjectURL(cropImage);
+      setCropImage(null);
+    } catch (error) {
+      console.error('Error compressing image:', error);
+    }
   };
 
   const handleCancel = (type) => {

@@ -17,7 +17,7 @@ const CreateAlbums = () => {
     useEffect(() => {
         const fetchStars = async () => {
             try {
-                const response = await axios.get('https://stardb-api.vercel.app/api/stars/create-star/get-all-star');
+                const response = await axios.get('http://localhost:1769/api/stars/create-star/get-all-star');
                 const sortedStars = response.data.sort((a, b) => a.starname.localeCompare(b.starname));
                 setStars(sortedStars);
             } catch (error) {
@@ -29,9 +29,13 @@ const CreateAlbums = () => {
 
     const onFinish = async (values) => {
         const formData = new FormData();
-        values.albums.forEach(file => {
+
+        // Sort files by name in ascending order
+        const sortedFiles = values.albums.sort((a, b) => a.name.localeCompare(b.name));
+        sortedFiles.forEach(file => {
             formData.append('albums', file.originFileObj);
         });
+
         formData.append('albumname', values.albumname);
 
         if (values.starname) {
@@ -44,7 +48,7 @@ const CreateAlbums = () => {
         setUploading(true);
 
         try {
-            await axios.post('https://stardb-api.vercel.app/api/stars/albums/create-album', formData, {
+            await axios.post('http://localhost:1769/api/stars/albums/create-album', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

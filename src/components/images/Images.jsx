@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FloatButton, Pagination, Select } from 'antd';
 import './images.css';
 import ImagesSidebar from '../sidebar/ImagesSidebar';
+
+const { Option } = Select;
 
 const Images = () => {
   const [images, setImages] = useState([]);
@@ -14,6 +17,7 @@ const Images = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedStarNames, setSelectedStarNames] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [pageSize, setPageSize] = useState(100); // Set default page size to 100
 
   useEffect(() => {
     fetchStarData();
@@ -105,7 +109,7 @@ const Images = () => {
     setSelectedTags(selected);
   };
 
-  const filteredImages = images.filter(item => 
+  const filteredImages = images.filter(item =>
     (selectedStarNames.length === 0 || selectedStarNames.includes(getStarName(item.starId))) &&
     (selectedTags.length === 0 || item.starImages.some(image => image.tags.some(tag => selectedTags.includes(tag))))
   );
@@ -113,10 +117,19 @@ const Images = () => {
   const starNamesWithImages = [...new Set(filteredImages.map(item => getStarName(item.starId)))];
   const allTags = [...new Set(images.flatMap(item => item.starImages.flatMap(image => image.tags)))];
 
+  const handlePageChange = (page, pageSize) => {
+    setPage(page);
+  };
+
+  const handlePageSizeChange = (current, size) => {
+    setPageSize(size);
+    setPage(1); // Reset to the first page when page size changes
+  };
+
   return (
     <div className='flex'>
       <div className={`transition-width duration-300 ${isSidebarOpen ? 'w-[300px]' : 'w-0'} bg-slate-600 h-screen overflow-hidden`}>
-        <ImagesSidebar 
+        <ImagesSidebar
           starNames={starNamesWithImages}
           tags={allTags}
           selectedStarNames={selectedStarNames}
@@ -164,8 +177,18 @@ const Images = () => {
           {loading && <div className='loading'>Loading...</div>}
           {!loading && !hasMore && images.length > 0 && <div className='no-more-data'>No more images found.</div>}
           {!loading && images.length === 0 && <div className='no-images'>No images found.</div>}
+          <Pagination
+            showSizeChanger
+            onShowSizeChange={handlePageSizeChange}
+            onChange={handlePageChange}
+            defaultCurrent={page}
+            total={filteredImages.length}
+            pageSize={pageSize}
+            pageSizeOptions={['20', '50', '100', '200']} // Optional: Customize available page sizes
+          />
         </div>
       </div>
+      <FloatButton.BackTop />
     </div>
   );
 };

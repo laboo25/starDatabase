@@ -25,7 +25,7 @@ const UpdateAll = () => {
       title: 'RowHead',
       dataIndex: 'key',
       rowScope: 'row',
-      size: 20
+      columnWidth: 20
     },
     {
       title: 'Profile',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './starAlbum.css';
 import axios from 'axios';
-import { Spin, message } from 'antd';
+import { Spin, message, Pagination } from 'antd';
 import ModalAlbum from './ModalAlbum';
 
 const StarAlbums = ({ starId }) => {
@@ -9,6 +9,8 @@ const StarAlbums = ({ starId }) => {
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(localStorage.getItem('modalVisible') === 'true');
   const [selectedAlbum, setSelectedAlbum] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50); // Set default page size to 40
 
   useEffect(() => {
     fetchAlbums();
@@ -67,6 +69,13 @@ const StarAlbums = ({ starId }) => {
     window.history.back();
   };
 
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
+  const paginatedAlbums = albums.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   const getTotalImages = () => {
     return albums.reduce((total, album) => total + album.albumimages.length, 0);
   };
@@ -89,7 +98,7 @@ const StarAlbums = ({ starId }) => {
         <p>albums & images</p>
       </div>
       <div className="album-gallery">
-        {albums.map(album => (
+        {paginatedAlbums.map(album => (
           <div key={album._id} id="album-card">
             <div onClick={() => showModal(album)} id='card'>
               <img
@@ -104,6 +113,14 @@ const StarAlbums = ({ starId }) => {
             </div>
           </div>
         ))}
+        <Pagination
+          showSizeChanger
+          onShowSizeChange={handlePageChange}
+          onChange={handlePageChange}
+          defaultCurrent={currentPage}
+          total={albums.length}
+          pageSize={pageSize}
+        />
         {selectedAlbum && (
           <ModalAlbum
             visible={isModalVisible}
