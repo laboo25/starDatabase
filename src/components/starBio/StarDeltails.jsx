@@ -33,13 +33,13 @@ const StarDetails = () => {
                     setStarName(JSON.parse(storedStarName));
                     setStarBio(JSON.parse(storedStarBio));
                 } else {
-                    const titleRes = await axios.get('star-database-api.vercel.app/api/stars/create-star/get-all-star');
+                    const titleRes = await axios.get('https://stardatabase-api-production.up.railway.app/api/stars/create-star/get-all-star');
                     const titleData = titleRes.data.find((item) => item._id === _id);
                     if (titleData) {
                         setStarName(titleData);
                         localStorage.setItem(`starName_${_id}`, JSON.stringify(titleData));
 
-                        const bioRes = await axios.get('star-database-api.vercel.app/api/stars/star-bio/get-all-bio');
+                        const bioRes = await axios.get('https://stardatabase-api-production.up.railway.app/api/stars/star-bio/get-all-bio');
                         const bioData = bioRes.data.find((bio) => bio.starname === _id);
                         if (bioData) {
                             setStarBio(bioData);
@@ -52,7 +52,7 @@ const StarDetails = () => {
                     }
                 }
 
-                const albumRes = await axios.get('star-database-api.vercel.app/api/stars/albums/get-all-albums');
+                const albumRes = await axios.get('https://stardatabase-api-production.up.railway.app/api/stars/albums/get-all-albums');
                 const albumData = albumRes.data.filter((albm) => albm.starname && albm.starname.includes(_id));
                 setAlbums(albumData);
 

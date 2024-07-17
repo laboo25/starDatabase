@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const axiosInstance = axios.create({
-  baseURL: 'star-database-api.vercel.app/api',
+  baseURL: 'https://stardatabase-api-production.up.railway.app/api',
 });
 
 axiosInstance.interceptors.response.use(

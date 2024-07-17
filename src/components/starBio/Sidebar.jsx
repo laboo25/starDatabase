@@ -11,7 +11,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [filteredStars, setFilteredStars] = useState([]);
 
   useEffect(() => {
-    axios.get('star-database-api.vercel.app/api/stars/create-star/get-all-star')
+    axios.get('https://stardatabase-api-production.up.railway.app/api/stars/create-star/get-all-star')
       .then((res) => {
         const filteredAndSortedStars = res.data
           .filter(star => star.starprofile) // Only include stars with a starprofile image

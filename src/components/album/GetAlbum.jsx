@@ -14,7 +14,7 @@ const GetAlbum = () => {
   const [pageSize, setPageSize] = useState(50); // Set default page size to 40
 
   useEffect(() => {
-    fetch('star-database-api.vercel.app/api/stars/albums/get-all-albums')
+    fetch('https://stardatabase-api-production.up.railway.app/api/stars/albums/get-all-albums')
       .then(response => response.json())
       .then(data => {
         setAlbums(data);
