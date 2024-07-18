@@ -156,7 +156,7 @@ const UpdateAll = () => {
             columns={columns}
             dataSource={filteredData}
             rowKey="key"
-            pagination={{ defaultPageSize: 25, showSizeChanger: true, pageSizeOptions: ['10', '20', '30'] }}
+            pagination={{ defaultPageSize: 25, showSizeChanger: true, pageSizeOptions: ['25', '50', '100'] }}
             defaultSortOrder={{ order: 'ascend', columnKey: 'name' }} // Set default sort order
             onChange={(pagination, filters, sorter) => {
               if (sorter.order === 'ascend') {
