@@ -4,7 +4,6 @@ import axios from 'axios';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import avater from '/avater.webp';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames';
 
 const { Search } = Input;
 
@@ -22,10 +21,11 @@ const UpdateAll = () => {
 
   const [columns, setColumns] = useState([
     {
-      title: 'RowHead',
-      dataIndex: 'key',
-      rowScope: 'row',
-      columnWidth: 20
+      title: 'Row Number',
+      dataIndex: 'index',
+      key: 'index',
+      render: (text, record, index) => index + 1,
+      width: 50,
     },
     {
       title: 'Profile',
@@ -69,7 +69,7 @@ const UpdateAll = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button onClick={() => showDeleteConfirm(record)}>delete</Button>
+          <Button danger onClick={() => showDeleteConfirm(record)}>delete</Button>
         </Space>
       ),
     },
@@ -81,6 +81,7 @@ const UpdateAll = () => {
         const response = await axios.get('https://stardatabase-api-production.up.railway.app/api/stars/create-star/get-all-star');
         const stars = response.data.map((star, index) => ({
           key: index + 1,
+          index: index + 1, // Assign a unique index to each row
           name: capitalize(star.starname),
           _id: star._id,
           cover: star.starcover,
@@ -155,7 +156,7 @@ const UpdateAll = () => {
           <Table
             columns={columns}
             dataSource={filteredData}
-            rowKey="key"
+            rowKey="index"
             pagination={{ defaultPageSize: 25, showSizeChanger: true, pageSizeOptions: ['25', '50', '100'] }}
             defaultSortOrder={{ order: 'ascend', columnKey: 'name' }} // Set default sort order
             onChange={(pagination, filters, sorter) => {
