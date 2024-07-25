@@ -214,7 +214,7 @@ const StarBio = ({ starName, starBio, navigate, sidebarVisible, setSidebarVisibl
                             </div>
                         </div>
                     ) : (
-                        <div id='cover' className='w-full flex items-center'>
+                        <div id='cover' className='w-full mx-auto items-center flex bg-slate-600'>
                             <div id='cover-wrapper' className='w-[250px] h-[250px] rounded-full'>
                                 {starName && <img src={starName.starcover} alt={`Cover for ${starName.starname}`} className='w-full h-full object-cover rounded-full' />}
                             </div>

@@ -98,7 +98,7 @@ const CreateStar = () => {
   const checkStarExists = async (name) => {
     try {
       setCheckingStarname(true);
-      const response = await axios.get('https://stardatabase-api-production.up.railway.app/api/stars/create-star/get-all-star');
+      const response = await axios.get('https://stardb-api.onrender.com//api/stars/create-star/get-all-star');
       const stars = response.data;
       const exists = stars.some((star) => star.starname.toLowerCase() === name.toLowerCase());
       setStarExists(exists);
@@ -146,7 +146,7 @@ const CreateStar = () => {
     console.log('Form Data:', formData);
 
     try {
-      const response = await axios.post('https://stardatabase-api-production.up.railway.app/api/stars/create-star/create-new-star', formData, {
+      const response = await axios.post('https://stardb-api.onrender.com//api/stars/create-star/create-new-star', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

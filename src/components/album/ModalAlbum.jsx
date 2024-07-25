@@ -27,7 +27,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
   useEffect(() => {
     const fetchStarnamesAndTags = async () => {
       try {
-        const response = await axios.get('https://stardatabase-api-production.up.railway.app/api/stars/create-star/get-all-star');
+        const response = await axios.get('https://stardb-api.onrender.com//api/stars/create-star/get-all-star');
         const fetchedStarnames = response.data.map(star => star.starname).sort();
         setStarnames(fetchedStarnames);
 
@@ -85,7 +85,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
       const updatedImages = [...images];
       updatedImages[selectedImageIndex].tags = newTags.sort();
 
-      await axios.put(`https://stardatabase-api-production.up.railway.app/api/stars/albums/update/${albumId}`, {
+      await axios.put(`https://stardb-api.onrender.com//api/stars/albums/update/${albumId}`, {
         albumname,
         starname: updatedImages[selectedImageIndex].starname,
         albumimages: updatedImages
@@ -111,7 +111,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
         formData.append('newImages', file.originFileObj);
       });
 
-      await axios.put(`https://stardatabase-api-production.up.railway.app/api/stars/albums/update/${albumId}`, formData, {
+      await axios.put(`https://stardb-api.onrender.com//api/stars/albums/update/${albumId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },

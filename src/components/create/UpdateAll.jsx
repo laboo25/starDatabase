@@ -78,7 +78,7 @@ const UpdateAll = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://stardatabase-api-production.up.railway.app/api/stars/create-star/get-all-star');
+        const response = await axios.get('https://stardb-api.onrender.com//api/stars/create-star/get-all-star');
         const stars = response.data.map((star, index) => ({
           key: index + 1,
           index: index + 1, // Assign a unique index to each row
@@ -124,7 +124,7 @@ const UpdateAll = () => {
   const handleOk = async () => {
     try {
       // Make API call to delete the star
-      await axios.delete(`https://stardatabase-api-production.up.railway.app/api/stars/create-star/delete-star/${deleteRecord._id}`);
+      await axios.delete(`https://stardb-api.onrender.com//api/stars/create-star/delete-star/${deleteRecord._id}`);
       // Remove the deleted record from data and filteredData
       const newData = data.filter(item => item._id !== deleteRecord._id);
       setData(newData);
