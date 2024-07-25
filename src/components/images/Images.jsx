@@ -31,7 +31,7 @@ const Images = () => {
 
   const fetchStarData = async () => {
     try {
-      const starsResponse = await axios.get('https://stardb-api.onrender.com//api/stars/create-star/get-all-star');
+      const starsResponse = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
       const starData = starsResponse.data;
       const starMap = starData.reduce((map, star) => {
         map[star._id] = star.starname;
@@ -48,7 +48,7 @@ const Images = () => {
     if (loading) return;
     setLoading(true);
     try {
-      const imagesResponse = await axios.get('https://stardb-api.onrender.com//api/stars/images/get-all-images', {
+      const imagesResponse = await axios.get('https://stardb-api.onrender.com/api/stars/images/get-all-images', {
         params: { page }
       });
       const newImages = imagesResponse.data;

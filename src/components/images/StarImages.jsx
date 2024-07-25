@@ -15,8 +15,8 @@ const StarImages = ({ starId }) => {
   const fetchData = async () => {
     try {
       const [starsResponse, imagesResponse] = await Promise.all([
-        axios.get('https://stardb-api.onrender.com//api/stars/create-star/get-all-star'),
-        axios.get('https://stardb-api.onrender.com//api/stars/images/get-all-images')
+        axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star'),
+        axios.get('https://stardb-api.onrender.com/api/stars/images/get-all-images')
       ]);
 
       const starsData = starsResponse.data;

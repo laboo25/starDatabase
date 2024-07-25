@@ -21,7 +21,7 @@ const Navbar = () => {
     const fetchSuggestions = async () => {
         if (searchQuery) {
             try {
-                const response = await axios.get('https://stardb-api.onrender.com//api/stars/create-star/get-all-star');
+                const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
                 const filteredData = response.data.filter(star => 
                     star.starname.toLowerCase().includes(searchQuery.toLowerCase())
                 );

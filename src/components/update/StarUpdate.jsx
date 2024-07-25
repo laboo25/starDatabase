@@ -34,7 +34,7 @@ const StarUpdate = () => {
 
   const fetchStars = async () => {
     try {
-      const response = await axios.get('https://stardb-api.onrender.com//api/stars/create-star/get-all-star');
+      const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
       const sortedStars = response.data.sort((a, b) => a.starname.localeCompare(b.starname));
       setStars(sortedStars);
     } catch (error) {
@@ -67,7 +67,7 @@ const StarUpdate = () => {
 
     try {
       const response = await axios.put(
-        `https://stardb-api.onrender.com//api/stars/create-star/update-star/${selectedStar._id}`,
+        `https://stardb-api.onrender.com/api/stars/create-star/update-star/${selectedStar._id}`,
         formData,
         {
           headers: {
