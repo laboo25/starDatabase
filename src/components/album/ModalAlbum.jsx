@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './modalAlbum.css';
-import axios from 'axios';
-import { Select, Input, Modal, Button, Upload, Progress } from 'antd'; // Import Progress component from Ant Design
+import axiosInstance from '../../app/axiosInstance'; // Importing the axios instance
+import { Select, Input, Modal, Button, Upload, Progress } from 'antd';
 import category from '../../category.json';
 import { HiDotsVertical } from "react-icons/hi";
 
@@ -27,7 +27,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
   useEffect(() => {
     const fetchStarnamesAndTags = async () => {
       try {
-        const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+        const response = await axiosInstance.get('/stars/create-star/get-all-star');
         const fetchedStarnames = response.data.map(star => star.starname).sort();
         setStarnames(fetchedStarnames);
 
@@ -85,7 +85,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
       const updatedImages = [...images];
       updatedImages[selectedImageIndex].tags = newTags.sort();
 
-      await axios.put(`https://stardb-api.onrender.com/api/stars/albums/update/${albumId}`, {
+      await axiosInstance.put(`/stars/albums/update/${albumId}`, {
         albumname,
         starname: updatedImages[selectedImageIndex].starname,
         albumimages: updatedImages
@@ -111,7 +111,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
         formData.append('newImages', file.originFileObj);
       });
 
-      await axios.put(`https://stardb-api.onrender.com/api/stars/albums/update/${albumId}`, formData, {
+      await axiosInstance.put(`/stars/albums/update/${albumId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -121,7 +121,6 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
         }
       });
 
-      // Close modal after updating
       setEditAlbumModalVisible(false);
       setUploadProgress(0);
     } catch (error) {
@@ -157,7 +156,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
     <div className='modal-main'>
       <div className={`modal-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
         <div id='filter-option'>
-          <div id=''>
+          <div>
             <p>Filter by Tags</p>
             <div id='tags-wrapper'>
               {tags.map(tag => (
@@ -193,7 +192,7 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
                     ))}
                   </ul>
                 </div>
-                <div className='edit-modal absolute bottom-0 right-0'>
+                <div className='edit-modal absolute bottom-[-20px] right-0'>
                   <button className='edit-btn' onClick={() => toggleImageOptions(index)}><HiDotsVertical /></button>
                   {selectedImageIndex === index && (
                     <div className="options-menu">

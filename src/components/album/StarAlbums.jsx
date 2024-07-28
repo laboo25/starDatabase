@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './starAlbum.css';
-import axios from 'axios';
+import axiosInstance from '../../app/axiosInstance'; // Importing the axios instance
 import { Spin, message, Pagination } from 'antd';
 import ModalAlbum from './ModalAlbum';
 
@@ -10,7 +10,7 @@ const StarAlbums = ({ starId }) => {
   const [isModalVisible, setIsModalVisible] = useState(localStorage.getItem('modalVisible') === 'true');
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(50); // Set default page size to 40
+  const [pageSize, setPageSize] = useState(50); // Set default page size to 50
 
   useEffect(() => {
     fetchAlbums();
@@ -33,7 +33,7 @@ const StarAlbums = ({ starId }) => {
 
   const fetchAlbums = async () => {
     try {
-      const response = await axios.get('https://stardb-api.onrender.com/api/stars/albums/get-all-albums');
+      const response = await axiosInstance.get('/stars/albums/get-all-albums');
       console.log('API response:', response.data);
 
       if (!Array.isArray(response.data)) {
@@ -128,6 +128,9 @@ const StarAlbums = ({ starId }) => {
             length={selectedAlbum.albumimages.length}
             images={selectedAlbum.albumimages}
             onClose={handleCancel}
+            albumId={selectedAlbum._id} // Pass albumId to ModalAlbum
+            sortField={'name'} // Example sort field
+            sortOrder={'ascend'} // Example sort order
           />
         )}
       </div>

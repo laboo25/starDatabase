@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ModalAlbum from './ModalAlbum';
 import './getAlbum.css';
 import { Pagination } from 'antd';
+import axiosInstance from '../../app/axiosInstance';  // Import the axios instance
 
 const GetAlbum = () => {
   const [albums, setAlbums] = useState([]);
@@ -11,14 +12,13 @@ const GetAlbum = () => {
   const [sortField, setSortField] = useState('date'); // 'date' or 'name'
   const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(50); // Set default page size to 40
+  const [pageSize, setPageSize] = useState(50); // Set default page size to 50
 
   useEffect(() => {
-    fetch('https://stardb-api.onrender.com/api/stars/albums/get-all-albums')
-      .then(response => response.json())
-      .then(data => {
-        setAlbums(data);
-        setSortedAlbums(data);
+    axiosInstance.get('/stars/albums/get-all-albums')
+      .then(response => {
+        setAlbums(response.data);
+        setSortedAlbums(response.data);
       })
       .catch(error => console.error('Error fetching albums:', error));
   }, []);

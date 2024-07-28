@@ -81,7 +81,12 @@ img {
   width: 100%;
   height: 100%;
 }
-
+.card .edit-modal {
+  display: none !important;
+}
+.card:hover .edit-modal {
+  display: block !important;
+}
 .custom-modal-content {
   background: white;
   width: 100%;

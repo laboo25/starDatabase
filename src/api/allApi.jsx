@@ -1,10 +1,38 @@
-import axios from 'axios'
+// src/axiosInstance.js
+import axios from 'axios';
 
-const instance = axios.create({
-    baseURL: 'https://stardb-api.onrender.com/api/',
-    // baseURL: 'http://localhost:1769/api/',
+const baseURLs = [
+  'https://stardb-api.onrender.com/api',
+  'https://star-database-api.up.railway.app/api',
+  'https://stardb-api.vercel.app/api'
+];
+
+const createAxiosInstance = (baseURL) => {
+  return axios.create({
+    baseURL: baseURL,
+    timeout: 1000,
+    headers: { 'Authorization': 'Bearer yourToken' } // Replace with your token or any other headers
   });
+};
 
+const axiosInstances = baseURLs.map(url => createAxiosInstance(url));
+
+const makeRequestWithRetries = async (config, retries = 0) => {
+  try {
+    const response = await axiosInstances[retries].request(config);
+    return response;
+  } catch (error) {
+    if (retries < axiosInstances.length - 1) {
+      return makeRequestWithRetries(config, retries + 1);
+    } else {
+      throw error;
+    }
+  }
+};
+
+export default makeRequestWithRetries;
+
+  
   //  CREATE STAR API
   export const createStar = async (data) => {
     try {
