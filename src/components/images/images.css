@@ -29,7 +29,7 @@
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     justify-content: center;
     grid-gap: 15px;
     overflow: auto;
@@ -47,7 +47,7 @@
 
 /* Square box container */
 #images-wrapper #card #squire-box {
-    height: 200px;
+    max-height: 230px;
     aspect-ratio: 1;
     
     padding: 5px;
@@ -95,13 +95,13 @@
 
     /* Adjust padding for smaller screens */
     #image-main {
-        padding: 50px 20px;
+        padding: 50px 0px;
     }
 
     /* Adjust grid for smaller screens */
     #images-wrapper {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        padding: 0 0px;
+        padding: 0 20px;
     }
 
     /* Adjust card size for smaller screens */
@@ -112,6 +112,6 @@
 
     /* Adjust square box height for smaller screens */
     #images-wrapper #card #squire-box {
-        height: 155px;
+        height: 150px !important;
     }
 }
