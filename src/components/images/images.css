@@ -101,7 +101,7 @@
     /* Adjust grid for smaller screens */
     #images-wrapper {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        padding: 0 20px;
+        padding: 0 0px;
     }
 
     /* Adjust card size for smaller screens */
