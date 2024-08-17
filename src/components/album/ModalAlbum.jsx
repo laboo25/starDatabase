@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './modalAlbum.css';
-import axiosInstance from '../../app/axiosInstance'; // Importing the axios instance
-import { Select, Input, Modal, Button, Upload, Progress } from 'antd';
+import axiosInstance from '../../app/axiosInstance';
+import { Select, Input, Modal, Button, Upload, Progress, message, Popconfirm } from 'antd';
 import category from '../../category.json';
 import { HiDotsVertical } from "react-icons/hi";
 
@@ -93,8 +93,10 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
 
       setEditTagsModalVisible(false);
       setTags([...new Set(newTags)].sort());
+      message.success('Tags updated successfully!');
     } catch (error) {
       console.error('Error saving tags:', error);
+      message.error('Failed to save tags.');
     }
   };
 
@@ -106,25 +108,34 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
     try {
       const formData = new FormData();
       formData.append('albumname', editAlbumname);
-      formData.append('starname', JSON.stringify(editStarname));
+      formData.append('starname', JSON.stringify(editStarname));  // Ensure this is an array of IDs
+
       fileList.forEach(file => {
-        formData.append('newImages', file.originFileObj);
+        formData.append('albumimages', file.originFileObj);
       });
 
-      await axiosInstance.put(`/stars/albums/update/${albumId}`, formData, {
+      const response = await axiosInstance.put(`/stars/albums/update/${albumId}`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
         },
         onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setUploadProgress(percentCompleted);
+          const { loaded, total } = progressEvent;
+          const percent = Math.floor((loaded / total) * 100);
+          setUploadProgress(percent);
         }
       });
 
-      setEditAlbumModalVisible(false);
-      setUploadProgress(0);
+      if (response.status === 200) {
+        message.success('Album updated successfully!');
+        onClose();  // Close the modal after a successful update
+      } else {
+        message.error('Failed to update album.');
+      }
     } catch (error) {
-      console.error('Error updating album:', error);
+      console.error('Error updating album:', error.response?.data || error.message);
+      message.error('Failed to update album.');
+    } finally {
+      setUploadProgress(0);
     }
   };
 
@@ -142,6 +153,34 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
 
   const handleUploadChange = ({ fileList }) => {
     setFileList(fileList);
+  };
+
+  const deleteImage = async (index) => {
+    try {
+      const updatedImages = images.filter((_, i) => i !== index);
+
+      await axiosInstance.put(`/stars/albums/update/${albumId}`, {
+        albumname,
+        albumimages: updatedImages,
+      });
+
+      message.success('Image deleted successfully!');
+      setSelectedImageIndex(null);  // Reset the selected image index
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      message.error('Failed to delete image.');
+    }
+  };
+
+  const deleteAlbum = async () => {
+    try {
+      await axiosInstance.delete(`/stars/albums/delete-album/${albumId}`);
+      message.success('Album deleted successfully!');
+      onClose();  // Close the modal after deletion
+    } catch (error) {
+      console.error('Error deleting album:', error);
+      message.error('Failed to delete album.');
+    }
   };
 
   const filteredImages = images.filter(image => {
@@ -177,7 +216,17 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
         <div className="custom-modal-content">
           <div className='pb-10 text-[20px]'>
             <h3 draggable={false}>{albumname} <span className='text-red-500'>{`x${length}`}</span></h3>
-            <span><button onClick={handleEditAlbumname}>edit</button></span>
+            <span>
+              <button onClick={handleEditAlbumname}>Edit</button>
+              <Popconfirm
+                title="Are you sure you want to delete this album?"
+                onConfirm={deleteAlbum}
+                okText="Yes"
+                cancelText="No"
+              >
+                <button>Delete Album</button>
+              </Popconfirm>
+            </span>
           </div>
           <div className="image-grid card">
             {filteredImages.map((image, index) => (
@@ -197,7 +246,14 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
                   {selectedImageIndex === index && (
                     <div className="options-menu">
                       <button className='edit-tags' onClick={() => openEditTagsModal(image.tags)}>Edit</button>
-                      <button>Delete</button>
+                      <Popconfirm
+                        title="Are you sure you want to delete this image?"
+                        onConfirm={() => deleteImage(index)}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <button>Delete</button>
+                      </Popconfirm>
                     </div>
                   )}
                 </div>
@@ -236,38 +292,42 @@ const ModalAlbum = ({ visible, albumname, length, images, onClose, albumId, sort
       <Modal
         title="Edit Album"
         open={editAlbumModalVisible}
-        onOk={handleEditAlbum}
         onCancel={handleCancelEditAlbum}
+        footer={[
+          <Button key="cancel" onClick={handleCancelEditAlbum}>Cancel</Button>,
+          <Button key="save" type="primary" onClick={handleEditAlbum}>Save</Button>
+        ]}
       >
-        <Input value={editAlbumname} onChange={handleAlbumnameChange} />
+        <Input
+          placeholder="Album Name"
+          value={editAlbumname}
+          onChange={handleAlbumnameChange}
+          style={{ marginBottom: '20px' }}
+        />
         <Select
           mode="multiple"
+          placeholder="Select Starname"
           value={editStarname}
           onChange={handleStarnameSelectChange}
-          style={{ width: '100%' }}
-          placeholder="Select star names"
+          style={{ marginBottom: '20px', width: '100%' }}
         >
           {starnames.map((starname, index) => (
-            <Option key={index} value={starname}>
-              {starname}
-            </Option>
+            <Option key={index} value={starname}>{starname}</Option>
           ))}
         </Select>
         <Dragger
           fileList={fileList}
-          onChange={handleUploadChange}
           beforeUpload={() => false}
+          onChange={handleUploadChange}
           multiple
         >
           <p className="ant-upload-drag-icon">
-            <i className="fas fa-cloud-upload-alt"></i>
+            <i className="fa fa-cloud-upload"></i>
           </p>
           <p className="ant-upload-text">Click or drag files to this area to upload</p>
-          <p className="ant-upload-hint">Support for multiple file upload.</p>
-          {uploadProgress > 0 && (
-            <Progress percent={uploadProgress} />
-          )}
+          <p className="ant-upload-hint">Support for a single or bulk upload.</p>
         </Dragger>
+        {uploadProgress > 0 && <Progress percent={uploadProgress} />}
       </Modal>
     </div>
   );
