@@ -205,7 +205,11 @@ const Images = () => {
               ))
             )}
           </div>
-          {loading && <div className='loading'>Loading...</div>}
+          {loading && 
+      <div className='w-full flex justify-center py-5'>
+          <div className="loader">
+          </div>
+        </div>}
           {!loading && !hasMore && images.length > 0 && <div className='no-more-data'>No more images found.</div>}
           {!loading && images.length === 0 && <div className='no-images'>No images found.</div>}
           <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>

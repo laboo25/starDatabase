@@ -81,7 +81,12 @@ const StarAlbums = ({ starId }) => {
   };
 
   if (loading) {
-    return <Spin size="large" className="loading-spinner" />;
+    return (
+      <div className='w-full flex justify-center py-5'>
+          <div className="loader">
+          </div>
+        </div>
+    )
   }
 
   if (albums.length === 0) {

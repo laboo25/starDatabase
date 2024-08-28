@@ -120,7 +120,10 @@ const GetAlbum = () => {
         </button>
       </div>
       {loading ? (
-        <p>Loading...</p>
+        <div className='w-full h-screen absolute top-0 left-0 z-10 flex justify-center items-center'>
+          <div className="loader">
+          </div>
+        </div>
       ) : (
         <>
           <div id='wrapper' className='w-full flex py-10 flex-wrap'>
