@@ -1,7 +1,7 @@
-.main-app::-webkit-scrollbar {
+*::-webkit-scrollbar {
     display: none; 
   }
-  .main-app {
+* {
     scrollbar-width: none;
     -ms-overflow-style: none;  
   }  
