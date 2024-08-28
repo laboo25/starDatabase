@@ -33,9 +33,9 @@ html::-webkit-scrollbar-track {
 }
 
 html::-webkit-scrollbar-thumb {
-    background: #888; /* Color of the scrollbar thumb */
-    border-radius: 10px; /* Adjust the radius to change the rounded corners */
-    padding: 5px; /* Padding inside the scrollbar thumb */
+    background: #888; 
+    border-radius: 10px; 
+    padding: 5px;
 }
 
 html::-webkit-scrollbar-thumb:hover {

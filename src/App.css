@@ -1,7 +1,7 @@
-*::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
+.main-app::-webkit-scrollbar {
+    display: none; 
   }
-  * {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
+  .main-app {
+    scrollbar-width: none;
+    -ms-overflow-style: none;  
   }  

@@ -17,7 +17,7 @@ const Images = () => {
   const [selectedStarNames, setSelectedStarNames] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedLogic, setSelectedLogic] = useState('AND'); // State for logical operation
-  const [pageSize, setPageSize] = useState(100); // Set default page size to 100
+  const [pageSize, setPageSize] = useState(50); // Set default page size to 50
 
   useEffect(() => {
     fetchStarData();
@@ -79,14 +79,17 @@ const Images = () => {
 
   const handleStarNameChange = (selected) => {
     setSelectedStarNames(selected);
+    setPage(1); // Reset to the first page when filters change
   };
 
   const handleTagChange = (selected) => {
     setSelectedTags(selected);
+    setPage(1); // Reset to the first page when filters change
   };
 
   const handleLogicChange = (logic) => {
     setSelectedLogic(logic);
+    setPage(1); // Reset to the first page when filters change
   };
 
   const filterImagesByTags = (images, tags, logic) => {
@@ -109,6 +112,8 @@ const Images = () => {
   const filteredImages = filterImagesByTags(images.filter(item =>
     selectedStarNames.length === 0 || selectedStarNames.includes(getStarName(item.starId))
   ), selectedTags, selectedLogic);
+
+  const paginatedImages = filteredImages.slice((page - 1) * pageSize, page * pageSize);
 
   const starNamesWithImages = [...new Set(images.map(item => getStarName(item.starId)))];
   const allTags = [...new Set(images.flatMap(item => item.starImages.flatMap(image => image.tags)))];
@@ -150,7 +155,7 @@ const Images = () => {
         <div id='image-main'>
           {error && <div className='error'>{error}</div>}
           <div id='images-wrapper'>
-            {filteredImages.map((item, itemIndex) =>
+            {paginatedImages.map((item, itemIndex) =>
               item.starImages.map((image, imageIndex) => (
                 <div key={`${item._id}-${image._id}`} className='card' id='card'>
                   <div id='options' className='relative'>
