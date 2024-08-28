@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Upload, message, Select, Progress } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import axiosInstance from '../../app/axiosInstance';
 import category from '../../category.json';
 
 const { Option } = Select;
@@ -17,7 +17,7 @@ const CreateAlbums = () => {
     useEffect(() => {
         const fetchStars = async () => {
             try {
-                const response = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+                const response = await axiosInstance.get('/stars/create-star/get-all-star'); // Use axiosInstance
                 const sortedStars = response.data.sort((a, b) => a.starname.localeCompare(b.starname));
                 setStars(sortedStars);
             } catch (error) {
@@ -48,7 +48,7 @@ const CreateAlbums = () => {
         setUploading(true);
 
         try {
-            await axios.post('https://stardb-api.onrender.com/api/stars/albums/create-album', formData, {
+            await axiosInstance.post('/stars/albums/create-album', formData, { // Use axiosInstance
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

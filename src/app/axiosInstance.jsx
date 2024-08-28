@@ -4,9 +4,8 @@ import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const baseURLs = [
+  'https://stardb-api.vercel.app/api',
   'https://stardb-api.onrender.com/api',
-  'https://star-database-api.up.railway.app/api',
-  'https://stardb-api.vercel.app/api'
 ];
 
 // Function to get a random base URL

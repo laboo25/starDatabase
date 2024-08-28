@@ -10,7 +10,9 @@
 * {
     font-family: SFPRODISPLAYREGULAR, sans-serif;
 }
-
+html {
+    scroll-behavior: smooth
+}
 
 @tailwind base;
 @tailwind components;

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import './images.css';
-import axios from 'axios';
 import { Spin, message } from 'antd';
+import axiosInstance from '../..//app/axiosInstance';
+
 
 const StarImages = ({ starId }) => {
   const [loading, setLoading] = useState(true);
@@ -15,8 +16,8 @@ const StarImages = ({ starId }) => {
   const fetchData = async () => {
     try {
       const [starsResponse, imagesResponse] = await Promise.all([
-        axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star'),
-        axios.get('https://stardb-api.onrender.com/api/stars/images/get-all-images')
+        axiosInstance.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star'),
+        axiosInstance.get('https://stardb-api.onrender.com/api/stars/images/get-all-images')
       ]);
 
       const starsData = starsResponse.data;

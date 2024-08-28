@@ -20,6 +20,8 @@ import Search from "./components/search/Search";
 import Images from "./components/images/Images";
 import GetAlbum from "./components/album/GetAlbum";
 import UpdateAlbum from "./components/create/UpdateAlbum";
+import { Provider } from "react-redux";
+import store from "./app/store";
 
 Fancybox.bind('[data-fancybox="gallery"]', {
   Carousel: {
@@ -97,7 +99,8 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
 );

@@ -66,7 +66,7 @@ const StarBio = ({ starName, starBio, navigate, sidebarVisible, setSidebarVisibl
                         <div id='bio-page' className='w-full flex '>
                             
                             <div className='profile'>
-                                {starName && <img src={starName.starprofile} alt={starName.starname} draggable={false} />}
+                                {starName && <img src={starName.starprofile} alt={starName.starname} draggable={false} loading='lazy'/>}
                             </div>
                             <div className='bio'>
                                 {starName && <h2 className='title'>{starName.starname}</h2>}
@@ -214,7 +214,7 @@ const StarBio = ({ starName, starBio, navigate, sidebarVisible, setSidebarVisibl
                             </div>
                         </div>
                     ) : (
-                        <div id='cover' className='w-full mx-auto items-center flex bg-slate-600'>
+                        <div id='cover' className='w-full mx-auto items-center flex '>
                             <div id='cover-wrapper' className='w-[250px] h-[250px] rounded-full'>
                                 {starName && <img src={starName.starcover} alt={`Cover for ${starName.starname}`} className='w-full h-full object-cover rounded-full' />}
                             </div>

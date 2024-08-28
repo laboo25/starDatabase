@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FloatButton, Pagination, Select } from 'antd';
 import './images.css';
 import ImagesSidebar from '../sidebar/ImagesSidebar';
+import axiosInstance from '../../app/axiosInstance'; // Import axiosInstance
+import { TfiLayoutGrid3Alt } from "react-icons/tfi";
+import { TfiLayoutGrid4Alt } from "react-icons/tfi";
 
 const { Option } = Select;
 
@@ -17,6 +19,7 @@ const Images = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedStarNames, setSelectedStarNames] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedLogic, setSelectedLogic] = useState('AND'); // State for logical operation
   const [pageSize, setPageSize] = useState(100); // Set default page size to 100
 
   useEffect(() => {
@@ -31,7 +34,7 @@ const Images = () => {
 
   const fetchStarData = async () => {
     try {
-      const starsResponse = await axios.get('https://stardb-api.onrender.com/api/stars/create-star/get-all-star');
+      const starsResponse = await axiosInstance.get('/stars/create-star/get-all-star');
       const starData = starsResponse.data;
       const starMap = starData.reduce((map, star) => {
         map[star._id] = star.starname;
@@ -48,7 +51,7 @@ const Images = () => {
     if (loading) return;
     setLoading(true);
     try {
-      const imagesResponse = await axios.get('https://stardb-api.onrender.com/api/stars/images/get-all-images', {
+      const imagesResponse = await axiosInstance.get('/stars/images/get-all-images', {
         params: { page }
       });
       const newImages = imagesResponse.data;
@@ -109,12 +112,32 @@ const Images = () => {
     setSelectedTags(selected);
   };
 
-  const filteredImages = images.filter(item =>
-    (selectedStarNames.length === 0 || selectedStarNames.includes(getStarName(item.starId))) &&
-    (selectedTags.length === 0 || item.starImages.some(image => image.tags.some(tag => selectedTags.includes(tag))))
-  );
+  const handleLogicChange = (logic) => {
+    setSelectedLogic(logic);
+  };
 
-  const starNamesWithImages = [...new Set(filteredImages.map(item => getStarName(item.starId)))];
+  const filterImagesByTags = (images, tags, logic) => {
+    if (tags.length === 0) return images;
+
+    return images.filter(item => {
+      const itemTags = item.starImages.flatMap(image => image.tags);
+
+      if (logic === 'AND') {
+        return tags.every(tag => itemTags.includes(tag));
+      } else if (logic === 'OR') {
+        return tags.some(tag => itemTags.includes(tag));
+      } else if (logic === 'NOT') {
+        return tags.every(tag => !itemTags.includes(tag));
+      }
+      return true;
+    });
+  };
+
+  const filteredImages = filterImagesByTags(images.filter(item =>
+    selectedStarNames.length === 0 || selectedStarNames.includes(getStarName(item.starId))
+  ), selectedTags, selectedLogic);
+
+  const starNamesWithImages = [...new Set(images.map(item => getStarName(item.starId)))];
   const allTags = [...new Set(images.flatMap(item => item.starImages.flatMap(image => image.tags)))];
 
   const handlePageChange = (page, pageSize) => {
@@ -134,14 +157,22 @@ const Images = () => {
           tags={allTags}
           selectedStarNames={selectedStarNames}
           selectedTags={selectedTags}
+          selectedLogic={selectedLogic} // Pass down the selected logic state
           onStarNameChange={handleStarNameChange}
           onTagChange={handleTagChange}
+          onLogicChange={handleLogicChange} // Pass down the logic change handler
         />
       </div>
-      <div className='flex-1'>
-        <button onClick={toggleSidebar} className='m-2 p-2 text-black text-[30px]'>
+      <div className='flex-1 '>
+        <div className='w-full flex justify-between px-2 '>
+        <button onClick={toggleSidebar} className=' p-2 text-black text-[30px]'>
           ◧
         </button>
+        <div id='layouts' className='w-[30px] h-full flex items-center justify-center'>
+          <button ><TfiLayoutGrid4Alt className='text-[30px]'/></button>
+          <button><TfiLayoutGrid3Alt className='text-[26px]'/></button>
+        </div>
+        </div>
         <div id='image-main'>
           {error && <div className='error'>{error}</div>}
           <div id='images-wrapper'>
@@ -177,15 +208,19 @@ const Images = () => {
           {loading && <div className='loading'>Loading...</div>}
           {!loading && !hasMore && images.length > 0 && <div className='no-more-data'>No more images found.</div>}
           {!loading && images.length === 0 && <div className='no-images'>No images found.</div>}
-          <Pagination
-            showSizeChanger
-            onShowSizeChange={handlePageSizeChange}
-            onChange={handlePageChange}
-            defaultCurrent={page}
-            total={filteredImages.length}
-            pageSize={pageSize}
-            pageSizeOptions={['20', '50', '100', '200']} // Optional: Customize available page sizes
-          />
+          <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+            {filteredImages.length > pageSize && (
+              <Pagination
+                showSizeChanger
+                onShowSizeChange={handlePageSizeChange}
+                onChange={handlePageChange}
+                defaultCurrent={page}
+                total={filteredImages.length}
+                pageSize={pageSize}
+                pageSizeOptions={['20', '50', '100', '200']}
+              />
+            )}
+          </div>
         </div>
       </div>
       <FloatButton.BackTop />
