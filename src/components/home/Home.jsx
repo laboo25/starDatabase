@@ -9,6 +9,7 @@ const Home = () => {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(50);
+    const [loading, setLoading] = useState(true);
 
     const location = useLocation();
 
@@ -32,6 +33,8 @@ const Home = () => {
                 }
             } catch (error) {
                 setError(error);
+            } finally {
+                setLoading(false); // Data fetching is complete, stop loading
             }
         };
 
@@ -93,9 +96,14 @@ const Home = () => {
         <>
             <div>
                 <div id='home'>
+                    {!loading && starTitles.length > 0 && (
+                        <div id="loadingbar" className='w-full h-[2px] absolute top-0 left-0 z-10' style={{background: 'linear-gradient(87deg, rgba(102,251,12,1) 0%, rgba(254,191,0,1) 20%, rgba(254,10,0,1) 40%, rgba(255,107,1,1) 60%, rgba(12,245,242,1) 80%, rgba(154,37,255,1) 100%)'}}></div>
+                    )}
                     <div className='wrapper'>
                         {error ? (
                             <div className="error">An error occurred: {error.message}</div>
+                        ) : loading ? (
+                            <div className="loading">Loading data...</div>
                         ) : (
                             currentStarTitles.map((star, index) => (
                                 <div className='card' key={index}>
@@ -113,15 +121,15 @@ const Home = () => {
                         )}
                     </div>
                     <div id='home-pagination'>
-                    <Pagination 
-                        current={currentPage} 
-                        total={starTitles.length} 
-                        pageSize={itemsPerPage} 
-                        showSizeChanger
-                        pageSizeOptions={['10', '50', '100']}
-                        onChange={handlePageChange} 
-                        onShowSizeChange={handlePageSizeChange}
-                    />
+                        <Pagination 
+                            current={currentPage} 
+                            total={starTitles.length} 
+                            pageSize={itemsPerPage} 
+                            showSizeChanger
+                            pageSizeOptions={['10', '50', '100']}
+                            onChange={handlePageChange} 
+                            onShowSizeChange={handlePageSizeChange}
+                        />
                     </div>
                 </div>
             </div>
