@@ -7,7 +7,7 @@ export const getStars = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await apiGetStars();
-      return response.data; // Assuming response has a `data` property with the star list
+      return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data || "An error occurred");
     }
@@ -20,7 +20,7 @@ export const createStar = createAsyncThunk(
   async (newStar, { rejectWithValue }) => {
     try {
       const response = await apiCreateStar(newStar);
-      return response.data; // Assuming response has a `data` property with the new star
+      return response.data; 
     } catch (err) {
       return rejectWithValue(err.response.data || "An error occurred");
     }
@@ -33,7 +33,7 @@ export const deleteStar = createAsyncThunk(
   async (starId, { rejectWithValue }) => {
     try {
       await apiDeleteStar(starId);
-      return starId; // Return the deleted star's ID to remove it from the state
+      return starId;
     } catch (err) {
       return rejectWithValue(err.response.data || "An error occurred");
     }
@@ -46,7 +46,7 @@ export const updateStar = createAsyncThunk(
   async ({ id, updatedData }, { rejectWithValue }) => {
     try {
       const response = await apiUpdateStar(id, updatedData);
-      return response.data; // Assuming response has a `data` property with the updated star
+      return response.data; 
     } catch (err) {
       return rejectWithValue(err.response.data || "An error occurred");
     }
@@ -89,7 +89,7 @@ const starSlice = createSlice({
       })
       .addCase(createStar.fulfilled, (state, action) => {
         state.loading = false;
-        state.starList.push(action.payload); // Add the new star to the list
+        state.starList.push(action.payload);
       })
       .addCase(createStar.rejected, (state, action) => {
         state.loading = false;
@@ -102,7 +102,7 @@ const starSlice = createSlice({
       })
       .addCase(deleteStar.fulfilled, (state, action) => {
         state.loading = false;
-        state.starList = state.starList.filter(star => star.id !== action.payload); // Remove the deleted star
+        state.starList = state.starList.filter(star => star.id !== action.payload);
       })
       .addCase(deleteStar.rejected, (state, action) => {
         state.loading = false;
@@ -117,7 +117,7 @@ const starSlice = createSlice({
         state.loading = false;
         const index = state.starList.findIndex(star => star.id === action.payload.id);
         if (index !== -1) {
-          state.starList[index] = action.payload; // Update the star in the list
+          state.starList[index] = action.payload;
         }
       })
       .addCase(updateStar.rejected, (state, action) => {

@@ -21,7 +21,7 @@ const Controller = () => {
     };
 
     return (
-        <div id='controller-main'>
+        <div id='controller-main' className='sm:hidden'>
             <div id='controllers'>
                 {/* Button for going to the previous page */}
                 <button onClick={handlePrevious}>

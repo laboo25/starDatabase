@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FloatButton, Pagination, Select } from 'antd';
+import { FloatButton, Pagination } from 'antd';
 import './images.css';
 import ImagesSidebar from '../sidebar/ImagesSidebar';
 import axiosInstance from '../../app/axiosInstance'; // Import axiosInstance
-import { TfiLayoutGrid3Alt } from "react-icons/tfi";
-import { TfiLayoutGrid4Alt } from "react-icons/tfi";
-
-const { Option } = Select;
+import { TfiLayoutGrid3Alt, TfiLayoutGrid4Alt } from "react-icons/tfi";
 
 const Images = () => {
   const [images, setImages] = useState([]);
@@ -27,10 +24,8 @@ const Images = () => {
   }, []);
 
   useEffect(() => {
-    if (Object.keys(starMap).length > 0) {
-      fetchData(page);
-    }
-  }, [page, starMap]);
+    fetchData(page, pageSize);
+  }, [page, pageSize]);
 
   const fetchStarData = async () => {
     try {
@@ -47,12 +42,12 @@ const Images = () => {
     }
   };
 
-  const fetchData = async (page) => {
+  const fetchData = async (page, pageSize) => {
     if (loading) return;
     setLoading(true);
     try {
       const imagesResponse = await axiosInstance.get('/stars/images/get-all-images', {
-        params: { page }
+        params: { page, pageSize }
       });
       const newImages = imagesResponse.data;
 
@@ -72,28 +67,6 @@ const Images = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight - 50 && hasMore && !loading) {
-      setPage(prevPage => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    const handleDebouncedScroll = debounce(handleScroll, 200);
-    window.addEventListener('scroll', handleDebouncedScroll);
-    return () => {
-      window.removeEventListener('scroll', handleDebouncedScroll);
-    };
-  }, [loading, hasMore]);
-
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func(...args), delay);
-    };
   };
 
   const getStarName = (starId) => {
@@ -142,6 +115,7 @@ const Images = () => {
 
   const handlePageChange = (page, pageSize) => {
     setPage(page);
+    setPageSize(pageSize);
   };
 
   const handlePageSizeChange = (current, size) => {
@@ -163,15 +137,15 @@ const Images = () => {
           onLogicChange={handleLogicChange} // Pass down the logic change handler
         />
       </div>
-      <div className='flex-1 '>
-        <div className='w-full flex justify-between px-2 '>
-        <button onClick={toggleSidebar} className=' p-2 text-black text-[30px]'>
-          ◧
-        </button>
-        <div id='layouts' className='w-[30px] h-full flex items-center justify-center'>
-          <button ><TfiLayoutGrid4Alt className='text-[30px]'/></button>
-          <button><TfiLayoutGrid3Alt className='text-[26px]'/></button>
-        </div>
+      <div className='flex-1'>
+        <div className='w-full flex justify-between px-2'>
+          <button onClick={toggleSidebar} className='p-2 text-black text-[30px]'>
+            ◧
+          </button>
+          <div id='layouts' className='w-[30px] h-full flex items-center justify-center'>
+            <button><TfiLayoutGrid4Alt className='text-[30px]' /></button>
+            <button><TfiLayoutGrid3Alt className='text-[26px]' /></button>
+          </div>
         </div>
         <div id='image-main'>
           {error && <div className='error'>{error}</div>}
@@ -205,20 +179,19 @@ const Images = () => {
               ))
             )}
           </div>
-          {loading && 
-      <div className='w-full flex justify-center py-5'>
-          <div className="loader">
-          </div>
-        </div>}
+          {loading &&
+            <div className='w-full flex justify-center py-5'>
+              <div className="loader"></div>
+            </div>}
           {!loading && !hasMore && images.length > 0 && <div className='no-more-data'>No more images found.</div>}
           {!loading && images.length === 0 && <div className='no-images'>No images found.</div>}
           <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-            {filteredImages.length > pageSize && (
+            {!loading && filteredImages.length > pageSize && (
               <Pagination
                 showSizeChanger
                 onShowSizeChange={handlePageSizeChange}
                 onChange={handlePageChange}
-                defaultCurrent={page}
+                current={page}
                 total={filteredImages.length}
                 pageSize={pageSize}
                 pageSizeOptions={['20', '50', '100', '200']}

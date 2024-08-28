@@ -57,7 +57,7 @@
     align-items: center;
 }
 #images-wrapper #card #squire-box:hover{
-    background-color: rgba(240, 240, 240, 0.418);
+    background-color: rgba(230, 230, 230, 0.493);
 } 
 /* Image inside square box */
 #images-wrapper #card #squire-box a {

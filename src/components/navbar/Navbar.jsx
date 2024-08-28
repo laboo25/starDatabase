@@ -107,7 +107,7 @@ const Navbar = () => {
                     />
                     {searchQuery && (
                         <button onClick={() => { setSearchQuery(''); setSuggestions([]); }} className='clear'>
-                            <div className='mx-2 p-[3px] bg-[#cfcfcf98] rounded-[50%]'>
+                            <div className='mx-2 p-[5px] text-[red]'>
                                 ×
                             </div>
                         </button>

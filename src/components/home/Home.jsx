@@ -97,39 +97,52 @@ const Home = () => {
             <div>
                 <div id='home'>
                     {!loading && starTitles.length > 0 && (
-                        <div id="loadingbar" className='w-full h-[2px] absolute top-0 left-0 z-10' style={{background: 'linear-gradient(87deg, rgba(102,251,12,1) 0%, rgba(254,191,0,1) 20%, rgba(254,10,0,1) 40%, rgba(255,107,1,1) 60%, rgba(12,245,242,1) 80%, rgba(154,37,255,1) 100%)'}}></div>
+                        <div id="loadingbar" className='w-full h-[2px] absolute top-0 left-0 z-10 flex flex-nowrap'>
+                            <div className='w-auto h-[2px] bg-[rgba(102,251,12,1)] flex-1'></div>
+                            <div className='w-auto h-[2px] bg-[rgba(254,191,0,1)] flex-1'></div>
+                            <div className='w-auto h-[2px] bg-[rgba(254,10,0,1)] flex-1'></div>
+                            <div className='w-auto h-[2px] bg-[rgba(255,107,1,1)] flex-1'></div>
+                            <div className='w-auto h-[2px] bg-[rgba(154,37,255,1)] flex-1'></div>
+                            <div className='w-auto h-[2px] bg-[rgba(12,245,242,1)] flex-1'></div>
+                        </div>
                     )}
                     <div className='wrapper'>
                         {error ? (
                             <div className="error">An error occurred: {error.message}</div>
                         ) : loading ? (
-                            <div className="loading">Loading data...</div>
-                        ) : (
-                            currentStarTitles.map((star, index) => (
-                                <div className='card' key={index}>
-                                    <div style={{ width: "100%" }}>
-                                        <Link 
-                                            to={`/star/${star._id}`}
-                                            onClick={() => sessionStorage.setItem(`scrollPosition-${currentPage}`, window.scrollY)}
-                                        >
-                                            <img src={star.starcover} alt={star.starname} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                        </Link>
-                                    </div>
-                                    <p className='title'>{star.starname}</p>
+                            <div className="w-full h-screen absolute top-0 left-0 z-10 flex justify-center items-center bg-white">
+                                <div className='loader'>
+                                    {/* Add your loader/spinner here */}
                                 </div>
-                            ))
+                            </div>
+                        ) : (
+                            <>
+                                {currentStarTitles.map((star, index) => (
+                                    <div className='card' key={index}>
+                                        <div style={{ width: "100%" }}>
+                                            <Link 
+                                                to={`/star/${star._id}`}
+                                                onClick={() => sessionStorage.setItem(`scrollPosition-${currentPage}`, window.scrollY)}
+                                            >
+                                                <img src={star.starcover} alt={star.starname} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                            </Link>
+                                        </div>
+                                        <p className='title'>{star.starname}</p>
+                                    </div>
+                                ))}
+                                <div id='home-pagination'>
+                                    <Pagination 
+                                        current={currentPage} 
+                                        total={starTitles.length} 
+                                        pageSize={itemsPerPage} 
+                                        showSizeChanger
+                                        pageSizeOptions={['10', '50', '100']}
+                                        onChange={handlePageChange} 
+                                        onShowSizeChange={handlePageSizeChange}
+                                    />
+                                </div>
+                            </>
                         )}
-                    </div>
-                    <div id='home-pagination'>
-                        <Pagination 
-                            current={currentPage} 
-                            total={starTitles.length} 
-                            pageSize={itemsPerPage} 
-                            showSizeChanger
-                            pageSizeOptions={['10', '50', '100']}
-                            onChange={handlePageChange} 
-                            onShowSizeChange={handlePageSizeChange}
-                        />
                     </div>
                 </div>
             </div>
