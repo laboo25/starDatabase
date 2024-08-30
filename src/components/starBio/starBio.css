@@ -63,7 +63,11 @@
   margin: 0;
   padding: 30px 0 50px 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #2563eb;
+  background: #833AB4;
+background: linear-gradient(to left, #833AB4 0%, #FD1D1D 50%, #FCB045 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+
 }
 #bio-page .bio .bio-texts {
   font-size: 15px;
