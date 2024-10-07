@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, message, Button, Input, Form, Progress, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import ImageCropper from './ImageCropper';
-import imageCompression from 'browser-image-compression';
 
 const { Dragger } = Upload;
 
@@ -51,38 +50,17 @@ const CreateStar = () => {
     setStarprofile(fileList);
   };
 
-  const handleCrop = async (blob, type) => {
+  const handleCrop = (blob, type) => {
     const file = new File([blob], currentFile.name, { type: currentFile.type });
-
-    let options;
     if (type === 'cover') {
-      options = {
-        maxSizeMB: 0.017,
-        maxWidthOrHeight: 500,
-        useWebWorker: true,
-      };
+      setStarcover([{ ...starcover[0], originFileObj: file }]);
+      setIsCoverModalVisible(false);
     } else if (type === 'profile') {
-      options = {
-        maxSizeMB: 0.09,
-        maxWidthOrHeight: 1200,
-        useWebWorker: true,
-      };
+      setStarprofile([{ ...starprofile[0], originFileObj: file }]);
+      setIsProfileModalVisible(false);
     }
-
-    try {
-      const compressedFile = await imageCompression(file, options);
-      if (type === 'cover') {
-        setStarcover([{ ...starcover[0], originFileObj: compressedFile }]);
-        setIsCoverModalVisible(false);
-      } else if (type === 'profile') {
-        setStarprofile([{ ...starprofile[0], originFileObj: compressedFile }]);
-        setIsProfileModalVisible(false);
-      }
-      const preview = URL.createObjectURL(compressedFile);
-      setPreviewImage(preview);
-    } catch (error) {
-      console.error('Error compressing image:', error);
-    }
+    const preview = URL.createObjectURL(file);
+    setPreviewImage(preview);
   };
 
   const handleCancel = (type) => {
