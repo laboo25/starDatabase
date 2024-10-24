@@ -16,7 +16,7 @@ const GetAlbum = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20); // Define pageSize state with a default value
   const [loading, setLoading] = useState(JSON.parse(sessionStorage.getItem('loading')) || true); 
-
+// albums fetching
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
